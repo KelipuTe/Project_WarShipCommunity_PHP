@@ -5,6 +5,11 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * 用户类
+ * Class User
+ * @package App
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -15,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'email','email_confirm_code','email_confirm', 'password','avatar'
     ];
 
     /**
@@ -26,4 +31,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * 密码字段预处理
+     * @param $password
+     */
+    public function setPasswordAttribute($password){
+        $this->attributes['password'] = \Hash::make($password);//密码加密
+    }
 }
