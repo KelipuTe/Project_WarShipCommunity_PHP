@@ -35,8 +35,9 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
                     <div class="text-center">
-                        <a href="/office/create" class="btn btn-success">我要报道</a>
+                        <a href="/office/create" class="form-control btn btn-success">我要报道</a>
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="violations"></div>

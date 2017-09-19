@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Discussion;
 use App\Introduction;
 
 /**
@@ -25,7 +26,8 @@ class MasterController extends Controller
     }
 
     public  function forum(){
-        return view('forum/forum');
+        $discussions = Discussion::latest()->published()->get();
+        return view('forum/forum',compact('discussions'));
     }
 
     public  function activity(){

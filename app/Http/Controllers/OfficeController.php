@@ -7,6 +7,11 @@ use App\Http\Requests\OfficeStoreRequest;
 use App\Introduction;
 use App\Message;
 
+/**
+ * 这个控制器负责办公区
+ * Class OfficeController
+ * @package App\Http\Controllers
+ */
 class OfficeController extends Controller
 {
     /**

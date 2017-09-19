@@ -27,8 +27,8 @@
                 <div>
                     {!! $introduction->body !!}
                 </div>
-                <hr>
                 @foreach($introduction->messages as $message)
+                    <hr>
                     <div class="media">
                         <div class="media-left">
                             <img class="media-object img-circle img_avatar" alt="50x50" src="{{$message->user->avatar}}">
@@ -41,17 +41,20 @@
                 @endforeach
                 @if(Auth::check())
                     <hr>
-                    {!! Form::open(['url'=>'/office/show/welcome']) !!}
-                    {!! Form::hidden('introduction_id',$introduction->id) !!}
-                    <div class="form-group">
-                        {!! Form::textarea('body','欢迎新人，我是'.Auth::user()->username,['class'=>'form-control']) !!}
-                    </div>
-                    <div>
-                        {!! Form::submit('打个招呼',['class'=>'btn btn-success pull-right']) !!}
-                    </div>
-                    {!! Form::close() !!}
+                    @if(Auth::user()->username != $introduction->user->username)
+                        {!! Form::open(['url'=>'/office/show/welcome']) !!}
+                        {!! Form::hidden('introduction_id',$introduction->id) !!}
+                        <div class="form-group">
+                            {!! Form::textarea('body','欢迎新人，我是'.Auth::user()->username,['class'=>'form-control']) !!}
+                        </div>
+                        <div>
+                            {!! Form::submit('打个招呼',['class'=>'form-control btn btn-primary']) !!}
+                        </div>
+                        {!! Form::close() !!}
+                    @endif
                 @else
-                    <a href="/user/signIn" class="btn btn-block btn-success">登录参与迎新</a>
+                    <hr>
+                    <a href="/user/login" class="form-control btn btn-success">登录参与迎新</a>
                 @endif
             </div>
         </div>

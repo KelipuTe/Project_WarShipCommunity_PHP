@@ -18,7 +18,7 @@
                     {!! Form::textarea('body',null,['class'=>'form-control']) !!}
                 </div>
                 <div>
-                    {!! Form::submit('修改报道',['class'=>'btn btn-primary pull-right']) !!}
+                    {!! Form::submit('修改报道',['class'=>'form-control btn btn-primary']) !!}
                 </div>
                 {!! Form::close() !!}
             </div>

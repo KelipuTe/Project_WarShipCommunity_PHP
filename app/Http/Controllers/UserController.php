@@ -6,6 +6,11 @@ use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\User;
 
+/**
+ * 这个控制器负责和用户
+ * Class UserController
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller
 {
     /**

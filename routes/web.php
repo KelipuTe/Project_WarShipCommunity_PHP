@@ -40,3 +40,9 @@ Route::get('/office/show/{id}','OfficeController@show');//办公区新人报道�
 Route::get('/office/show/{id}/edit','OfficeController@edit');//办公区新人报道修改页面
 Route::patch('/office/show/{id}/update','OfficeController@update');//办公区新人报道修改页面后台
 Route::post('/office/show/welcome','OfficeController@welcome');//办公区新人报道显示页面迎新后台
+
+//ForumController
+Route::get('/forum/create','ForumController@create');//讨论区创建页面
+Route::post('/forum/store','ForumController@store');//讨论区创建页面后台
+Route::get('/forum/show/{id}','ForumController@show');//讨论区显示页面
+Route::post('/forum/show/commit','ForumController@commit');//讨论区评论后台

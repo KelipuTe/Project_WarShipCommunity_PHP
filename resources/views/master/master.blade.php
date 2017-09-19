@@ -86,5 +86,14 @@
 </div>
 <!-- 页面主体部分 -->
 @yield('content')
+<!-- 页面底部 -->
+<footer id="footer" class="footer">
+    <hr>
+    <div class="text-center">
+        <span> &copy; </span><span> 2017 </span><span class="glyphicon glyphicon-heart"></span><span> KelipuTe </span>
+        <span> | </span>
+        <span> Powered by <a href="https://laravel-china.org/"> Laravel </a></span>
+    </div>
+</footer>
 </body>
 </html>

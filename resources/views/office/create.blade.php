@@ -18,7 +18,7 @@
                     {!! Form::textarea('body','新人报道，大家好，我是'.Auth::user()->username.'！！',['class'=>'form-control']) !!}
                 </div>
                 <div>
-                    {!! Form::submit('新人报道',['class'=>'btn btn-primary pull-right']) !!}
+                    {!! Form::submit('新人报道',['class'=>'form-control btn btn-primary']) !!}
                 </div>
                 {!! Form::close() !!}
             </div>
