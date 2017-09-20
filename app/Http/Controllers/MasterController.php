@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Discussion;
 use App\Introduction;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * 这个控制器负责各个主要页面的跳转
