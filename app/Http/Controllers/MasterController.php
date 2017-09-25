@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Redis;
 class MasterController extends Controller
 {
     public function welcome(){
-        Redis::set('kelipute','kelipute');
+        /*Redis::set('kelipute','kelipute');
         $name = Redis::get('kelipute');
-        dd($name);
+        dd($name);*/
         return view('master/welcome');
     }
 

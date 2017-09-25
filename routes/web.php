@@ -46,3 +46,7 @@ Route::get('/forum/create','ForumController@create');//讨论区创建页面
 Route::post('/forum/store','ForumController@store');//讨论区创建页面后台
 Route::get('/forum/show/{id}','ForumController@show');//讨论区显示页面
 Route::post('/forum/show/commit','ForumController@commit');//讨论区评论后台
+
+//ActivityController
+Route::get('/activity/publicChat','ActivityController@publicChat');//活动区公共聊天室
+Route::post('/activity/showPublicChat','ActivityController@showPublicChat');//活动区公共聊天室后台
