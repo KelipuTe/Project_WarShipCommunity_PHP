@@ -7,7 +7,20 @@
     <script src="https://cdn.bootcss.com/socket.io/2.0.3/socket.io.slim.js"></script>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2" role="main">
+            <div class="col-md-2 col-md-offset-1">
+                <div>
+                    <dl id="userSignIn">
+                        <dt>室内成员：</dt>
+                        @foreach($userList as $userlist)
+                            <dt>{{$userlist}}</dt>
+                        @endforeach
+                    </dl>
+                </div>
+                <div>
+                    <a id="chat_logout" class="form-control btn btn-primary" href="/activity/publicChatLogout">退出</a>
+                </div>
+            </div>
+            <div class="col-md-8" role="main">
                 <div>
                     <dl id="publicChatRoom"></dl>
                 </div>
@@ -26,7 +39,9 @@
                         <button id="chat_submit" class="form-control btn btn-primary">发送</button>
                     </div>
                 @else
-                    <a class="form-control btn btn-success" href="/user/login" role="button">登陆参与讨论</a>
+                    <div>
+                        <a class="form-control btn btn-success" href="/user/login" role="button">登陆参与讨论</a>
+                    </div>
                 @endif
             </div>
         </div>
@@ -46,11 +61,16 @@
             $('#publicChatRoom').append($('<dt>').text(data.chatMessage));
         });
 
+        socket.on('public-channel-user:publicChatUserSignIn',function (data) {
+            $('#userSignIn').empty();
+            $('#userSignIn').append($('<dt>').text('室内成员：'));
+            $.each(data,function (i,value) {
+                $('#userSignIn').append($('<dt>').text(value));
+            });
+        });
+
         $(document).ready(function () {
             $('#chat_submit').on('click',function () {
-                /*$('#publicChatRoom').append($('<dt>').text($('#username').val()));
-                $('#publicChatRoom').append($('<dt>').text($('#time').val()));
-                $('#publicChatRoom').append($('<dt>').text($('#body').val()));*/
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('#chat_form input[name="_token"]').val()
@@ -72,6 +92,7 @@
                         console.log("error：" +jqXHR.status);
                     }
                 });
+                $('#body').val('');
             });
         });
     </script>

@@ -19,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PublicChat' => [
             'App\Listeners\PublicChatListener',
         ],
+        'App\Events\PublicChatUserSignIn' => [
+            'App\Listeners\PublicChatUserSignInListener',
+        ],
     ];
 
     /**

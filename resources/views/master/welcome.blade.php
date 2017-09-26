@@ -37,7 +37,7 @@
                                     <img src="/image/avatar/quincy.jpg" class="img_welcome" alt="200x100">
                                     <div class="caption">
                                         <h3>活动区<a href="/activity" class="btn btn-primary pull-right" role="button">推门</a></h3>
-                                        <p>签到，投票</p>
+                                        <p>聊天，签到，投票</p>
                                     </div>
                                 </div>
                             </div>
