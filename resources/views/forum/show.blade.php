@@ -13,7 +13,7 @@
                     <div class="container">
                         <div class="media">
                             <div class="media-left">
-                                <img class="media-object img-circle img_avatar" alt="50x50" src="{{$discussion->user->avatar}}">
+                                <img class="media-object img-circle img_avatar_middle" src="{{$discussion->user->avatar}}">
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading">{{$discussion->title}}
@@ -35,7 +35,7 @@
                     <hr>
                     <div class="media">
                         <div class="media-left">
-                            <img class="media-object img-circle img_avatar" alt="50x50" src="{{$comment->user->avatar}}">
+                            <img class="media-object img-circle img_avatar_small" src="{{$comment->user->avatar}}">
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">{{$comment->user->username}}</h4>

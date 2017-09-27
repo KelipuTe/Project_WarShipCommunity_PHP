@@ -64,7 +64,7 @@
         socket.on('public-channel-user:publicChatUserSignIn',function (data) {
             $('#userSignIn').empty();
             $('#userSignIn').append($('<dt>').text('室内成员：'));
-            $.each(data,function (i,value) {
+            $.each(data,function (index,value) {
                 $('#userSignIn').append($('<dt>').text(value));
             });
         });

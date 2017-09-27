@@ -7,7 +7,7 @@
     <link type="text/css" rel="stylesheet" href="/css/style.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
-    <script type="text/javascript" src="/js/ThirdPartyLibrary/jquery.form.js"></script>
+    <script type="text/javascript" src="/ThirdPartyLibrary/jquery.form.js"></script>
 </head>
 <body>
 <!-- 顶部导航条 -->
@@ -31,14 +31,14 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if(Auth::check())
-                    <li><img src="{{Auth::user()->avatar}}" class="img-circle img_avatar" alt="50x50"></li>
+                    <li><img src="{{Auth::user()->avatar}}" class="img-circle img_avatar_small" alt="50x50"></li>
                     <li>
                         <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             {{Auth::user()->username}}
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-                            <li><a href="#">个人信息</a></li>
+                            <li><a href="/user/info">个人信息</a></li>
                             <li><a href="#">暂无内容</a></li>
                             <li><a href="#">暂无内容</a></li>
                             <li role="separator" class="divider"></li>

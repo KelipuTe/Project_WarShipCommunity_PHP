@@ -11,7 +11,7 @@
                     <div class="container">
                         <div class="media">
                             <div class="media-left">
-                                <img class="media-object img-circle img_avatar" alt="50x50" src="{{$introduction->user->avatar}}">
+                                <img class="media-object img-circle img_avatar_middle" src="{{$introduction->user->avatar}}">
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading">{{$introduction->title}}
@@ -31,7 +31,7 @@
                     <hr>
                     <div class="media">
                         <div class="media-left">
-                            <img class="media-object img-circle img_avatar" alt="50x50" src="{{$message->user->avatar}}">
+                            <img class="media-object img-circle img_avatar_small" src="{{$message->user->avatar}}">
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">{{$message->user->username}}</h4>

@@ -32,6 +32,9 @@ Route::post('/user/create','UserController@create');//注册页面后台
 Route::get('/user/login','UserController@login');//登录页面
 Route::post('/user/signIn','UserController@signIn');//登录页面后台
 Route::get('/user/logout','UserController@logout');//退出登录
+Route::get('/user/info','UserController@info');//个人信息页面
+Route::post('/user/avatar','UserController@avatar');//上传头像
+Route::post('/user/cropAvatar','UserController@cropAvatar');//裁剪上传头像
 
 //OfficeController
 Route::get('/office/create','OfficeController@create');//办公区新人报道创建页面
