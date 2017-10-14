@@ -15,7 +15,11 @@ class Message extends Model
         'body','user_id','introduction_id'
     ];
 
+    /**
+     * 通过message找到user
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user(){
-        return $this->belongsTo(User::class);//通过message拿到user
+        return $this->belongsTo(User::class);
     }
 }

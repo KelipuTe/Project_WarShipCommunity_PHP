@@ -56,11 +56,11 @@ class UserController extends Controller
             'email'=>$request->get('email'),
             'password'=>$request->get('password')
         ];
-        //登录验证
+        /*登录验证*/
         if(\Auth::attempt($data)){
             return redirect('/welcome');
         }
-        //验证失败
+        /*验证失败*/
         \Session::flash('user_login_failed','密码输入错误');
         return redirect('/user/login')->withInput();//验证失败时返回登录页面并带回数据
     }
@@ -75,11 +75,11 @@ class UserController extends Controller
     }
 
     /**
-     * 个人信息页面
+     * 个人信息修改页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function info(){
-        return view('user/info');
+    public function infoEdit(){
+        return view('user/infoEdit');
     }
 
     /**
@@ -137,6 +137,6 @@ class UserController extends Controller
         $user = \Auth::user();
         $user->avatar = asset($photo);
         $user->save();
-        return redirect('/user/info');
+        return redirect('/user/infoEdit');
     }
 }

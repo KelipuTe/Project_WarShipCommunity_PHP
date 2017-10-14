@@ -15,11 +15,19 @@ class Introduction extends Model
         'title','body','user_id','last_user_id'
     ];
 
+    /**
+     * 通过introduction找到user
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user(){
-        return $this->belongsTo(User::class);//通过introduction拿到user
+        return $this->belongsTo(User::class);
     }
 
+    /**
+     * 通过introduction找到所有的message
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function messages(){
-        return $this->hasMany(Message::class);//通过introduction拿到message
+        return $this->hasMany(Message::class);
     }
 }

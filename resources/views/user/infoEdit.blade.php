@@ -4,8 +4,10 @@
     <li><a href="/user/info">个人信息</a></li>
 @stop
 @section('content')
+    {{--引入组件--}}
     <link type="text/css" rel="stylesheet" href="/ThirdPartyLibrary/Jcrop/css/jquery.Jcrop.css">
     <script type="text/javascript" src="/ThirdPartyLibrary/Jcrop/js/jquery.Jcrop.js"></script>
+    {{--网页部分--}}
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2" role="main">
@@ -65,6 +67,7 @@
             </div>
         </div>
     </div>
+    {{--JS部分需要jquery.form.js--}}
     <script>
         $(document).ready(function() {
             var options = {

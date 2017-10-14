@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>WarShipCommunity</title>
-    <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
     <link type="text/css" rel="stylesheet" href="/css/style.css">
-    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js" ></script>
     <script type="text/javascript" src="/ThirdPartyLibrary/jquery.form.js"></script>
+    @yield('head')
 </head>
 <body>
 <!-- 顶部导航条 -->
@@ -38,7 +39,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-                            <li><a href="/user/info">个人信息</a></li>
+                            <li><a href="/user/infoEdit">个人信息</a></li>
                             <li><a href="#">暂无内容</a></li>
                             <li><a href="#">暂无内容</a></li>
                             <li role="separator" class="divider"></li>

@@ -1,13 +1,16 @@
 @extends('forum.app')
+@section('head')
+    <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.4.4/vue.js"></script>
+@stop
 @section('breadCrumb')
     @parent
-    <li><a href="">{{$discussion->title}}</a></li>
+    <li><a href="" id="discussion-id" name="{{$discussion->id}}">{{$discussion->title}}</a></li>
 @stop
 @section('content')
     {{--主体部分--}}
     <div class="container">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1" role="main">
+            <div class="col-md-8" role="main">
                 {{--主体顶部巨幕--}}
                 <div class="jumbotron">
                     <div class="container">
@@ -46,29 +49,160 @@
                 {{--创建评论部分--}}
                 @if(Auth::check())
                     <hr>
-                    @include('vendor.ueditor.assets')
+                    <p>参与讨论</p>
+                    @include('vendor.ueditor.assets'){{--使用编辑器时需要添加--}}
                     @include('error.errorList')
                     {!! Form::open(['url'=>'/forum/show/commit']) !!}
                     {!! Form::hidden('discussion_id',$discussion->id) !!}
                     <div class="form-group">
-                        <!-- 编辑器容器 -->
+                        {{--编辑器容器--}}
                         <script id="container" name="body" type="text/plain"></script>
                     </div>
                     <div>
                         {!! Form::submit('提交',['class'=>'form-control btn btn-primary']) !!}
                     </div>
                     {!! Form::close() !!}
-                <!-- 实例化编辑器 -->
+                    {{--实例化编辑器--}}
                     <script type="text/javascript">
                         var ue = UE.getEditor('container');
                         ue.ready(function() {
-                            ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.
+                            ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');/*设置CSRFtoken*/
                         });
                     </script>
                 @else
                     <hr>
                     <a href="/user/login" class="form-control btn btn-success">登录参与讨论</a>
                 @endif
+            </div>
+            <div class="col-md-4">
+                {{--关于文章--}}
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <h2>{{$discussion->hasFollowedUser()}}</h2>
+                        <span>已关注</span>
+                    </div>
+                    <div class="panel-body">
+                        @if(Auth::check())
+                            {{--<a href="/follow/userDiscussionFollow/{{$discussion->id}}"
+                               class="btn btn-default {{Auth::user()->hasFollowedDiscussion($discussion->id) ? 'btn-success' : ''}}">
+                                <span class="glyphicon {{Auth::user()->hasFollowedDiscussion($discussion->id) ? 'glyphicon-star' : 'glyphicon-star-empty'}}"></span>
+                                {{Auth::user()->hasFollowedDiscussion($discussion->id) ? '已关注' : '关注该讨论'}}
+                            </a>--}}
+                            {{--用户关注讨论的Vue.js组件--}}
+                            <div id="user-discussion">
+                                <user-discussion-button></user-discussion-button>
+                            </div>
+                            <template id="template-user-discussion-button">
+                                <div>
+                                    <button class="btn btn-default" :class="vclass" @click="userDiscussionFollow()">
+                                        <span class="glyphicon " :class="vglyphicon"></span>
+                                        <span v-text="vtext"></span>
+                                    </button>
+                                </div>
+                            </template>
+                            <script>
+                                Vue.component('user-discussion-button',{
+                                    template:'#template-user-discussion-button',
+                                    data:function () {
+                                        return{
+                                            userDiscussion:0
+                                        }
+                                    },
+                                    created:function () {
+                                        this.userDiscussion = this.hasUserDiscussionFollow();
+                                    },
+                                    methods:{
+                                        hasUserDiscussionFollow:function () {
+                                            var vm = this;//这里需要指定是Vue.js的this不是JavaScript的this
+                                            var discussion_id = $('#discussion-id').attr('name');
+                                            $.ajax({
+                                                type:'GET',
+                                                url:'/VueHttp/hasUserDiscussionFollow/' + discussion_id,
+                                                dataType:'json',
+                                                success:function (data) {
+                                                    vm.userDiscussion = data.userDiscussion;
+                                                },
+                                                error:function(jqXHR){
+                                                    console.log("出现错误：" +jqXHR.status);
+                                                }
+                                            });
+                                        },
+                                        userDiscussionFollow:function () {
+                                            var vm = this;//这里需要指定是Vue.js的this不是JavaScript的this
+                                            var discussion_id = $('#discussion-id').attr('name');
+                                            $.ajax({
+                                                type:'GET',
+                                                url:'/VueHttp/userDiscussionFollow/' + discussion_id,
+                                                dataType:'json',
+                                                success:function (data) {
+                                                    vm.userDiscussion = data.userDiscussion;
+                                                },
+                                                error:function(jqXHR){
+                                                    console.log("出现错误：" +jqXHR.status);
+                                                }
+                                            });
+                                        }
+                                    },
+                                    computed:{
+                                        vclass:function () {
+                                            return this.userDiscussion ? 'btn-success' : '';
+                                        },
+                                        vglyphicon:function () {
+                                            return this.userDiscussion ? 'glyphicon-star' : 'glyphicon-star-empty';
+                                        },
+                                        vtext:function () {
+                                            return this.userDiscussion ? '已关注' : '关注该讨论';
+                                        }
+                                    }
+                                });
+                                new Vue({
+                                    el:'#user-discussion'
+                                });
+                            </script>
+                            {{--用户关注讨论的Vue.js组件--}}
+                        @else
+                            <a href="/follow/userDiscussionFollow/{{$discussion->id}}"
+                               class="btn btn-default">
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                关注该讨论
+                            </a>
+                        @endif
+                    </div>
+                </div>
+                {{--关于作者--}}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <p>关于作者</p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img src="{{$discussion->user->avatar}}" class="img_avatar_small" alt="{{$discussion->user->username}}">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a href="#">{{$discussion->user->username}}</a>
+                                </h4>
+                            </div>
+                            <div style="display: flex">
+                                <div>
+                                    <div>讨论</div>
+                                    <div>{{count($discussion->user->discussions)}}</div>
+                                </div>
+                                <div>
+                                    <div>回复</div>
+                                    <div>{{count($discussion->user->comments)}}</div>
+                                </div>
+                                <div>
+                                    <div>关注者</div>
+                                    <div>{{count($discussion->user->userUser)}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

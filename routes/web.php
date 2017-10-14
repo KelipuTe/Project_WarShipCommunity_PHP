@@ -29,10 +29,10 @@ Route::get('/archives','MasterController@archives');//冷月档案馆
 //UserController
 Route::get('/user/register','UserController@register');//注册页面
 Route::post('/user/create','UserController@create');//注册页面后台
-Route::get('/user/login','UserController@login');//登录页面
+Route::get('/user/login',[ 'as' => 'login', 'uses' => 'UserController@login']);//登录页面
 Route::post('/user/signIn','UserController@signIn');//登录页面后台
 Route::get('/user/logout','UserController@logout');//退出登录
-Route::get('/user/info','UserController@info');//个人信息页面
+Route::get('/user/infoEdit','UserController@infoEdit');//个人信息修改页面
 Route::post('/user/avatar','UserController@avatar');//上传头像
 Route::post('/user/cropAvatar','UserController@cropAvatar');//裁剪上传头像
 
@@ -54,3 +54,10 @@ Route::post('/forum/show/commit','ForumController@commit');//讨论区评论后�
 Route::get('/activity/publicChat','ActivityController@publicChat');//活动区公共聊天室
 Route::post('/activity/showPublicChat','ActivityController@showPublicChat');//活动区公共聊天室后台
 Route::get('/activity/publicChatLogout','ActivityController@publicChatLogout');//退出活动区公共聊天室
+
+//FollowController
+Route::get('/follow/userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow');//用户关注讨论
+
+//VueHttpController
+Route::get('VueHttp/userDiscussionFollow/{discussion}','VueHttpController@userDiscussionFollow');//用户关注讨论
+Route::get('VueHttp/hasUserDiscussionFollow/{discussion}','VueHttpController@hasUserDiscussionFollow');//检查用户是否关注讨论

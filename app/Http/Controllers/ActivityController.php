@@ -23,7 +23,7 @@ class ActivityController extends Controller
     public function publicChat(){
         $key = "publicChatSignIn";
         if(\Auth::check()){
-            //PublicChatUserSignIn，type=1表示有用户进入公共聊天室
+            /*PublicChatUserSignIn，type=1表示有用户进入公共聊天室*/
             event(new PublicChatUserSignIn(1,\Auth::user()->username));
         }
         $userList = Redis::smembers($key);
@@ -36,7 +36,7 @@ class ActivityController extends Controller
      */
     public function publicChatLogout(){
         if(\Auth::check()){
-            //PublicChatUserSignIn，type=-1表示有用户退出公共聊天室
+            /*PublicChatUserSignIn，type=-1表示有用户退出公共聊天室*/
             event(new PublicChatUserSignIn(-1,\Auth::user()->username));
         }
         return redirect('/welcome');
