@@ -128,7 +128,7 @@
                                             });
                                         },
                                         userDiscussionFollow:function () {
-                                            var vm = this;//这里需要指定是Vue.js的this不是JavaScript的this
+                                            var vm = this;
                                             var discussion_id = $('#discussion-id').attr('name');
                                             $.ajax({
                                                 type:'GET',
