@@ -44,7 +44,7 @@
             <div class="modal-content">
                 {!! Form::open( [ 'url' => ['/user/cropAvatar'], 'method' => 'POST', 'onsubmit'=>'return checkCoords();','files' => true ] ) !!}
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color: #ffffff">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color: #66ffcc">&times;</span></button>
                     <h4 class="modal-title" id="exampleModalLabel">裁剪头像</h4>
                 </div>
                 <div class="modal-body">

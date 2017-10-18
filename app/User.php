@@ -57,15 +57,8 @@ class User extends Authenticatable
     }
 
     /**
-     * 通过user找到所有的向该用户发送的personalLetter
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function personalLetter(){
-        return $this->hasMany(PersonalLetter::class,'to_user_id');
-    }
-
-    /**
      * 定义user和discussion在user_discussion表中的多对多关系
+     * 这个函数通过用户找到所有被用户关注的讨论
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function userDiscussion(){
@@ -96,10 +89,39 @@ class User extends Authenticatable
 
     /**
      * 定义user和user在user_user表中的多对多关系
+     * 这个函数通过关注者找到被关注的用户
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function userUser(){
+    public function userUserFollowed(){
         /*self::class就是User::class*/
+        /*注意一下参数里的两个key*/
         return $this->belongsToMany(self::class,'user_user','follower_id','followed_id')->withTimestamps();
+    }
+
+    /**
+     * 定义user和user在user_user表中的多对多关系
+     * 这个函数通过被关注的用户找到关注者
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function userUserFollower(){
+        /*注意一下参数里的两个key*/
+        return $this->belongsToMany(self::class,'user_user','followed_id','follower_id')->withTimestamps();
+    }
+
+    /**
+     * user关注user
+     * @param $user
+     * @return array
+     */
+    public function userUserFollow($user){
+        return $this->userUserFollowed()->toggle($user);
+    }
+
+    /**
+     * 通过user找到所有的向该用户发送的personalLetter
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function personalLetter(){
+        return $this->hasMany(PersonalLetter::class,'to_user_id');
     }
 }

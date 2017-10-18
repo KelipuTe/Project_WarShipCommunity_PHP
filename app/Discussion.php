@@ -66,6 +66,10 @@ class Discussion extends Model
         return $this->belongsToMany(User::class,'user_discussion')->withTimestamps();
     }
 
+    /**
+     * 计算已经关注改讨论的用户数量
+     * @return int
+     */
     public function hasFollowedUser(){
         return $this->userDiscussion()->where('discussion_id',$this->id)->count();
     }

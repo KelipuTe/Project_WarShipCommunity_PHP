@@ -82,97 +82,30 @@
                         <span>已关注</span>
                     </div>
                     <div class="panel-body">
-                        @if(Auth::check())
-                            {{--<a href="/follow/userDiscussionFollow/{{$discussion->id}}"
-                               class="btn btn-default {{Auth::user()->hasFollowedDiscussion($discussion->id) ? 'btn-success' : ''}}">
-                                <span class="glyphicon {{Auth::user()->hasFollowedDiscussion($discussion->id) ? 'glyphicon-star' : 'glyphicon-star-empty'}}"></span>
-                                {{Auth::user()->hasFollowedDiscussion($discussion->id) ? '已关注' : '关注该讨论'}}
-                            </a>--}}
-                            {{--用户关注讨论的Vue.js组件--}}
-                            <div id="user-discussion">
+                        <div id="user-discussion">
+                            @if(Auth::check())
+                                {{--<a href="/follow/userDiscussionFollow/{{$discussion->id}}"
+                                   class="btn btn-default {{Auth::user()->hasFollowedDiscussion($discussion->id) ? 'btn-success' : ''}}">
+                                    <span class="glyphicon {{Auth::user()->hasFollowedDiscussion($discussion->id) ? 'glyphicon-star' : 'glyphicon-star-empty'}}"></span>
+                                    {{Auth::user()->hasFollowedDiscussion($discussion->id) ? '已关注' : '关注该讨论'}}
+                                </a>--}}
+                                {{--用户关注讨论的Vue.js组件--}}
                                 <user-discussion-button></user-discussion-button>
-                            </div>
-                            <template id="template-user-discussion-button">
-                                <div>
-                                    <button class="btn btn-default" :class="vclass" @click="userDiscussionFollow()">
-                                        <span class="glyphicon " :class="vglyphicon"></span>
-                                        <span v-text="vtext"></span>
-                                    </button>
-                                </div>
-                            </template>
-                            <script>
-                                Vue.component('user-discussion-button',{
-                                    template:'#template-user-discussion-button',
-                                    data:function () {
-                                        return{
-                                            userDiscussion:0
-                                        }
-                                    },
-                                    created:function () {
-                                        this.userDiscussion = this.hasUserDiscussionFollow();
-                                    },
-                                    methods:{
-                                        hasUserDiscussionFollow:function () {
-                                            var vm = this;//这里需要指定是Vue.js的this不是JavaScript的this
-                                            var discussion_id = $('#discussion-id').attr('name');
-                                            $.ajax({
-                                                type:'GET',
-                                                url:'/VueHttp/hasUserDiscussionFollow/' + discussion_id,
-                                                dataType:'json',
-                                                success:function (data) {
-                                                    vm.userDiscussion = data.userDiscussion;
-                                                },
-                                                error:function(jqXHR){
-                                                    console.log("出现错误：" +jqXHR.status);
-                                                }
-                                            });
-                                        },
-                                        userDiscussionFollow:function () {
-                                            var vm = this;
-                                            var discussion_id = $('#discussion-id').attr('name');
-                                            $.ajax({
-                                                type:'GET',
-                                                url:'/VueHttp/userDiscussionFollow/' + discussion_id,
-                                                dataType:'json',
-                                                success:function (data) {
-                                                    vm.userDiscussion = data.userDiscussion;
-                                                },
-                                                error:function(jqXHR){
-                                                    console.log("出现错误：" +jqXHR.status);
-                                                }
-                                            });
-                                        }
-                                    },
-                                    computed:{
-                                        vclass:function () {
-                                            return this.userDiscussion ? 'btn-success' : '';
-                                        },
-                                        vglyphicon:function () {
-                                            return this.userDiscussion ? 'glyphicon-star' : 'glyphicon-star-empty';
-                                        },
-                                        vtext:function () {
-                                            return this.userDiscussion ? '已关注' : '关注该讨论';
-                                        }
-                                    }
-                                });
-                                new Vue({
-                                    el:'#user-discussion'
-                                });
-                            </script>
-                            {{--用户关注讨论的Vue.js组件--}}
-                        @else
-                            <a href="/follow/userDiscussionFollow/{{$discussion->id}}"
-                               class="btn btn-default">
-                                <span class="glyphicon glyphicon-star-empty"></span>
-                                关注该讨论
-                            </a>
-                        @endif
+                                {{--用户关注讨论的Vue.js组件--}}
+                            @else
+                                <a href="/VueHttp/userDiscussionFollow/{{$discussion->id}}"
+                                   class="btn btn-default">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    关注该讨论
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 {{--关于作者--}}
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <p>关于作者</p>
+                    <div class="panel-heading text-center">
+                        <h3>关于作者</h3>
                     </div>
                     <div class="panel-body">
                         <div class="media">
@@ -186,24 +119,175 @@
                                     <a href="#">{{$discussion->user->username}}</a>
                                 </h4>
                             </div>
-                            <div style="display: flex">
-                                <div>
-                                    <div>讨论</div>
-                                    <div>{{count($discussion->user->discussions)}}</div>
+                            <div class="user-statics">
+                                <div class="statics-item text-center">
+                                    <div class="statics-text">讨论</div>
+                                    <div class="statics-count">{{count($discussion->user->discussions)}}</div>
                                 </div>
-                                <div>
-                                    <div>回复</div>
-                                    <div>{{count($discussion->user->comments)}}</div>
+                                <div class="statics-item text-center">
+                                    <div class="statics-text">回复</div>
+                                    <div class="statics-count">{{count($discussion->user->comments)}}</div>
                                 </div>
-                                <div>
-                                    <div>关注者</div>
-                                    <div>{{count($discussion->user->userUser)}}</div>
+                                <div class="statics-item text-center">
+                                    <div class="statics-text">关注者</div>
+                                    <div class="statics-count">{{count($discussion->user->userUserFollower)}}</div>
                                 </div>
                             </div>
+                        </div>
+                        <div id="user-user">
+                            @if(Auth::check())
+                                {{--用户关注用户的Vue.js组件--}}
+                                <user-user-button></user-user-button>
+                                {{--用户关注用户的Vue.js组件--}}
+                            @else
+                                <a href="/follow/userUserFollow/{{$discussion->user->id}}"
+                                   class="btn btn-default">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    关注该用户
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    {{--用户关注讨论的Vue.js组件--}}
+    <template id="template-user-discussion-button">
+        <div>
+            <button class="btn btn-default" :class="vclass" @click="userDiscussionFollow()">
+                <span class="glyphicon " :class="vglyphicon"></span>
+                <span v-text="vtext"></span>
+            </button>
+        </div>
+    </template>
+    <script>
+        Vue.component('user-discussion-button',{
+            template:'#template-user-discussion-button',
+            data:function () {
+                return{
+                    userDiscussion:0
+                }
+            },
+            created:function () {
+                this.userDiscussion = this.hasUserDiscussionFollow();
+            },
+            methods:{
+                hasUserDiscussionFollow:function () {
+                    var vm = this;//这里需要指定是Vue.js的this不是JavaScript的this
+                    var discussion_id = $('#discussion-id').attr('name');
+                    $.ajax({
+                        type:'GET',
+                        url:'/VueHttp/hasUserDiscussionFollow/' + discussion_id,
+                        dataType:'json',
+                        success:function (data) {
+                            vm.userDiscussion = data.userDiscussion;
+                        },
+                        error:function(jqXHR){
+                            console.log("出现错误：" +jqXHR.status);
+                        }
+                    });
+                },
+                userDiscussionFollow:function () {
+                    var vm = this;
+                    var discussion_id = $('#discussion-id').attr('name');
+                    $.ajax({
+                        type:'GET',
+                        url:'/VueHttp/userDiscussionFollow/' + discussion_id,
+                        dataType:'json',
+                        success:function (data) {
+                            vm.userDiscussion = data.userDiscussion;
+                        },
+                        error:function(jqXHR){
+                            console.log("出现错误：" +jqXHR.status);
+                        }
+                    });
+                }
+            },
+            computed:{
+                vclass:function () {
+                    return this.userDiscussion ? 'btn-success' : '';
+                },
+                vglyphicon:function () {
+                    return this.userDiscussion ? 'glyphicon-star' : 'glyphicon-star-empty';
+                },
+                vtext:function () {
+                    return this.userDiscussion ? '已关注' : '关注该讨论';
+                }
+            }
+        });
+        new Vue({
+            el:'#user-discussion'
+        });
+    </script>
+    {{--用户关注讨论的Vue.js组件--}}
+    {{--用户关注用户的Vue.js组件--}}
+    <template id="template-user-user-button">
+        <div>
+            <button class="btn btn-default" :class="vclass" @click="userUserFollow()">
+                <span class="glyphicon " :class="vglyphicon"></span>
+                <span v-text="vtext"></span>
+            </button>
+        </div>
+    </template>
+    <script>
+        Vue.component('user-user-button',{
+            template:'#template-user-user-button',
+            data:function () {
+                return{
+                    userUser:0
+                }
+            },
+            created:function () {
+                this.userUser = this.hasUserUserFollow();
+            },
+            methods:{
+                hasUserUserFollow:function () {
+                    var vm = this;
+                    var discussion_id = $('#discussion-id').attr('name');
+                    $.ajax({
+                        type:'GET',
+                        url:'/VueHttp/hasUserUserFollow/' + discussion_id,
+                        dataType:'json',
+                        success:function (data) {
+                            vm.userUser = data.userUser;
+                        },
+                        error:function(jqXHR){
+                            console.log("出现错误：" +jqXHR.status);
+                        }
+                    });
+                },
+                userUserFollow:function () {
+                    var vm = this;
+                    var discussion_id = $('#discussion-id').attr('name');
+                    $.ajax({
+                        type:'GET',
+                        url:'/VueHttp/userUserFollow/' + discussion_id,
+                        dataType:'json',
+                        success:function (data) {
+                            vm.userUser = data.userUser;
+                        },
+                        error:function(jqXHR){
+                            console.log("出现错误：" +jqXHR.status);
+                        }
+                    });
+                }
+            },
+            computed:{
+                vclass:function () {
+                    return this.userUser ? 'btn-success' : '';
+                },
+                vglyphicon:function () {
+                    return this.userUser ? 'glyphicon-star' : 'glyphicon-star-empty';
+                },
+                vtext:function () {
+                    return this.userUser ? '已关注' : '关注TA';
+                }
+            }
+        });
+        new Vue({
+            el:'#user-user'
+        });
+    </script>
+    {{--用户关注用户的Vue.js组件--}}
 @stop

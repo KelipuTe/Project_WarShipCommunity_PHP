@@ -56,8 +56,10 @@ Route::post('/activity/showPublicChat','ActivityController@showPublicChat');//�
 Route::get('/activity/publicChatLogout','ActivityController@publicChatLogout');//退出活动区公共聊天室
 
 //FollowController
-Route::get('/follow/userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow');//用户关注讨论
+//Route::get('/follow/userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow');//用户关注讨论
 
 //VueHttpController
-Route::get('VueHttp/userDiscussionFollow/{discussion}','VueHttpController@userDiscussionFollow');//用户关注讨论
-Route::get('VueHttp/hasUserDiscussionFollow/{discussion}','VueHttpController@hasUserDiscussionFollow');//检查用户是否关注讨论
+Route::get('/VueHttp/userDiscussionFollow/{discussion}','VueHttpController@userDiscussionFollow');//用户关注讨论
+Route::get('/VueHttp/hasUserDiscussionFollow/{discussion}','VueHttpController@hasUserDiscussionFollow');//检查用户是否关注讨论
+Route::get('/VueHttp/userUserFollow/{discussion}','VueHttpController@userUserFollow');//用户关注用户
+Route::get('/VueHttp/hasUserUserFollow/{discussion}','VueHttpController@hasUserUserFollow');//检查用户是否关注用户
