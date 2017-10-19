@@ -63,3 +63,6 @@ Route::get('/VueHttp/userDiscussionFollow/{discussion}','VueHttpController@userD
 Route::get('/VueHttp/hasUserDiscussionFollow/{discussion}','VueHttpController@hasUserDiscussionFollow');//检查用户是否关注讨论
 Route::get('/VueHttp/userUserFollow/{discussion}','VueHttpController@userUserFollow');//用户关注用户
 Route::get('/VueHttp/hasUserUserFollow/{discussion}','VueHttpController@hasUserUserFollow');//检查用户是否关注用户
+
+//NotificationController
+Route::get('notification/userUserNotification','NotificationController@userUserNotification');//用户关注用户消息通知

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Discussion;
+use App\Notifications\UserUserFollowNotification;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -48,9 +49,17 @@ class VueHttpController extends Controller
      * @return mixed
      */
     public function userUserFollow($discussion_id){
-        $discussion = Discussion::find($discussion_id);//通过discussion_id找到discussion对象
-        $user = User::find($discussion->user->id);//通过discussion对象找到关注的user对象
-        Auth::user()->userUserFollow($user);//获取自己的user对象调用关注用户函数
+        $discussion = Discussion::find($discussion_id);
+        $user = User::find($discussion->user->id);
+        $followers = $user->userUserFollower()->pluck('follower_id')->toArray();
+        if(!in_array(Auth::user()->id,$followers)){
+            /*如果还没有关注目标用户*/
+            Auth::user()->userUserFollow($user);//获取自己的user对象调用关注用户函数
+            $user->notify(new UserUserFollowNotification());//关注用户完成后发送站内信通知被关注用户
+        } else {
+            /*否则取消关注目标用户*/
+            Auth::user()->userUserFollow($user);
+        }
         return $this->hasUserUserFollow($discussion_id);
     }
 
