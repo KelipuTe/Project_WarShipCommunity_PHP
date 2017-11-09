@@ -14,7 +14,7 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="office">
                         <div class="row">
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-sm-12 col-md-4">
                                 <div class="thumbnail">
                                     <img src="/image/avatar/lex.png" class="img_welcome" alt="200x100">
                                     <div class="caption">
@@ -23,7 +23,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-sm-12 col-md-4">
                                 <div class="thumbnail">
                                     <img src="/image/avatar/ougen.jpg" class="img_welcome" alt="200x100">
                                     <div class="caption">
@@ -32,7 +32,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-sm-12 col-md-4">
                                 <div class="thumbnail">
                                     <img src="/image/avatar/quincy.jpg" class="img_welcome" alt="200x100">
                                     <div class="caption">
@@ -59,7 +59,7 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="factory">
                         <div class="row">
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-sm-12 col-md-4">
                                 <div class="thumbnail">
                                     <img src="/image/avatar/mao.jpg" class="img_welcome" alt="200x100">
                                     <div class="caption">
@@ -68,7 +68,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-sm-12 col-md-4">
                                 <div class="thumbnail">
                                     <img src="/image/avatar/mao_remake.jpg" class="img_welcome" alt="200x100">
                                     <div class="caption">
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-sm-12 col-md-4">
                                 <div class="thumbnail">
                                     <img src="/image/avatar/vv.png" class="img_welcome" alt="200x100">
                                     <div class="caption">

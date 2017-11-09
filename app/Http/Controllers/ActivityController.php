@@ -26,7 +26,7 @@ class ActivityController extends Controller
             /*PublicChatUserSignIn，type=1表示有用户进入公共聊天室*/
             event(new PublicChatUserSignIn(1,\Auth::user()->username));
         }
-        $userList = Redis::smembers($key);
+        $userList = Redis::smembers($key);//从 Redis Set 集合里取数据
         return view('activity/publicChat',compact('userList'));
     }
 

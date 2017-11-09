@@ -15,8 +15,8 @@ class CreatePersonalLetterTable extends Migration
     {
         Schema::create('personal_letter', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('from_user_id');
-            $table->unsignedInteger('to_user_id');
+            $table->integer('from_user_id')->unsigned();
+            $table->integer('to_user_id')->unsigned();
             $table->text('body');
             $table->integer('has_read')->default(0);
             $table->timestamp('read_at')->nullable();

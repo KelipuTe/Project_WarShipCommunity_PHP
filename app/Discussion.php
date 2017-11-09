@@ -67,7 +67,7 @@ class Discussion extends Model
     }
 
     /**
-     * 计算已经关注改讨论的用户数量
+     * 计算已经关注该讨论的用户数量
      * @return int
      */
     public function hasFollowedUser(){

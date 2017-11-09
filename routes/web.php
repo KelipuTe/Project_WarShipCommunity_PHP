@@ -40,8 +40,8 @@ Route::post('/user/cropAvatar','UserController@cropAvatar');//裁剪上传头像
 Route::get('/office/create','OfficeController@create');//办公区新人报道创建页面
 Route::post('/office/store','OfficeController@store');//办公区新人报道创建页面后台
 Route::get('/office/show/{id}','OfficeController@show');//办公区新人报道显示页面
-Route::get('/office/show/{id}/edit','OfficeController@edit');//办公区新人报道修改页面
-Route::patch('/office/show/{id}/update','OfficeController@update');//办公区新人报道修改页面后台
+//Route::get('/office/show/{id}/edit','OfficeController@edit');//办公区新人报道修改页面
+//Route::patch('/office/show/{id}/update','OfficeController@update');//办公区新人报道修改页面后台
 Route::post('/office/show/welcome','OfficeController@welcome');//办公区新人报道显示页面迎新后台
 
 //ForumController
@@ -65,4 +65,8 @@ Route::get('/VueHttp/userUserFollow/{discussion}','VueHttpController@userUserFol
 Route::get('/VueHttp/hasUserUserFollow/{discussion}','VueHttpController@hasUserUserFollow');//检查用户是否关注用户
 
 //NotificationController
-Route::get('notification/userUserNotification','NotificationController@userUserNotification');//用户关注用户消息通知
+Route::get('/notification/show','NotificationController@show');//用户关注用户消息通知
+
+//AccountController
+//Route::get('/account/officeStore/{id}','AccountController@officeStore');//新人报道获得活跃值
+Route::get('/account/getLiveness/{id}','AccountController@getLiveness');//用户活跃值和等级

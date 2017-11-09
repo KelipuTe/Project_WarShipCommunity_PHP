@@ -1,12 +1,14 @@
 @extends('master.master')
+@section('head')
+    {{--引入组件--}}
+    <link type="text/css" rel="stylesheet" href="/ThirdPartyLibrary/Jcrop/css/jquery.Jcrop.css">
+    <script type="text/javascript" src="/ThirdPartyLibrary/Jcrop/js/jquery.Jcrop.js"></script>
+@stop
 @section('breadCrumb')
     @parent
     <li><a href="/user/info">个人信息</a></li>
 @stop
 @section('content')
-    {{--引入组件--}}
-    <link type="text/css" rel="stylesheet" href="/ThirdPartyLibrary/Jcrop/css/jquery.Jcrop.css">
-    <script type="text/javascript" src="/ThirdPartyLibrary/Jcrop/js/jquery.Jcrop.js"></script>
     {{--网页部分--}}
     <div class="container">
         <div class="row">

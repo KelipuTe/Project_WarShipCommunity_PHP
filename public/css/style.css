@@ -34,13 +34,17 @@
 }
 /*userInfo.blade.php中上传按钮*/
 /*show.blade.php中右侧关于作者*/
-.user-statics .user-actions{
-    margin-top: 20px;
-}
 .user-statics{
     display: flex;
+    margin-top: 20px;
 }
 .statics-item{
     padding: 2px 20px;
 }
 /*show.blade.php中右侧关于作者*/
+/*限制图片最大宽高*/
+img{
+    max-width: 500px;
+    max-height: 500px;
+}
+/*限制图片最大宽高*/

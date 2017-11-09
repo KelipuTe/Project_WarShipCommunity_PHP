@@ -34,7 +34,8 @@
                     {!! $discussion->body !!}
                 </div>
                 {{--评论部分--}}
-                @foreach($discussion->comments as $comment)
+                {{--@foreach($discussion->comments as $comment)--}}
+                @foreach($comments as $comment)
                     <hr>
                     <div class="media">
                         <div class="media-left">
@@ -46,6 +47,7 @@
                         </div>
                     </div>
                 @endforeach
+                <div class="text-center">{!! $comments->render() !!}</div>{{--分页--}}
                 {{--创建评论部分--}}
                 @if(Auth::check())
                     <hr>
@@ -110,41 +112,55 @@
                     <div class="panel-body">
                         <div class="media">
                             <div class="media-left">
-                                <a href="#">
+                                <a class="statics-item" href="#">
                                     <img src="{{$discussion->user->avatar}}" class="img_avatar_small" alt="{{$discussion->user->username}}">
                                 </a>
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading">
+                                <h4 class="media-heading statics-item">
                                     <a href="#">{{$discussion->user->username}}</a>
                                 </h4>
                             </div>
+                            {{--<div class="user-statics">
+                                <div class="statics-item">活跃值{{$discussion->user->account->liveness}}</div>
+                            </div>--}}
+                            {{--用户等级的Vue.js组件--}}
+                            <div id="liveness">
+                                <div class="user-statics">
+                                    <liveness></liveness>
+                                </div>
+                            </div>
+                            {{--用户等级的Vue.js组件--}}
                             <div class="user-statics">
                                 <div class="statics-item text-center">
-                                    <div class="statics-text">讨论</div>
-                                    <div class="statics-count">{{count($discussion->user->discussions)}}</div>
+                                    <div>讨 论</div>
+                                    <div>{{count($discussion->user->discussions)}}</div>
                                 </div>
                                 <div class="statics-item text-center">
-                                    <div class="statics-text">回复</div>
-                                    <div class="statics-count">{{count($discussion->user->comments)}}</div>
+                                    <div>回 复</div>
+                                    <div>{{count($discussion->user->comments)}}</div>
                                 </div>
                                 <div class="statics-item text-center">
-                                    <div class="statics-text">关注者</div>
-                                    <div class="statics-count">{{count($discussion->user->userUserFollower)}}</div>
+                                    <div>关注者</div>
+                                    <div>{{count($discussion->user->userUserFollower)}}</div>
                                 </div>
                             </div>
                         </div>
                         <div id="user-user">
                             @if(Auth::check())
                                 {{--用户关注用户的Vue.js组件--}}
-                                <user-user-button></user-user-button>
+                                <div class="user-statics">
+                                    <user-user-button></user-user-button>
+                                </div>
                                 {{--用户关注用户的Vue.js组件--}}
                             @else
-                                <a href="/follow/userUserFollow/{{$discussion->user->id}}"
+                                <div class="statics-item">
+                                <a href="/VueHttp/userUserFollow/{{$discussion->user->id}}"
                                    class="btn btn-default">
                                     <span class="glyphicon glyphicon-star-empty"></span>
                                     关注该用户
                                 </a>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -290,4 +306,55 @@
         });
     </script>
     {{--用户关注用户的Vue.js组件--}}
+    {{--用户等级的Vue.js组件--}}
+    <template id="template-liveness">
+        <div>
+            <span v-text="vliveness"></span>
+            <span v-text="vlevel"></span>
+        </div>
+    </template>
+    <script>
+        Vue.component('liveness',{
+            template:'#template-liveness',
+            data:function () {
+                return{
+                    liveness:0,
+                    level:0
+                }
+            },
+            created:function () {
+                this.init();
+            },
+            methods:{
+                init:function () {
+                    var vm = this;
+                    var discussion_id = $('#discussion-id').attr('name');
+                    $.ajax({
+                        type:'GET',
+                        url:'/account/getLiveness/' + discussion_id,
+                        dataType:'json',
+                        success:function (data) {
+                            vm.liveness = data.liveness;
+                            vm.level = data.level;
+                        },
+                        error:function(jqXHR){
+                            console.log("出现错误：" +jqXHR.status);
+                        }
+                    });
+                }
+            },
+            computed:{
+                vliveness:function () {
+                    return this.liveness;
+                },
+                vlevel:function () {
+                    return this.level;
+                }
+            }
+        });
+        new Vue({
+            el:'#liveness'
+        });
+    </script>
+    {{--用户等级的Vue.js组件--}}
 @stop

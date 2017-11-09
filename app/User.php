@@ -121,7 +121,23 @@ class User extends Authenticatable
      * 通过user找到所有的向该用户发送的personalLetter
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function personalLetter(){
+    public function fromPersonalLetter(){
+        return $this->hasMany(PersonalLetter::class,'from_user_id');
+    }
+
+    /**
+     * 通过user找到所有的向该用户发送的personalLetter
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function toPersonalLetter(){
         return $this->hasMany(PersonalLetter::class,'to_user_id');
+    }
+
+    /**
+     * 通过用户找到其对应的账户
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function account(){
+        return $this->hasOne(Account::class,'user_id');
     }
 }

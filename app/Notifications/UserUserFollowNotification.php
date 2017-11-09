@@ -31,10 +31,18 @@ class UserUserFollowNotification extends Notification
     public function via($notifiable)
     {
         return ['database'];
+        /*database表示使用数据库站内信通知方式*/
+        /*mail表示使用邮件通知方式*/
         /*return ['database','mail'];*/
     }
 
+    /**
+     * toDatabase()的函数名是根据via()中的database起的名字
+     * @param $notifiable
+     * @return array
+     */
     public function toDatabase($notifiable){
+        /*写入数据库中的数据*/
         return [
             'follower' => Auth::user()->username
         ];

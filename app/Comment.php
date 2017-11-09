@@ -22,4 +22,12 @@ class Comment extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * 通过comment找到discussion
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function discussion(){
+        return $this->belongsTo(Discussion::class);
+    }
 }

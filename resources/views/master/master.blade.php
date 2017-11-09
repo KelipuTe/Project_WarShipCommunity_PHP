@@ -6,7 +6,7 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
     <link type="text/css" rel="stylesheet" href="/css/style.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js" ></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js"></script>
     <script type="text/javascript" src="/ThirdPartyLibrary/jquery.form.js"></script>
     @yield('head')
 </head>
@@ -32,6 +32,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if(Auth::check())
+                    <li><a href="/notification/show">消 息 <span class="badge">{{count(Auth::user()->notifications)}}</span></a></li>
                     <li><img src="{{Auth::user()->avatar}}" class="img-circle img_avatar_small" alt="50x50"></li>
                     <li>
                         <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

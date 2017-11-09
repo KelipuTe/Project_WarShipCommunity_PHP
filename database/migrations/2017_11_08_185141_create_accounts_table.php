@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserDiscussionTable extends Migration
+class CreateAccountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateUserDiscussionTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_discussion', function (Blueprint $table) {
+        Schema::create('accounts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->integer('discussion_id')->unsigned();
+            $table->integer('liveness')->default(0);//用户活跃度
+            $table->integer('bonus_points')->default(0);//用户账户积分
+            $table->double('balance')->default(0);//用户账户余额
+            $table->integer('vip')->default(0);//用户是否是vip
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateUserDiscussionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_discussion');
+        Schema::dropIfExists('accounts');
     }
 }

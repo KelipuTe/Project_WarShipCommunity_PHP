@@ -23,12 +23,13 @@
                                             <img class="media-object img-circle img_avatar_small" src="{{$introduction->user->avatar}}">
                                         </div>
                                         <div class="media-body">
-                                            <h4 class="media-heading"><a href="/office/show/{{$introduction->id}}">{{$introduction->title}}</a>
-                                                <div class="pull-right">
-                                                    <span>{{count($introduction->messages)}}回复</span>
-                                                </div>
+                                            <h4 class="media-heading">
+                                                <a href="/office/show/{{$introduction->id}}">{{$introduction->title}}</a>
                                             </h4>
                                             {{$introduction->user->username}}
+                                            <div class="pull-right">
+                                                <span>{{count($introduction->messages)}}回复</span>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach

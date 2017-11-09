@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Comment;
 use App\Discussion;
 use App\Http\Requests\CommitRequest;
@@ -30,10 +31,12 @@ class ForumController extends Controller
      */
     public function store(ForumStoreRequest $request){
         $data = [
-            'user_id'=>\Auth::user()->id,
-            'last_user_id'=>\Auth::user()->id,
+            'user_id'=>Auth::user()->id,
+            'last_user_id'=>Auth::user()->id,
         ];
         $discussion = Discussion::create(array_merge($request->all(),$data));
+        $accountController = new AccountController();
+        $accountController->forumStore(Auth::user()->id);//创建讨论，增加活跃值
         return redirect()->action('ForumController@show',['id'=>$discussion->id]);
     }
 
@@ -44,7 +47,8 @@ class ForumController extends Controller
      */
     public function show($id){
         $discussion = Discussion::findOrFail($id);
-        return view('forum/show',compact('discussion'));
+        $comments = $discussion->comments()->paginate(10);//分页
+        return view('forum/show',compact('discussion','comments'));
     }
 
     /**
@@ -53,7 +57,12 @@ class ForumController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function commit(CommitRequest $request){
-        Comment::create(array_merge($request->all(),['user_id'=>\Auth::user()->id]));
+        Comment::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
+        $discussion = Discussion::findOrFail($request->get('discussion_id'));
+        $discussion->update(['last_user_id'=>Auth::user()->id]);
+        $accountController = new AccountController();
+        $accountController->officeWelcomer(Auth::user()->id);//讨论评论提供者，增加活跃值
+        $accountController->officeWelcome($discussion->user->id);//讨论被评论，增加活跃值
         return redirect()->action('ForumController@show',['id'=>$request->get('discussion_id')]);
     }
 }

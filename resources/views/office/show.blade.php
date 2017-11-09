@@ -15,9 +15,9 @@
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading">{{$introduction->title}}
-                                    @if(Auth::check() && Auth::user()->id == $introduction->user_id)
+                                    {{--@if(Auth::check() && Auth::user()->id == $introduction->user_id)
                                         <a class="btn btn-primary btn-lg pull-right" href="/office/show/{{$introduction->id}}/edit" role="button">修改</a>
-                                    @endif
+                                    @endif--}}
                                 </h4>
                                 {{$introduction->user->name}}
                             </div>

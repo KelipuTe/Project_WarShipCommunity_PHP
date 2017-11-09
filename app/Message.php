@@ -22,4 +22,12 @@ class Message extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * 通过message找到introduction
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function introduction(){
+        return $this->belongsTo(Introduction::class);
+    }
 }

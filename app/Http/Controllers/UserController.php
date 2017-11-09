@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Account;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\User;
@@ -34,7 +35,8 @@ class UserController extends Controller
             'email_confirm_code'=>str_random(48),//生成48位邮箱验证码
             'avatar'=>'/image/avatar/default_avatar.jpg'
         ];
-        User::create(array_merge($request->all(),$data));//创建新用户
+        $user = User::create(array_merge($request->all(),$data));//创建新用户
+        Account::create(['user_id'=>$user->id]);//为新用户创建对应账户
         return redirect('/user/login');
     }
 

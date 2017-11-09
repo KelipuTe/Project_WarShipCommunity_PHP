@@ -21,12 +21,14 @@
                                 <img class="media-object img-circle img_avatar_small" src="{{$discussion->user->avatar}}">
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading"><a href="/forum/show/{{$discussion->id}}">{{$discussion->title}}</a>
-                                    <div class="pull-right">
-                                        <span>{{count($discussion->comments)}}回复</span>
-                                    </div>
+                                <h4 class="media-heading">
+                                    <a href="/forum/show/{{$discussion->id}}">{{$discussion->title}}</a>
                                 </h4>
                                 {{$discussion->user->username}}
+                                <div class="pull-right">
+                                    <span>共{{count($discussion->comments)}}条回复，</span>
+                                    <span>用户{{$discussion->last_user_id}}最后更新于{{$discussion->updated_at->diffForHumans()}}</span>
+                                </div>
                             </div>
                         </div>
                     @endforeach
