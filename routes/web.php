@@ -54,6 +54,9 @@ Route::post('/forum/show/commit','ForumController@commit');//讨论区评论后�
 Route::get('/activity/publicChat','ActivityController@publicChat');//活动区公共聊天室
 Route::post('/activity/showPublicChat','ActivityController@showPublicChat');//活动区公共聊天室后台
 Route::get('/activity/publicChatLogout','ActivityController@publicChatLogout');//退出活动区公共聊天室
+Route::get('/activity/sign','ActivityController@sign');//活动区每日签到页面
+Route::get('/activity/showSign','ActivityController@showSign');//活动区每日签到
+Route::get('/activity/signIn/{nowDay}','ActivityController@signIn');//每日签到或者补签
 
 //FollowController
 //Route::get('/follow/userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow');//用户关注讨论

@@ -30,7 +30,7 @@ class Account extends Model
      * 活跃值等级
      * @var array
      */
-    public static $levelScore = array(
+    public $levelScore = array(
         'level_1'=>100,
         'level_2'=>200,
         'level_3'=>300,
@@ -53,7 +53,7 @@ class Account extends Model
 
     public function level($liveness){
         for($i = 1;$i < 19;++$i){
-            if($liveness > $this->levelScore['level_'.$i]){
+            if($liveness < $this->levelScore['level_'.$i]){
                 break;
             }
         }

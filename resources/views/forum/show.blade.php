@@ -1,7 +1,4 @@
 @extends('forum.app')
-@section('head')
-    <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.4.4/vue.js"></script>
-@stop
 @section('breadCrumb')
     @parent
     <li><a href="" id="discussion-id" name="{{$discussion->id}}">{{$discussion->title}}</a></li>
@@ -345,10 +342,10 @@
             },
             computed:{
                 vliveness:function () {
-                    return this.liveness;
+                    return '活跃值：'+this.liveness;
                 },
                 vlevel:function () {
-                    return this.level;
+                    return '等级：'+this.level;
                 }
             }
         });

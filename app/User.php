@@ -118,7 +118,7 @@ class User extends Authenticatable
     }
 
     /**
-     * 通过user找到所有的向该用户发送的personalLetter
+     * 通过user找到所有该用户发送的personalLetter
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function fromPersonalLetter(){
@@ -126,7 +126,7 @@ class User extends Authenticatable
     }
 
     /**
-     * 通过user找到所有的向该用户发送的personalLetter
+     * 通过user找到所有向该用户发送的personalLetter
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function toPersonalLetter(){
@@ -134,10 +134,18 @@ class User extends Authenticatable
     }
 
     /**
-     * 通过用户找到其对应的账户
+     * 通过user找到其对应的account
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function account(){
         return $this->hasOne(Account::class,'user_id');
+    }
+
+    /**
+     * 通过user找到其对应的sign
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function signs(){
+        return $this->hasMany(Sign::class,'user_id');
     }
 }
