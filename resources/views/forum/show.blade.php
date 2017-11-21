@@ -166,7 +166,7 @@
         </div>
     </div>
     {{--用户关注讨论的Vue.js组件--}}
-    <template id="template-user-discussion-button">
+    {{--<template id="template-user-discussion-button">
         <div>
             <button class="btn btn-default" :class="vclass" @click="userDiscussionFollow()">
                 <span class="glyphicon " :class="vglyphicon"></span>
@@ -232,7 +232,7 @@
         new Vue({
             el:'#user-discussion'
         });
-    </script>
+    </script>--}}
     {{--用户关注讨论的Vue.js组件--}}
     {{--用户关注用户的Vue.js组件--}}
     <template id="template-user-user-button">
@@ -354,4 +354,5 @@
         });
     </script>
     {{--用户等级的Vue.js组件--}}
+    <script src="/js/app.js" type="text/javascript" rel="script"></script>
 @stop

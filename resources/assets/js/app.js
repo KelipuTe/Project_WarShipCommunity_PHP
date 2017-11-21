@@ -20,3 +20,9 @@ Vue.component('example', require('./components/Example.vue'));
 const app = new Vue({
     el: '#app'
 });
+
+Vue.component('user-discussion-button', require('./components/UserDiscussionButton.vue'));
+
+const userDiscussion = new Vue({
+    el: '#user-discussion'
+});
