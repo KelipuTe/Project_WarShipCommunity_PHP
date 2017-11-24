@@ -16,7 +16,7 @@
                 </div>
                 <div>
                     @foreach($discussions as $discussion)
-                        <div class="media">
+                        <div class="media forum-line">
                             <div class="media-left">
                                 <img class="media-object img-circle img_avatar_small" src="{{$discussion->user->avatar}}">
                             </div>
@@ -32,6 +32,7 @@
                             </div>
                         </div>
                     @endforeach
+                    <div class="text-center">{!! $discussions->render() !!}</div>{{--分页--}}
                 </div>
             </div>
         </div>

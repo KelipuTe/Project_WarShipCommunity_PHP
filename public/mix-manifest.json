@@ -1,4 +1,6 @@
 {
+    "/js/forumShow.js": "/js/forumShow.js",
+    "/js/activitySign.js": "/js/activitySign.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css"
 }

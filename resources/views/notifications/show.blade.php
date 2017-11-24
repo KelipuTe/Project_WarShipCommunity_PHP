@@ -5,7 +5,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">消息通知</div>
-                @foreach($user->notifications as $notification)
+                @foreach($notifications as $notification)
                     @include('notifications.'.snake_case(class_basename($notification->type)))
                 @endforeach
             </div>

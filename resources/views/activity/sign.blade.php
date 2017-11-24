@@ -12,16 +12,16 @@
                         <h2>每日签到</h2>
                     </div>
                 </div>
-                {{--签到组件--}}
-                <div id="sign">
-                    <sign></sign>
+                {{--显示每日签到日历的Vue.js组件--}}
+                <div id="showSign">
+                    <show-sign></show-sign>
                 </div>
-                {{--签到组件--}}
+                {{--显示每日签到日历的Vue.js组件--}}
             </div>
         </div>
     </div>
-    {{--用户关注用户的Vue.js组件--}}
-    <template id="template-sign">
+    {{--显示每日签到日历的Vue.js组件--}}
+    {{--<template id="template-showSign">
         <div>
             <div><span v-text="vyear"></span> 年 <span v-text="vmonth"></span> 月</div>
             <div>
@@ -64,8 +64,8 @@
         }
     </script>
     <script>
-        Vue.component('sign',{
-            template:'#template-sign',
+        Vue.component('showSign',{
+            template:'#template-showSign',
             data:function () {
                 return{
                     year:0,
@@ -80,7 +80,7 @@
             methods:{
                 showSign:function () {
                     var vm = this;
-                    $.ajax({
+                    jQuery.ajax({
                         type:'GET',
                         url:'/activity/showSign',
                         dataType:'json',
@@ -165,6 +165,9 @@
         new Vue({
             el:'#sign'
         });
-    </script>
-    {{--用户关注用户的Vue.js组件--}}
+    </script>--}}
+    {{--显示每日签到日历的Vue.js组件--}}
+    {{--引入经过编译的Vuejs组件--}}
+    <script src="/js/activitySign.js" type="text/javascript" rel="script"></script>
+    {{--引入经过编译的Vuejs组件--}}
 @stop

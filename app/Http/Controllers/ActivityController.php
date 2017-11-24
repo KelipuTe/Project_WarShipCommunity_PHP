@@ -69,7 +69,6 @@ class ActivityController extends Controller
      * @return mixed
      */
     public function showSign(){
-        $user = Auth::user();
         $nowTime = Carbon::now();
         $sign = Sign::all()
             ->where('user_id',Auth::user()->id)
@@ -95,7 +94,8 @@ class ActivityController extends Controller
             'year' => $sign->year,
             'month' => $sign->month,
             'day' => $sign->day,
-            'combo' => $sign->combo
+            'total' => $this->totalCount(),
+            'combo' => $this->comboCount($sign->day,$nowTime->day)
         ]);
     }
 
@@ -104,7 +104,6 @@ class ActivityController extends Controller
      * @return mixed
      */
     public function signIn($nowDay){
-        $user = Auth::user();
         $nowTime = Carbon::now();
         $sign = Sign::all()
             ->where('user_id',Auth::user()->id)
@@ -126,14 +125,61 @@ class ActivityController extends Controller
             ];
             $sign = Sign::create(array_merge($data));
         }
-        $dayArray = explode(',',$sign->day);
-        $dayArray[$nowDay-1] = '1';
-        $daysign = $dayArray[0];
+        $dayArray = explode(',',$sign->day);//把字符串拆分成数组
+        $dayArray[$nowDay-1] = '1';//今天签到
+        $daysign = $dayArray[0];//把拆分的数组组装成原来的字符串
         for($i=1;$i<count($dayArray);++$i){
             $daysign = $daysign.','.$dayArray[$i];
         }
-        $sign->update(['day'=>$daysign]);
+        $sign->update(['day'=>$daysign]);//更新数据库
+        $this->livenessCount($sign->day,$nowTime->day);//签到获得活跃值
         return $this->showSign();
+    }
+
+    /**
+     * 计算用户累计签到天数
+     * @return int
+     */
+    function totalCount(){
+        $signs = Sign::all()->where('user_id',Auth::user()->id);//取出用户所有的签到表
+        if($signs == null){
+            return 0;
+        }
+        $count = 0;
+        foreach ($signs as $sign){
+            $count = $count + substr_count($sign->day,'1');//统计目标字符串内某字符串出现的次数
+        }
+        return $count;
+    }
+
+    /**
+     * 计算当月连续签到天数
+     * @param $day
+     * @param $i_day
+     * @return int
+     */
+    function comboCount($day,$i_day){
+        $combo = 0;
+        $days = explode(',',$day);
+        /*这里先判断下表是否越界，如果从当月第一天就连续签到的话，先判断是否签到会造成下标越界错误*/
+        while($i_day > 0 && $days[$i_day-1] != '0'){
+            $combo = $combo + 1;
+            --$i_day;
+        }
+        return $combo;
+    }
+
+    /**
+     * 签到获得活跃值
+     * @param $day
+     * @param $i_day
+     */
+    function livenessCount($day,$i_day){
+        $total = $this->totalCount();
+        $combo = $this->comboCount($day,$i_day);
+        $power = 1 + (int)($total/10) + (int)($combo/7);//签到活跃值倍率=基础倍率1+用户累计签到天数/10+当月连续签到天数/7
+        $accountController = new AccountController();
+        $accountController->activitySign(Auth::user()->id,$power);//增加活跃值
     }
 
 }

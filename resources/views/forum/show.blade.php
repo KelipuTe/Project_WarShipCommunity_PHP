@@ -7,39 +7,34 @@
     {{--主体部分--}}
     <div class="container">
         <div class="row">
-            <div class="col-md-8" role="main">
-                {{--主体顶部巨幕--}}
-                <div class="jumbotron">
-                    <div class="container">
-                        <div class="media">
-                            <div class="media-left">
-                                <img class="media-object img-circle img_avatar_middle" src="{{$discussion->user->avatar}}">
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading">{{$discussion->title}}
-                                    @if(Auth::check() && Auth::user()->id == $discussion->user_id)
-                                        <a class="btn btn-primary btn-lg pull-right" href="" role="button">爆破</a>
-                                    @endif
-                                </h4>
-                                {{$discussion->user->username}}
-                            </div>
-                        </div>
+            <div class="col-md-9" role="main">
+                {{--主体内容--}}
+                <div class="panel panel-default panel-danger">
+                    <div class="panel-heading">
+                        <h2>{{$discussion->title}}
+                            @if(Auth::check() && Auth::user()->id == $discussion->user_id)
+                                <a class="btn btn-primary btn-sm pull-right" href="" role="button">爆破</a>
+                            @endif
+                        </h2>
+                    </div>
+                    <div class="panel-body">
+                        {!! $discussion->body !!}
                     </div>
                 </div>
-                {{--主体内容--}}
-                <div>
-                    {!! $discussion->body !!}
-                </div>
                 {{--评论部分--}}
-                {{--@foreach($discussion->comments as $comment)--}}
                 @foreach($comments as $comment)
-                    <hr>
-                    <div class="media">
-                        <div class="media-left">
-                            <img class="media-object img-circle img_avatar_small" src="{{$comment->user->avatar}}">
+                    <div class="panel panel-default panel-success">
+                        <div class="panel-heading">
+                            <div class="media">
+                                <div class="media-left">
+                                    <img class="media-object img-circle img_avatar_small" src="{{$comment->user->avatar}}">
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading forum-show-line">{{$comment->user->username}}</h4>
+                                </div>
+                            </div>
                         </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">{{$comment->user->username}}</h4>
+                        <div class="panel-body">
                             {!! $comment->body !!}
                         </div>
                     </div>
@@ -73,9 +68,9 @@
                     <a href="/user/login" class="form-control btn btn-success">登录参与讨论</a>
                 @endif
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 {{--关于文章--}}
-                <div class="panel panel-default">
+                <div class="panel panel-default panel-info">
                     <div class="panel-heading text-center">
                         <h2>{{$discussion->hasFollowedUser()}}</h2>
                         <span>已关注</span>
@@ -102,45 +97,38 @@
                     </div>
                 </div>
                 {{--关于作者--}}
-                <div class="panel panel-default">
+                <div class="panel panel-default panel-info">
                     <div class="panel-heading text-center">
                         <h3>关于作者</h3>
                     </div>
                     <div class="panel-body">
                         <div class="media">
                             <div class="media-left">
-                                <a class="statics-item" href="#">
-                                    <img src="{{$discussion->user->avatar}}" class="img_avatar_small" alt="{{$discussion->user->username}}">
-                                </a>
+                                <img src="{{$discussion->user->avatar}}" class="img_avatar_small" alt="{{$discussion->user->username}}">
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading statics-item">
+                                <h4 class="media-heading">
                                     <a href="#">{{$discussion->user->username}}</a>
                                 </h4>
                             </div>
-                            {{--<div class="user-statics">
-                                <div class="statics-item">活跃值{{$discussion->user->account->liveness}}</div>
-                            </div>--}}
-                            {{--用户等级的Vue.js组件--}}
-                            <div id="liveness">
-                                <div class="user-statics">
-                                    <liveness></liveness>
-                                </div>
+                        </div>
+                        {{--用户等级的Vue.js组件--}}
+                        <div id="liveness">
+                            <liveness></liveness>
+                        </div>
+                        {{--用户等级的Vue.js组件--}}
+                        <div class="user-statics">
+                            <div class="statics-item text-center">
+                                <div>讨 论</div>
+                                <div>{{count($discussion->user->discussions)}}</div>
                             </div>
-                            {{--用户等级的Vue.js组件--}}
-                            <div class="user-statics">
-                                <div class="statics-item text-center">
-                                    <div>讨 论</div>
-                                    <div>{{count($discussion->user->discussions)}}</div>
-                                </div>
-                                <div class="statics-item text-center">
-                                    <div>回 复</div>
-                                    <div>{{count($discussion->user->comments)}}</div>
-                                </div>
-                                <div class="statics-item text-center">
-                                    <div>关注者</div>
-                                    <div>{{count($discussion->user->userUserFollower)}}</div>
-                                </div>
+                            <div class="statics-item text-center">
+                                <div>回 复</div>
+                                <div>{{count($discussion->user->comments)}}</div>
+                            </div>
+                            <div class="statics-item text-center">
+                                <div>关 注</div>
+                                <div>{{count($discussion->user->userUserFollower)}}</div>
                             </div>
                         </div>
                         <div id="user-user">
@@ -235,7 +223,7 @@
     </script>--}}
     {{--用户关注讨论的Vue.js组件--}}
     {{--用户关注用户的Vue.js组件--}}
-    <template id="template-user-user-button">
+    {{--<template id="template-user-user-button">
         <div>
             <button class="btn btn-default" :class="vclass" @click="userUserFollow()">
                 <span class="glyphicon " :class="vglyphicon"></span>
@@ -260,7 +248,7 @@
                     var discussion_id = $('#discussion-id').attr('name');
                     $.ajax({
                         type:'GET',
-                        url:'/VueHttp/hasUserUserFollow/' + discussion_id,
+                        url:'/follow/hasUserUserFollow/' + discussion_id,
                         dataType:'json',
                         success:function (data) {
                             vm.userUser = data.userUser;
@@ -275,7 +263,7 @@
                     var discussion_id = $('#discussion-id').attr('name');
                     $.ajax({
                         type:'GET',
-                        url:'/VueHttp/userUserFollow/' + discussion_id,
+                        url:'/follow/userUserFollow/' + discussion_id,
                         dataType:'json',
                         success:function (data) {
                             vm.userUser = data.userUser;
@@ -301,10 +289,10 @@
         new Vue({
             el:'#user-user'
         });
-    </script>
+    </script>--}}
     {{--用户关注用户的Vue.js组件--}}
     {{--用户等级的Vue.js组件--}}
-    <template id="template-liveness">
+    {{--<template id="template-liveness">
         <div>
             <span v-text="vliveness"></span>
             <span v-text="vlevel"></span>
@@ -352,7 +340,9 @@
         new Vue({
             el:'#liveness'
         });
-    </script>
+    </script>--}}
     {{--用户等级的Vue.js组件--}}
-    <script src="/js/app.js" type="text/javascript" rel="script"></script>
+    {{--引入经过编译的Vuejs组件--}}
+    <script src="/js/forumShow.js" type="text/javascript" rel="script"></script>
+    {{--引入经过编译的Vuejs组件--}}
 @stop

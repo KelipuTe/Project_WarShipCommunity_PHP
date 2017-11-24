@@ -1,8 +1,10 @@
 @extends('master.master')
 @section('head')
     {{--引入组件--}}
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.js"></script>
     <link type="text/css" rel="stylesheet" href="/ThirdPartyLibrary/Jcrop/css/jquery.Jcrop.css">
     <script type="text/javascript" src="/ThirdPartyLibrary/Jcrop/js/jquery.Jcrop.js"></script>
+    {{--引入组件--}}
 @stop
 @section('breadCrumb')
     @parent
@@ -12,18 +14,8 @@
     {{--网页部分--}}
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2" role="main">
-                {{--<div class="text-center">
-                    <img src="{{Auth::user()->avatar}}" class="img_avatar_middle img-circle">
-                </div>
-                {!! Form::open(['url'=>'/user/avatar','files'=>true]) !!}
-                <div class="form-group">
-                    {!! Form::file('avatar') !!}
-                </div>
-                <div class="form-group">
-                    {!! Form::submit('submit',['class'=>'btn btn-success form-control']) !!}
-                </div>
-                {!! Form::close() !!}--}}
+            <div class="col-md-3 col-md-offset-1 col-sm-12" role="main">
+                {{--头像裁剪--}}
                 <div class="text-center">
                     <div id="validation-errors"></div>
                     <img src="{{Auth::user()->avatar}}" class="img_avatar_middle img-circle" id="user-avatar">
@@ -39,8 +31,105 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-7 col-sm-12">
+                <div>
+                    <input id="token" name="_token" value="{{csrf_token()}}" type="hidden">
+                    <div class="form-group user-form-line">
+                        <label for="info-uid" class="col-md-2 user-form-lable-line">UID：</label>
+                        <div class="col-md-8">
+                            <input id="info-uid" type="text" class="form-control" value="{{Auth::user()->id}}" disabled/>
+                        </div>
+                    </div>
+                    <div class="form-group user-form-line">
+                        <label for="info-username" class="col-md-2 user-form-lable-line">Username：</label>
+                        <div class="col-md-8">
+                            <input id="info-username" type="text" class="form-control" value="{{Auth::user()->username}}" disabled/>
+                        </div>
+                    </div>
+                    <div class="form-group user-form-line">
+                        <label for="info-email" class="col-md-2 user-form-lable-line">Email：</label>
+                        <div class="col-md-8">
+                            <input id="info-email" type="email" class="form-control" value="{{Auth::user()->email}}" disabled/>
+                        </div>
+                        <div class="col-md-1">
+                            {{--邮箱验证组件--}}
+                            <div id="info-email-confirm">
+                                <info-email-confirm></info-email-confirm>
+                            </div>
+                            <template id="template-info-email-confirm">
+                                <div>
+                                    <button class="btn btn-default" :class="vclass" @click="doEmailConfirm()">
+                                        <span v-text="vtext"></span>
+                                    </button>
+                                </div>
+                            </template>
+                            <script>
+                                Vue.component('info-email-confirm',{
+                                    template:'#template-info-email-confirm',
+                                    data:function () {
+                                        return{
+                                            emailConfirm:0
+                                        }
+                                    },
+                                    created:function () {
+                                        this.emailConfirm = this.hasEmailConfirm();
+                                    },
+                                    methods:{
+                                        hasEmailConfirm:function () {
+                                            var vm = this;
+                                            $.ajax({
+                                                type:'GET',
+                                                url:'/user/getEmailConfirm',
+                                                dataType:'json',
+                                                success:function (data) {
+                                                    vm.emailConfirm = data.emailConfirm;
+                                                },
+                                                error:function(jqXHR){
+                                                    console.log("出现错误：" +jqXHR.status);
+                                                }
+                                            });
+                                        },
+                                        doEmailConfirm:function () {
+                                            if(this.emailConfirm == 1){
+                                                alert('邮箱已验证');
+                                            }else{
+                                                var vm = this;
+                                                $.ajax({
+                                                    type:'GET',
+                                                    url:'/user/doEmailConfirm',
+                                                    dataType:'json',
+                                                    success:function (data) {
+                                                        this.emailConfirm = data.status;
+                                                        alert("邮件已发送，如果未收到邮件，请稍等片刻");
+                                                    },
+                                                    error:function(jqXHR){
+                                                        console.log("出现错误：" +jqXHR.status);
+                                                        alert("邮件发送失败");
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    },
+                                    computed:{
+                                        vclass:function () {
+                                            return this.emailConfirm == 1 ? 'btn-success' : 'btn-primary';
+                                        },
+                                        vtext:function () {
+                                            return this.emailConfirm == 1 ? '已验证' : '验证邮箱';
+                                        }
+                                    }
+                                });
+                                new Vue({
+                                    el:'#info-email-confirm'
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    {{--头像裁剪的遮罩窗体--}}
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

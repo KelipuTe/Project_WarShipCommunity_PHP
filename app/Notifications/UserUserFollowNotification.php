@@ -37,6 +37,7 @@ class UserUserFollowNotification extends Notification
     }
 
     /**
+     * notification 需要执行的函数
      * toDatabase()的函数名是根据via()中的database起的名字
      * @param $notifiable
      * @return array

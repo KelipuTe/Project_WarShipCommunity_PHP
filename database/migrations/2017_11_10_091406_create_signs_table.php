@@ -19,7 +19,6 @@ class CreateSignsTable extends Migration
             $table->integer('year');//年
             $table->integer('month');//月
             $table->string('day');//日，日的格式1,1,0,0,1...，1表示签到，0表示未签到
-            $table->integer('combo')->default(0);//连续签到
             $table->timestamps();
         });
     }

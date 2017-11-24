@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Discussion;
 use App\Introduction;
 use Illuminate\Support\Facades\Redis;
@@ -30,7 +31,7 @@ class MasterController extends Controller
     }
 
     public function forum(){
-        $discussions = Discussion::latest()->published()->get();
+        $discussions = Discussion::latest()->published()->paginate(10);
         return view('forum/forum',compact('discussions'));
     }
 

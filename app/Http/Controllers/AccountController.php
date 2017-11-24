@@ -64,6 +64,16 @@ class AccountController extends Controller
     }
 
     /**
+     * 签到增加活跃值
+     * @param $id
+     * @param $power
+     */
+    public function activitySign($id,$power = 1){
+        /*$power 表示签到活跃值倍率*/
+        $this->update($id,$power * Account::$livenessScore['activitySign']);
+    }
+
+    /**
      * 活跃值数据库操作函数
      * @param $id
      * @param $num
@@ -74,6 +84,11 @@ class AccountController extends Controller
         $account->update(['liveness'=>$account->liveness += $num]);
     }
 
+    /**
+     * 获得用户活跃值
+     * @param $id
+     * @return mixed
+     */
     public function getLiveness($id){
         $discussion = Discussion::find($id);
         $liveness = $discussion->user->account->liveness;

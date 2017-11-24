@@ -1,7 +1,7 @@
-<!--用户关注讨论的Vue.js组件-->
+<!--用户关注用户的Vue.js组件-->
 <template>
     <div>
-        <button class="btn btn-default" :class="vclass" @click="userDiscussionFollow()">
+        <button class="btn btn-default" :class="vclass" @click="userUserFollow()">
             <span class="glyphicon " :class="vglyphicon"></span>
             <span v-text="vtext"></span>
         </button>
@@ -11,41 +11,41 @@
 <script>
     export default {
         mounted() {
-            console.log('Component user-discussion-button Component mounted.')
+            console.log('Component user-user-button mounted.')
         },
         data:function () {
             return{
-                userDiscussion:0
+                userUser:0
             }
         },
         created:function () {
-            this.userDiscussion = this.hasUserDiscussionFollow();
+            this.userUser = this.hasUserUserFollow();
         },
         methods:{
-            hasUserDiscussionFollow:function () {
-                var vm = this;//这里需要指定是Vue.js的this不是JavaScript的this
+            hasUserUserFollow:function () {
+                var vm = this;
                 var discussion_id = $('#discussion-id').attr('name');
                 $.ajax({
                     type:'GET',
-                    url:'/follow/hasUserDiscussionFollow/' + discussion_id,
+                    url:'/follow/hasUserUserFollow/' + discussion_id,
                     dataType:'json',
                     success:function (data) {
-                        vm.userDiscussion = data.userDiscussion;
+                        vm.userUser = data.userUser;
                     },
                     error:function(jqXHR){
                         console.log("出现错误：" +jqXHR.status);
                     }
                 });
             },
-            userDiscussionFollow:function () {
+            userUserFollow:function () {
                 var vm = this;
                 var discussion_id = $('#discussion-id').attr('name');
                 $.ajax({
                     type:'GET',
-                    url:'/follow/userDiscussionFollow/' + discussion_id,
+                    url:'/follow/userUserFollow/' + discussion_id,
                     dataType:'json',
                     success:function (data) {
-                        vm.userDiscussion = data.userDiscussion;
+                        vm.userUser = data.userUser;
                     },
                     error:function(jqXHR){
                         console.log("出现错误：" +jqXHR.status);
@@ -55,13 +55,13 @@
         },
         computed:{
             vclass:function () {
-                return this.userDiscussion ? 'btn-success' : '';
+                return this.userUser ? 'btn-success' : '';
             },
             vglyphicon:function () {
-                return this.userDiscussion ? 'glyphicon-star' : 'glyphicon-star-empty';
+                return this.userUser ? 'glyphicon-star' : 'glyphicon-star-empty';
             },
             vtext:function () {
-                return this.userDiscussion ? '已关注' : '关注该讨论';
+                return this.userUser ? '已关注' : '关注TA';
             }
         }
     }

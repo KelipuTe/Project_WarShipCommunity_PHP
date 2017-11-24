@@ -15,15 +15,13 @@ class Account extends Model
 
     /**
      * 活跃值
+     * 命名方式为"区域名"+"区域控制器方法名"
      * @var array
      */
     public static $livenessScore = array(
-        'officeStore'=>50,
-        'forumWelcome'=>5,
-        'forumWelcomer'=>5,
-        'forumStore'=>10,
-        'forumCommit'=>5,
-        'forumCommitter'=>5
+        'officeStore'=>50, 'forumWelcome'=>5, 'forumWelcomer'=>5,
+        'forumStore'=>10, 'forumCommit'=>5, 'forumCommitter'=>5,
+        'activitySign'=>2
     );
 
     /**
@@ -31,26 +29,18 @@ class Account extends Model
      * @var array
      */
     public $levelScore = array(
-        'level_1'=>100,
-        'level_2'=>200,
-        'level_3'=>300,
-        'level_4'=>500,
-        'level_5'=>800,
-        'level_6'=>1300,
-        'level_7'=>2100,
-        'level_8'=>3400,
-        'level_9'=>5500,
-        'level_10'=>8900,
-        'level_11'=>14400,
-        'level_12'=>23300,
-        'level_13'=>37700,
-        'level_14'=>61000,
-        'level_15'=>98700,
-        'level_16'=>159700,
-        'level_17'=>258400,
-        'level_18'=>418100
+        'level_1'=>100, 'level_2'=>200, 'level_3'=>300, 'level_4'=>500,
+        'level_5'=>800, 'level_6'=>1300, 'level_7'=>2100, 'level_8'=>3400,
+        'level_9'=>5500, 'level_10'=>8900, 'level_11'=>14400, 'level_12'=>23300,
+        'level_13'=>37700, 'level_14'=>61000, 'level_15'=>98700, 'level_16'=>159700,
+        'level_17'=>258400, 'level_18'=>418100
     );
 
+    /**
+     * 判断活跃值对应等级
+     * @param $liveness
+     * @return int
+     */
     public function level($liveness){
         for($i = 1;$i < 19;++$i){
             if($liveness < $this->levelScore['level_'.$i]){

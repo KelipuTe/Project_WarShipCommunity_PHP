@@ -7,7 +7,7 @@
     <link type="text/css" rel="stylesheet" href="/css/style.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
     <script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js"></script>
-    <script type="text/javascript" src="/ThirdPartyLibrary/jquery.form.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.4.4/vue.js"></script>
     @yield('head')
 </head>
 <body>
@@ -32,7 +32,23 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if(Auth::check())
-                    <li><a href="/notification/show">消 息 <span class="badge">{{count(Auth::user()->notifications)}}</span></a></li>
+                    <li>
+                        <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">消 息
+                            @if(count(Auth::user()->unreadNotifications))
+                                <span class="badge">{{count(Auth::user()->unreadNotifications)}}</span>
+                            @endif
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                            <li><a href="/notification/showAll">所有消息</a></li>
+                            <li><a href="/notification/showUnread">未读消息
+                                    @if(count(Auth::user()->unreadNotifications))
+                                        <span class="badge">{{count(Auth::user()->unreadNotifications)}}</span>
+                                    @endif
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li><img src="{{Auth::user()->avatar}}" class="img-circle img_avatar_small" alt="50x50"></li>
                     <li>
                         <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -41,7 +57,6 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                             <li><a href="/user/infoEdit">个人信息</a></li>
-                            <li><a href="#">暂无内容</a></li>
                             <li><a href="#">暂无内容</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/user/logout">退出登录</a></li>
@@ -94,7 +109,7 @@
     <div class="text-center">
         <span> &copy; </span><span> 2017 </span><span class="glyphicon glyphicon-heart"></span><span> KelipuTe </span>
         <span> | </span>
-        <span> Powered by <a href="https://laravel-china.org/"> Laravel </a></span>
+        <span> Powered by <a href="https://laravel-china.org/"> Laravel 5.5 </a></span>
     </div>
 </footer>
 </body>

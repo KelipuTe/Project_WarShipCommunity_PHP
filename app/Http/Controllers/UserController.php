@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Account;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\ThirdPartyLibrary\MyClass\QQMailer;
 use App\User;
 use Dotenv\Validator;
 use Illuminate\Http\Request;
@@ -59,7 +61,7 @@ class UserController extends Controller
             'password'=>$request->get('password')
         ];
         /*登录验证*/
-        if(\Auth::attempt($data)){
+        if(Auth::attempt($data)){
             return redirect('/welcome');
         }
         /*验证失败*/
@@ -72,7 +74,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function logout(){
-        \Auth::logout();
+        Auth::logout();
         return redirect('/welcome');
     }
 
@@ -105,7 +107,7 @@ class UserController extends Controller
         }
         /*验证////////////////////////////////////////////////////////////////*/
         $destinationPath = 'uploads/';//保存上传头像的文件夹，在public目录下
-        $filename = \Auth::user()->id.'_'.time().'_'.$file->getClientOriginalName();//拿到上传文件文件名
+        $filename = Auth::user()->id.'_'.time().'_'.$file->getClientOriginalName();//拿到上传文件文件名
         /*文件名重命名为用户id+上传时间+文件名*/
         $file->move($destinationPath, $filename);//将上传的图片移到uploads文件夹下
         Image::make($destinationPath.$filename)->fit(400)->save();//裁剪头像，缩略图
@@ -136,9 +138,51 @@ class UserController extends Controller
         $xAlign = (int)$request->get('x');
         $yAlign = (int)$request->get('y');
         Image::make($photo)->crop($width,$height,$xAlign,$yAlign)->save();
-        $user = \Auth::user();
+        $user = Auth::user();
         $user->avatar = asset($photo);
         $user->save();
         return redirect('/user/infoEdit');
+    }
+
+    /**
+     * 获取邮箱验证
+     * @return mixed
+     */
+    public function getEmailConfirm(){
+        return \Response::json([
+            'emailConfirm' => Auth::user()->email_confirm
+        ]);
+    }
+
+    /**
+     * 发送邮箱验证邮件
+     * @return mixed
+     */
+    public function doEmailConfirm(){
+        $mailer = new QQMailer(false);
+        $email = Auth::user()->email;
+        $title = "邮箱验证";//邮件标题
+        $content = '<a href="http://localhost:8000/user/checkEmailConfirm/'.$email.'/'.Auth::user()->email_confirm_code.'">点击验证</a>';//邮件内容
+        $mailer->addFile('image/avatar/ougen.jpg');//添加附件
+        $status = $mailer->send($email, $title, $content);//发送QQ邮件;
+        return \Response::json([
+            'status' => $status
+        ]);
+    }
+
+    public function checkEmailConfirm($email,$emailConfirmCode){
+        $user = User::All()->where('email',$email)->first();
+        if($emailConfirmCode == $user->email_confirm_code) {
+            $status = 1;
+            $data = [
+                'email_confirm_code'=>str_random(48),
+                'email_confirm'=>1
+            ];
+            $user->update($data);
+            return view('user/emailConfirm', compact('status','email', 'emailConfirmCode'));
+        }else{
+            $status = 0;
+            return view('user/emailConfirm', compact('status'));
+        }
     }
 }

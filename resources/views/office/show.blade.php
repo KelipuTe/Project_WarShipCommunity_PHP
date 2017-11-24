@@ -14,18 +14,13 @@
                                 <img class="media-object img-circle img_avatar_middle" src="{{$introduction->user->avatar}}">
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading">{{$introduction->title}}
-                                    {{--@if(Auth::check() && Auth::user()->id == $introduction->user_id)
-                                        <a class="btn btn-primary btn-lg pull-right" href="/office/show/{{$introduction->id}}/edit" role="button">修改</a>
-                                    @endif--}}
-                                </h4>
-                                {{$introduction->user->name}}
+                                <h2 class="media-heading">{{$introduction->title}}
+                                    <a>@ {{$introduction->user->username}}</a>
+                                </h2>
+                                <h3>{!! $introduction->body !!}</h3>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    {!! $introduction->body !!}
                 </div>
                 @foreach($introduction->messages as $message)
                     <hr>

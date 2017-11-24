@@ -12,11 +12,23 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
     /**
-     * 用户关注用户消息通知
+     * 显示用户所有消息通知
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(){
+    public function showAll(){
         $user = Auth::user();
-        return view('/notifications/show',compact('user'));
+        $notifications = $user->notifications;
+        return view('/notifications/show',compact('notifications'));
+    }
+
+    /**
+     * 显示用户未读消息通知
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showUnread(){
+        $user = Auth::user();
+        $notifications = $user->unreadNotifications;
+        $user->unreadNotifications->markAsRead();
+        return view('/notifications/show',compact('notifications'));
     }
 }
