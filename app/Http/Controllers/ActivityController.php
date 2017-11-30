@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Sign;
 use Auth;
+use Response;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 use App\ChatMessage;
 use App\Events\PublicChat;
 use App\Events\PublicChatUserSignIn;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
+use App\Sign;
 
 /**
  * 这个控制器负责活动区
@@ -18,6 +20,11 @@ use Illuminate\Support\Facades\Redis;
  */
 class ActivityController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * 公共聊天室页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -28,8 +35,8 @@ class ActivityController extends Controller
             /*PublicChatUserSignIn，type=1表示有用户进入公共聊天室*/
             event(new PublicChatUserSignIn(1,Auth::user()->username));
         }
-        $userList = Redis::smembers($key);//从 Redis Set 集合里取数据
-        return view('activity/publicChat',compact('userList'));
+        $userLists = Redis::smembers($key);//从 Redis Set 集合里取数据
+        return view('activity/publicChat',compact('userLists'));
     }
 
     /**
@@ -90,7 +97,7 @@ class ActivityController extends Controller
             ];
             $sign = Sign::create(array_merge($data));
         }
-        return \Response::json([
+        return Response::json([
             'year' => $sign->year,
             'month' => $sign->month,
             'day' => $sign->day,
@@ -101,6 +108,7 @@ class ActivityController extends Controller
 
     /**
      * 每日签到或者补签
+     * @param $nowDay
      * @return mixed
      */
     public function signIn($nowDay){

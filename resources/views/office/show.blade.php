@@ -15,7 +15,7 @@
                             </div>
                             <div class="media-body">
                                 <h2 class="media-heading">{{$introduction->title}}
-                                    <a>@ {{$introduction->user->username}}</a>
+                                    <a href="/user/userInfo/{{$introduction->user->id}}">@ {{$introduction->user->username}}</a>
                                 </h2>
                                 <h3>{!! $introduction->body !!}</h3>
                             </div>

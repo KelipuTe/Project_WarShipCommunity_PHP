@@ -87,7 +87,7 @@
                                 <user-discussion-button></user-discussion-button>
                                 {{--用户关注讨论的Vue.js组件--}}
                             @else
-                                <a href="/VueHttp/userDiscussionFollow/{{$discussion->id}}"
+                                <a href="/user/login"
                                    class="btn btn-default">
                                     <span class="glyphicon glyphicon-star-empty"></span>
                                     关注该讨论
@@ -108,7 +108,7 @@
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading">
-                                    <a href="#">{{$discussion->user->username}}</a>
+                                    <a href="/user/userInfo/{{$discussion->user->id}}">{{$discussion->user->username}}</a>
                                 </h4>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
                                 {{--用户关注用户的Vue.js组件--}}
                             @else
                                 <div class="statics-item">
-                                <a href="/VueHttp/userUserFollow/{{$discussion->user->id}}"
+                                <a href="/user/login"
                                    class="btn btn-default">
                                     <span class="glyphicon glyphicon-star-empty"></span>
                                     关注该用户

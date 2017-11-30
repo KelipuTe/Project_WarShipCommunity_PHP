@@ -10,6 +10,11 @@ namespace App\ThirdPartyLibrary\MyClass;
 
 use PHPMailer\PHPMailer\PHPMailer;
 
+/**
+ * QQ 邮件发送处理类
+ * Class QQMailer
+ * @package App\ThirdPartyLibrary\MyClass
+ */
 class QQMailer
 {
     /**

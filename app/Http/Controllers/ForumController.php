@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Illuminate\Http\Request;
+
 use App\Comment;
 use App\Discussion;
 use App\Http\Requests\CommitRequest;
 use App\Http\Requests\ForumStoreRequest;
-use Illuminate\Http\Request;
 
 /**
  * 这个控制器负责讨论区
@@ -16,6 +17,11 @@ use Illuminate\Http\Request;
  */
 class ForumController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('show');
+    }
+
     /**
      * 讨论创建页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

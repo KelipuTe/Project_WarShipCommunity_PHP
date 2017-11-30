@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Response;
+use Illuminate\Http\Request;
+
+use App\User;
 use App\Discussion;
 use App\Notifications\UserUserFollowNotification;
-use App\User;
-use Illuminate\Http\Request;
 
 /**
  * 这个控制器负责各种关注的方法
@@ -17,7 +19,7 @@ class FollowController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth',['only' => ['userDiscussionFollow']]);
+        $this->middleware('auth');
     }
 
     /**
@@ -27,7 +29,7 @@ class FollowController extends Controller
      */
     public function userDiscussionFollow($discussion){
         Auth::user()->userDiscussionFollow($discussion);//获取自己的user对象调用关注用户讨论
-        return \Response::json([
+        return Response::json([
             'userDiscussion' => Auth::user()->hasFollowedDiscussion($discussion)
         ]);
     }
@@ -38,7 +40,7 @@ class FollowController extends Controller
      * @return mixed
      */
     public function hasUserDiscussionFollow($discussion){
-        return \Response::json([
+        return Response::json([
             'userDiscussion' => Auth::user()->hasFollowedDiscussion($discussion)
         ]);
     }
@@ -72,7 +74,7 @@ class FollowController extends Controller
         $discussion = Discussion::find($discussion_id);//通过discussion_id找到discussion对象
         $user = User::find($discussion->user->id);//通过discussion对象找到user对象
         $followers = $user->userUserFollower()->pluck('follower_id')->toArray();//通过user对象找到所有的follower
-        return \Response::json([
+        return Response::json([
             'userUser' => in_array(Auth::user()->id,$followers)
         ]);
     }

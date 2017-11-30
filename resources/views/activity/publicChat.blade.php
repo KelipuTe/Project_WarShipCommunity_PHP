@@ -11,7 +11,7 @@
                 <div>
                     <dl id="userSignIn">
                         <dt>室内成员：</dt>
-                        @foreach($userList as $userlist)
+                        @foreach($userLists as $userlist)
                             <dt>{{$userlist}}</dt>
                         @endforeach
                     </dl>

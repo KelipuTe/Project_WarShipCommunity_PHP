@@ -1,4 +1,8 @@
 @extends('master.master')
+@section('breadCrumb')
+    @parent
+    <li><a href="">消息通知</a></li>
+@stop
 @section('content')
 <div class="container">
     <div class="row">

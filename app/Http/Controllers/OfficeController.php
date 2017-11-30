@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+
 use App\Http\Requests\MessageRequest;
 use App\Http\Requests\OfficeStoreRequest;
 use App\Introduction;
@@ -15,6 +16,11 @@ use App\Message;
  */
 class OfficeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('show');
+    }
+
     /**
      * 新人报道创建页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

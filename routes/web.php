@@ -33,7 +33,7 @@ Route::get('/user/login',[ 'as' => 'login', 'uses' => 'UserController@login']);/
 Route::post('/user/signIn','UserController@signIn');//登录页面后台
 Route::get('/user/logout','UserController@logout');//退出登录
 Route::get('/user/infoEdit','UserController@infoEdit');//个人信息修改页面
-Route::get('/user/getEmailConfirm','UserController@getEmailConfirm');//获取邮箱验证
+Route::get('/user/userInfo/{id}','UserController@userInfo');//个人信息页面
 Route::get('/user/doEmailConfirm','UserController@doEmailConfirm');//发送邮箱验证邮件
 Route::get('/user/checkEmailConfirm/{email}/{emailConfirmCode}','UserController@checkEmailConfirm');//邮箱验证
 Route::post('/user/avatar','UserController@avatar');//上传头像
@@ -43,9 +43,9 @@ Route::post('/user/cropAvatar','UserController@cropAvatar');//裁剪上传头像
 Route::get('/office/create','OfficeController@create');//办公区新人报道创建页面
 Route::post('/office/store','OfficeController@store');//办公区新人报道创建页面后台
 Route::get('/office/show/{id}','OfficeController@show');//办公区新人报道显示页面
+Route::post('/office/show/welcome','OfficeController@welcome');//办公区新人报道显示页面迎新后台
 //Route::get('/office/show/{id}/edit','OfficeController@edit');//办公区新人报道修改页面
 //Route::patch('/office/show/{id}/update','OfficeController@update');//办公区新人报道修改页面后台
-Route::post('/office/show/welcome','OfficeController@welcome');//办公区新人报道显示页面迎新后台
 
 //ForumController
 Route::get('/forum/create','ForumController@create');//讨论区创建页面

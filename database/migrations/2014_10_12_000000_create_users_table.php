@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('email_confirm')->default(0);//email验证状态
             $table->string('password');//密码
             $table->string('avatar');//头像
+            $table->integer('blacklist')->default(0);//用户是否是黑名单
             $table->rememberToken();
             $table->timestamps();
         });

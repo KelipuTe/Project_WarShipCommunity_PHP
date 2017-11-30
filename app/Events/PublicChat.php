@@ -15,6 +15,10 @@ class PublicChat
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * 实时通信类
+     * @var ChatMessage
+     */
     public $chatMessage;
 
     /**

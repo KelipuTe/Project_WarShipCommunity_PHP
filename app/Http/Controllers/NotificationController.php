@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
  */
 class NotificationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * 显示用户所有消息通知
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

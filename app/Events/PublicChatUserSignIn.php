@@ -14,8 +14,18 @@ class PublicChatUserSignIn
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * 用户登录状态，登入：1，登出：-1
+     * @var
+     */
     public $type;
+
+    /**
+     * 用户名
+     * @var
+     */
     public $username;
+
     /**
      * Create a new event instance.
      *

@@ -8,7 +8,7 @@
 @stop
 @section('breadCrumb')
     @parent
-    <li><a href="/user/info">个人信息</a></li>
+    <li><a href="">个人信息修改</a></li>
 @stop
 @section('content')
     {{--网页部分--}}
@@ -18,7 +18,7 @@
                 {{--头像裁剪--}}
                 <div class="text-center">
                     <div id="validation-errors"></div>
-                    <img src="{{Auth::user()->avatar}}" class="img_avatar_middle img-circle" id="user-avatar">
+                    <img src="{{$user->avatar}}" class="img_avatar_middle img-circle" id="user-avatar">
                     {!! Form::open(['url'=>'/user/avatar','files'=>true,'id'=>'avatar']) !!}
                     <div class="text-center">
                         <button type="button" class="btn btn-success avatar-button" id="upload-avatar">更换新的头像</button>
@@ -37,92 +37,19 @@
                     <div class="form-group user-form-line">
                         <label for="info-uid" class="col-md-2 user-form-lable-line">UID：</label>
                         <div class="col-md-8">
-                            <input id="info-uid" type="text" class="form-control" value="{{Auth::user()->id}}" disabled/>
+                            <input id="info-uid" type="text" class="form-control" value="{{$user->id}}" disabled/>
                         </div>
                     </div>
                     <div class="form-group user-form-line">
                         <label for="info-username" class="col-md-2 user-form-lable-line">Username：</label>
                         <div class="col-md-8">
-                            <input id="info-username" type="text" class="form-control" value="{{Auth::user()->username}}" disabled/>
+                            <input id="info-username" type="text" class="form-control" value="{{$user->username}}" disabled/>
                         </div>
                     </div>
                     <div class="form-group user-form-line">
                         <label for="info-email" class="col-md-2 user-form-lable-line">Email：</label>
                         <div class="col-md-8">
-                            <input id="info-email" type="email" class="form-control" value="{{Auth::user()->email}}" disabled/>
-                        </div>
-                        <div class="col-md-1">
-                            {{--邮箱验证组件--}}
-                            <div id="info-email-confirm">
-                                <info-email-confirm></info-email-confirm>
-                            </div>
-                            <template id="template-info-email-confirm">
-                                <div>
-                                    <button class="btn btn-default" :class="vclass" @click="doEmailConfirm()">
-                                        <span v-text="vtext"></span>
-                                    </button>
-                                </div>
-                            </template>
-                            <script>
-                                Vue.component('info-email-confirm',{
-                                    template:'#template-info-email-confirm',
-                                    data:function () {
-                                        return{
-                                            emailConfirm:0
-                                        }
-                                    },
-                                    created:function () {
-                                        this.emailConfirm = this.hasEmailConfirm();
-                                    },
-                                    methods:{
-                                        hasEmailConfirm:function () {
-                                            var vm = this;
-                                            $.ajax({
-                                                type:'GET',
-                                                url:'/user/getEmailConfirm',
-                                                dataType:'json',
-                                                success:function (data) {
-                                                    vm.emailConfirm = data.emailConfirm;
-                                                },
-                                                error:function(jqXHR){
-                                                    console.log("出现错误：" +jqXHR.status);
-                                                }
-                                            });
-                                        },
-                                        doEmailConfirm:function () {
-                                            if(this.emailConfirm == 1){
-                                                alert('邮箱已验证');
-                                            }else{
-                                                var vm = this;
-                                                $.ajax({
-                                                    type:'GET',
-                                                    url:'/user/doEmailConfirm',
-                                                    dataType:'json',
-                                                    success:function (data) {
-                                                        this.emailConfirm = data.status;
-                                                        alert("邮件已发送，如果未收到邮件，请稍等片刻");
-                                                    },
-                                                    error:function(jqXHR){
-                                                        console.log("出现错误：" +jqXHR.status);
-                                                        alert("邮件发送失败");
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    },
-                                    computed:{
-                                        vclass:function () {
-                                            return this.emailConfirm == 1 ? 'btn-success' : 'btn-primary';
-                                        },
-                                        vtext:function () {
-                                            return this.emailConfirm == 1 ? '已验证' : '验证邮箱';
-                                        }
-                                    }
-                                });
-                                new Vue({
-                                    el:'#info-email-confirm'
-                                });
-                            </script>
+                            <input id="info-email" type="email" class="form-control" value="{{$user->email}}" disabled/>
                         </div>
                     </div>
                 </div>

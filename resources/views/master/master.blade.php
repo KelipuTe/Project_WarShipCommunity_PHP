@@ -10,7 +10,7 @@
     <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.4.4/vue.js"></script>
     @yield('head')
 </head>
-<body>
+<body >
 <!-- 顶部导航条 -->
 <nav class="navbar navbar-default">
     <div class="container-fluid">

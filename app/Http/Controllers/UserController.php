@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Auth;
-use App\Account;
-use App\Http\Requests\UserLoginRequest;
-use App\Http\Requests\UserRegisterRequest;
-use App\ThirdPartyLibrary\MyClass\QQMailer;
-use App\User;
-use Dotenv\Validator;
+use Session;
+use Response;
+use Validator;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+
+use App\User;
+use App\Account;
+use App\ThirdPartyLibrary\MyClass\QQMailer;
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserRegisterRequest;
 
 /**
  * 这个控制器负责和用户
@@ -37,9 +40,54 @@ class UserController extends Controller
             'email_confirm_code'=>str_random(48),//生成48位邮箱验证码
             'avatar'=>'/image/avatar/default_avatar.jpg'
         ];
-        $user = User::create(array_merge($request->all(),$data));//创建新用户
-        Account::create(['user_id'=>$user->id]);//为新用户创建对应账户
-        return redirect('/user/login');
+        $status = $this->doEmailConfirm($request->get("email"),$data['email_confirm_code']);//发送账号激活邮件;
+        if($status) {
+            $user = User::create(array_merge($request->all(), $data));//创建新用户
+            Account::create(['user_id' => $user->id]);//为新用户创建对应账户
+            Auth::logout();//用户登出
+            Session::flash('user_register_success','账号注册成功，已发送一封激活邮件到您的邮箱，在登陆之前您需要激活您的账号');
+            return redirect('/user/login');
+        }
+        Session::flash('user_register_failed','服务器正忙，请稍后再试');
+        return redirect('/user/register')->withInput();
+    }
+
+    /**
+     * 发送账号激活邮件
+     * @param $email
+     * @param $email_confirm_code
+     * @return bool
+     */
+    public function doEmailConfirm($email,$email_confirm_code){
+        $mailer = new QQMailer(false);
+        $title = "账号激活";//邮件标题
+        $content = '<h1>Welcome to WarShipCommunity</h1>'
+            . '<a href="http://localhost/user/checkEmailConfirm/' . $email . '/' . $email_confirm_code . '">点击激活您的账号</a>';//邮件内容
+        //$mailer->addFile('image/avatar/ougen.jpg');//添加附件
+        $status = $mailer->send($email, $title, $content);//发送QQ邮件;
+        return $status;
+    }
+
+    /**
+     * 邮箱验证码核对
+     * @param $email
+     * @param $emailConfirmCode
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function checkEmailConfirm($email,$emailConfirmCode){
+        $user = User::All()->where('email',$email)->first();
+        if($emailConfirmCode == $user->email_confirm_code) {
+            $status = 1;
+            $data = [
+                'email_confirm_code'=>str_random(48),
+                'email_confirm'=>1
+            ];
+            $user->update($data);
+            return view('user/emailConfirm', compact('status','email'));
+        }else{
+            $status = 0;
+            return view('user/emailConfirm', compact('status'));
+        }
     }
 
     /**
@@ -62,10 +110,16 @@ class UserController extends Controller
         ];
         /*登录验证*/
         if(Auth::attempt($data)){
-            return redirect('/welcome');
+            if(Auth::user()->email_confirm == 1) {
+                return redirect('/welcome');
+            }
+            /*账号尚未激活*/
+            Auth::logout();//用户登出
+            Session::flash('user_login_failed','账号尚未激活');
+            return redirect('/user/login')->withInput();//验证失败时返回登录页面并带回数据
         }
-        /*验证失败*/
-        \Session::flash('user_login_failed','密码输入错误');
+        /*密码输入错误，或用户不存在*/
+        Session::flash('user_login_failed','密码输入错误，或用户不存在');
         return redirect('/user/login')->withInput();//验证失败时返回登录页面并带回数据
     }
 
@@ -79,11 +133,22 @@ class UserController extends Controller
     }
 
     /**
+     * 个人信息页面
+     * @param $user_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function userInfo($user_id){
+        $user = User::findOrFail($user_id);
+        return view('user/userInfo',compact('user'));
+    }
+
+    /**
      * 个人信息修改页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function infoEdit(){
-        return view('user/infoEdit');
+        $user = Auth::user();
+        return view('user/infoEdit',compact('user'));
     }
 
     /**
@@ -98,15 +163,15 @@ class UserController extends Controller
         $rules = array(
             'image' => 'image'
         );//验证规则，图片格式
-        $validator = \Validator::make($input, $rules);//检查规则是否通过
+        $validator = Validator::make($input, $rules);//检查规则是否通过
         if ( $validator->fails() ) {
-            return \Response::json([
+            return Response::json([
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
             ]);
         }
         /*验证////////////////////////////////////////////////////////////////*/
-        $destinationPath = 'uploads/';//保存上传头像的文件夹，在public目录下
+        $destinationPath = 'uploads/avatar/';//保存上传头像的文件夹，在public目录下
         $filename = Auth::user()->id.'_'.time().'_'.$file->getClientOriginalName();//拿到上传文件文件名
         /*文件名重命名为用户id+上传时间+文件名*/
         $file->move($destinationPath, $filename);//将上传的图片移到uploads文件夹下
@@ -118,7 +183,7 @@ class UserController extends Controller
         $user->save();*/
         /*在实现图片裁剪时这三行代码在裁剪完成后在执行///////////////////////*/
         /*使用ajax时需要返回json格式的数据*/
-        return \Response::json([
+        return Response::json([
             'success' => true,
             'avatar' => asset($destinationPath.$filename),
             'image' => $destinationPath.$filename
@@ -142,47 +207,5 @@ class UserController extends Controller
         $user->avatar = asset($photo);
         $user->save();
         return redirect('/user/infoEdit');
-    }
-
-    /**
-     * 获取邮箱验证
-     * @return mixed
-     */
-    public function getEmailConfirm(){
-        return \Response::json([
-            'emailConfirm' => Auth::user()->email_confirm
-        ]);
-    }
-
-    /**
-     * 发送邮箱验证邮件
-     * @return mixed
-     */
-    public function doEmailConfirm(){
-        $mailer = new QQMailer(false);
-        $email = Auth::user()->email;
-        $title = "邮箱验证";//邮件标题
-        $content = '<a href="http://localhost:8000/user/checkEmailConfirm/'.$email.'/'.Auth::user()->email_confirm_code.'">点击验证</a>';//邮件内容
-        $mailer->addFile('image/avatar/ougen.jpg');//添加附件
-        $status = $mailer->send($email, $title, $content);//发送QQ邮件;
-        return \Response::json([
-            'status' => $status
-        ]);
-    }
-
-    public function checkEmailConfirm($email,$emailConfirmCode){
-        $user = User::All()->where('email',$email)->first();
-        if($emailConfirmCode == $user->email_confirm_code) {
-            $status = 1;
-            $data = [
-                'email_confirm_code'=>str_random(48),
-                'email_confirm'=>1
-            ];
-            $user->update($data);
-            return view('user/emailConfirm', compact('status','email', 'emailConfirmCode'));
-        }else{
-            $status = 0;
-            return view('user/emailConfirm', compact('status'));
-        }
     }
 }

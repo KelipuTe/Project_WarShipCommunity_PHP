@@ -1,3 +1,4 @@
+
 /*##########master##########*/
 /*master/master.blade.php*/
 /*去掉顶部导航条下方的空白*/
@@ -6,10 +7,17 @@
 }
 /*去掉顶部导航条下方的空白*/
 
+/*背景图片*/
+.master-body{
+    background: url('/image/background/ssv_fortress.jpg') fixed;
+    background-size: 100%;
+}
+/*背景图片*/
+
 /*限制图片最大宽高*/
 img{
-    max-width: 500px;
-    max-height: 500px;
+    max-width: 400px;
+    max-height: 400px;
 }
 /*限制图片最大宽高*/
 

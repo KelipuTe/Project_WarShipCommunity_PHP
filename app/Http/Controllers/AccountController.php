@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Response;
 use App\Account;
 use App\Discussion;
 use Illuminate\Http\Request;
@@ -14,86 +15,90 @@ use Illuminate\Support\Facades\DB;
  */
 class AccountController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     /**
      * 新人报道，增加活跃值
-     * @param $id
+     * @param $user_id
      */
-    public function officeStore($id){
-        $this->update($id,Account::$livenessScore['officeStore']);
+    public function officeStore($user_id){
+        $this->update($user_id,Account::$livenessScore['officeStore']);
     }
 
     /**
      * 新人报道被欢迎，增加活跃值
-     * @param $id
+     * @param $user_id
      */
-    public function officeWelcome($id){
-        $this->update($id,Account::$livenessScore['forumWelcome']);
+    public function officeWelcome($user_id){
+        $this->update($user_id,Account::$livenessScore['forumWelcome']);
     }
 
     /**
      * 新人报道欢迎者，增加活跃值
-     * @param $id
+     * @param $user_id
      */
-    public function officeWelcomer($id){
-        $this->update($id,Account::$livenessScore['forumWelcomer']);
+    public function officeWelcomer($user_id){
+        $this->update($user_id,Account::$livenessScore['forumWelcomer']);
     }
 
     /**
      * 创建讨论，增加活跃值
-     * @param $id
+     * @param $user_id
      */
-    public function forumStore($id){
-        $this->update($id,Account::$livenessScore['forumStore']);
+    public function forumStore($user_id){
+        $this->update($user_id,Account::$livenessScore['forumStore']);
     }
 
     /**
      * 讨论被评论，增加活跃值
-     * @param $id
+     * @param $user_id
      */
-    public function forumCommit($id){
-        $this->update($id,Account::$livenessScore['forumCommit']);
+    public function forumCommit($user_id){
+        $this->update($user_id,Account::$livenessScore['forumCommit']);
     }
 
     /**
      * 讨论评论提供者，增加活跃值
-     * @param $id
+     * @param $user_id
      */
-    public function forumCommitter($id){
-        $this->update($id,Account::$livenessScore['forumCommitter']);
+    public function forumCommitter($user_id){
+        $this->update($user_id,Account::$livenessScore['forumCommitter']);
     }
 
     /**
      * 签到增加活跃值
-     * @param $id
+     * @param $user_id
      * @param $power
      */
-    public function activitySign($id,$power = 1){
+    public function activitySign($user_id,$power = 1){
         /*$power 表示签到活跃值倍率*/
-        $this->update($id,$power * Account::$livenessScore['activitySign']);
+        $this->update($user_id,$power * Account::$livenessScore['activitySign']);
     }
 
     /**
      * 活跃值数据库操作函数
-     * @param $id
+     * @param $user_id
      * @param $num
      */
-    public function update($id,$num){
-        $user = DB::table('accounts')->select('id')->where('user_id',$id)->first();
+    public function update($user_id,$num){
+        $user = DB::table('accounts')->select('id')->where('user_id',$user_id)->first();
         $account = Account::findOrFail($user->id);
         $account->update(['liveness'=>$account->liveness += $num]);
     }
 
     /**
      * 获得用户活跃值
-     * @param $id
+     * @param $user_id
      * @return mixed
      */
-    public function getLiveness($id){
-        $discussion = Discussion::find($id);
+    public function getLiveness($user_id){
+        $discussion = Discussion::find($user_id);
         $liveness = $discussion->user->account->liveness;
         $level = $discussion->user->account->level($liveness);
-        return \Response::json([
+        return Response::json([
             'liveness' => $liveness,
             'level' => $level
         ]);

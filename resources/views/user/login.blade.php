@@ -13,6 +13,11 @@
                         {{Session::get('user_login_failed')}}
                     </div>
                 @endif
+                @if(Session::has('user_register_success'))
+                    <div class="alert alert-danger" role="alert">
+                        {{Session::get('user_register_success')}}
+                    </div>
+                @endif
                 {!! Form::open(['url'=>'/user/signIn']) !!}
                 <div class="form-group">
                     {!! Form::label('email','Email:') !!}

@@ -8,6 +8,11 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3" role="main">
                 @include('error.errorList')
+                @if(Session::has('user_register_failed'))
+                    <div class="alert alert-danger" role="alert">
+                        {{Session::get('user_register_failed')}}
+                    </div>
+                @endif
                 {!! Form::open(['url'=>'/user/create']) !!}
                 <div class="form-group">
                     {!! Form::label('username','Username:') !!}
