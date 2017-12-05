@@ -1,11 +1,8 @@
-
-/*##########master##########*/
 /*master/master.blade.php*/
 /*去掉顶部导航条下方的空白*/
 .navbar{
     margin-bottom: 0;
 }
-/*去掉顶部导航条下方的空白*/
 
 /*背景图片*/
 .master-body{
@@ -14,84 +11,47 @@
 }
 /*背景图片*/
 
+/*网页顶部巨幕*/
+.master-top-jumbotron{
+    /*background-color: #6FAEF9;*/
+    background-color: rgba(111,174,249,0.8);
+}
+
+/*网页顶部标签页，导航条*/
+.master-top{
+    /*background-color: #6FAEF9;*/
+    background-color: rgba(111,174,249,0.8);
+    border-radius: 5px;
+}
+
+/*网页主体*/
+.master-middle{
+    background-color: rgba(255,255,255,0.6);
+    padding: 20px;
+}
+
+/*网页底部*/
+.master-footer{
+    background-color: #F8F8F8;
+    padding-bottom: 15px;
+}
+
 /*限制图片最大宽高*/
 img{
     max-width: 400px;
     max-height: 400px;
 }
-/*限制图片最大宽高*/
 
 /*不同部分图片的大小*/
 .img_welcome{
     width: 200px;
     height: 100px;
 }
-
 .img_avatar_small{
     width: 50px;
     height: 50px;
 }
-
 .img_avatar_middle{
     width: 150px;
     height: 150px;
 }
-/*不同部分图片的大小*/
-
-/*##########office##########*/
-/*office.blade.php中新人报道列表行距*/
-.office-line{
-    margin-top: 0;
-    padding-top: 20px;
-}
-/*office.blade.php中新人报道列表行距*/
-
-/*##########user##########*/
-/*infoEdit.blade.php中上传按钮*/
-#avatar .avatar{
-    margin: 2px auto;
-    width: 100px;
-    z-index: 6;
-    margin-top: -28px;
-    opacity:0;
-    height: 50px;
-}
-#avatar .btn.avatar-button{
-    margin-top: 30px;
-    z-index: 3;
-}
-/*infoEdit.blade.php中上传按钮*/
-
-/*infoEdit.blade.php中表单间距*/
-.user-form-line{
-    padding-top: 25px;
-    padding-bottom: 25px;
-}
-.user-form-lable-line{
-    padding-top: 5px;
-}
-/*infoEdit.blade.php中表单间距*/
-
-/*##########forum##########*/
-/*show.blade.php中评论标题栏间距*/
-.forum-line{
-    margin-top: 0;
-    padding-top: 20px;
-}
-/*show.blade.php中评论标题栏间距*/
-
-/*show.blade.php中评论标题栏间距*/
-.forum-show-line{
-    padding-top: 15px
-}
-/*show.blade.php中评论标题栏间距*/
-
-/*show.blade.php中右侧关于作者*/
-.user-statics{
-    display: flex;
-    margin-top: 20px;
-}
-.statics-item{
-    padding: 2px 20px;
-}
-/*show.blade.php中右侧关于作者*/

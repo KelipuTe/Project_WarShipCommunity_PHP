@@ -1,7 +1,7 @@
-<!--用户关注用户的Vue.js组件-->
+<!--forum/show.blade.php中用户关注用户的Vue.js组件-->
 <template>
     <div>
-        <button class="btn btn-default" :class="vclass" @click="userUserFollow()">
+        <button class="btn" :class="vclass" @click="userUserFollow()">
             <span class="glyphicon " :class="vglyphicon"></span>
             <span v-text="vtext"></span>
         </button>
@@ -55,7 +55,7 @@
         },
         computed:{
             vclass:function () {
-                return this.userUser ? 'btn-success' : '';
+                return this.userUser ? 'btn-success' : 'btn-danger';
             },
             vglyphicon:function () {
                 return this.userUser ? 'glyphicon-star' : 'glyphicon-star-empty';

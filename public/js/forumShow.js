@@ -11492,7 +11492,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     computed: {
         vclass: function vclass() {
-            return this.userDiscussion ? 'btn-success' : '';
+            return this.userDiscussion ? 'btn-success' : 'btn-danger';
         },
         vglyphicon: function vglyphicon() {
             return this.userDiscussion ? 'glyphicon-star' : 'glyphicon-star-empty';
@@ -11515,7 +11515,7 @@ var render = function() {
     _c(
       "button",
       {
-        staticClass: "btn btn-default",
+        staticClass: "btn",
         class: _vm.vclass,
         on: {
           click: function($event) {
@@ -11653,7 +11653,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     computed: {
         vclass: function vclass() {
-            return this.userUser ? 'btn-success' : '';
+            return this.userUser ? 'btn-success' : 'btn-danger';
         },
         vglyphicon: function vglyphicon() {
             return this.userUser ? 'glyphicon-star' : 'glyphicon-star-empty';
@@ -11676,7 +11676,7 @@ var render = function() {
     _c(
       "button",
       {
-        staticClass: "btn btn-default",
+        staticClass: "btn",
         class: _vm.vclass,
         on: {
           click: function($event) {

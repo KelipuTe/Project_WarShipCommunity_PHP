@@ -11457,6 +11457,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 function sign() {
     var day = $(this).attr("name");
@@ -11599,11 +11603,15 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("div", [
-      _c("span", { domProps: { textContent: _vm._s(_vm.vyear) } }),
-      _vm._v(" 年 "),
-      _c("span", { domProps: { textContent: _vm._s(_vm.vmonth) } }),
-      _vm._v(" 月")
+    _c("div", { staticClass: "jumbotron activity-sign-jumbotron" }, [
+      _c("div", { staticClass: "container text-center" }, [
+        _c("h2", [
+          _c("span", { domProps: { textContent: _vm._s(_vm.vyear) } }),
+          _vm._v(" 年 "),
+          _c("span", { domProps: { textContent: _vm._s(_vm.vmonth) } }),
+          _vm._v(" 月")
+        ])
+      ])
     ]),
     _vm._v(" "),
     _vm._m(0, false, false),

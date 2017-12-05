@@ -1,0 +1,9 @@
+/*activity.blade.php中顶部巨幕*/
+.activity-jumbotron{
+    /*background-color: #61ea49;*/
+    background-color: rgba(97,234,73,0.8);
+}
+/*activity/sign.blade.php中顶部巨幕*/
+.activity-sign-jumbotron{
+    background-color: #D9534F;
+}

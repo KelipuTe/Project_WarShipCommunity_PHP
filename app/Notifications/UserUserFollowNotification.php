@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use Illuminate\Support\Facades\Auth;
+use Auth;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -45,6 +45,7 @@ class UserUserFollowNotification extends Notification
     public function toDatabase($notifiable){
         /*写入数据库中的数据*/
         return [
+            'follower_id' => Auth::user()->id,
             'follower' => Auth::user()->username
         ];
     }

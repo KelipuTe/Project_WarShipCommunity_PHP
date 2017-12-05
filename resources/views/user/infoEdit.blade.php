@@ -1,10 +1,10 @@
-@extends('master.master')
+@extends('user.app')
 @section('head')
-    {{--引入组件--}}
+    @parent
+    {{--引入文件--}}
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.js"></script>
     <link type="text/css" rel="stylesheet" href="/ThirdPartyLibrary/Jcrop/css/jquery.Jcrop.css">
     <script type="text/javascript" src="/ThirdPartyLibrary/Jcrop/js/jquery.Jcrop.js"></script>
-    {{--引入组件--}}
 @stop
 @section('breadCrumb')
     @parent
@@ -12,45 +12,43 @@
 @stop
 @section('content')
     {{--网页部分--}}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3 col-md-offset-1 col-sm-12" role="main">
-                {{--头像裁剪--}}
+    <div class="row">
+        <div class="col-md-3 col-md-offset-1 col-sm-12" role="main">
+            {{--头像裁剪--}}
+            <div class="text-center">
+                <div id="validation-errors"></div>
+                <img src="{{$user->avatar}}" class="img_avatar_middle img-circle" id="user-avatar">
+                {!! Form::open(['url'=>'/user/avatar','files'=>true,'id'=>'avatar']) !!}
                 <div class="text-center">
-                    <div id="validation-errors"></div>
-                    <img src="{{$user->avatar}}" class="img_avatar_middle img-circle" id="user-avatar">
-                    {!! Form::open(['url'=>'/user/avatar','files'=>true,'id'=>'avatar']) !!}
-                    <div class="text-center">
-                        <button type="button" class="btn btn-success avatar-button" id="upload-avatar">更换新的头像</button>
-                    </div>
-                    {{--这里将<input>type=file标签透明度设为0，并调整z-index使其悬浮于按钮上方--}}
-                    {!! Form::file('avatar',['class'=>'avatar','id'=>'image']) !!}
-                    {!! Form::close() !!}
-                    <div class="span5">
-                        <div id="output" style="display:none"></div>
-                    </div>
+                    <button type="button" class="btn btn-success avatar-button" id="upload-avatar">更换新的头像</button>
+                </div>
+                {{--这里将<input>type=file标签透明度设为0，并调整z-index使其悬浮于按钮上方--}}
+                {!! Form::file('avatar',['class'=>'avatar','id'=>'image']) !!}
+                {!! Form::close() !!}
+                <div class="span5">
+                    <div id="output" style="display:none"></div>
                 </div>
             </div>
-            <div class="col-md-7 col-sm-12">
-                <div>
-                    <input id="token" name="_token" value="{{csrf_token()}}" type="hidden">
-                    <div class="form-group user-form-line">
-                        <label for="info-uid" class="col-md-2 user-form-lable-line">UID：</label>
-                        <div class="col-md-8">
-                            <input id="info-uid" type="text" class="form-control" value="{{$user->id}}" disabled/>
-                        </div>
+        </div>
+        <div class="col-md-7 col-sm-12">
+            <div>
+                <input id="token" name="_token" value="{{csrf_token()}}" type="hidden">
+                <div class="form-group user-form-line">
+                    <label for="info-uid" class="col-md-2 user-form-lable-line">UID：</label>
+                    <div class="col-md-8">
+                        <input id="info-uid" type="text" class="form-control" value="{{$user->id}}" readonly/>
                     </div>
-                    <div class="form-group user-form-line">
-                        <label for="info-username" class="col-md-2 user-form-lable-line">Username：</label>
-                        <div class="col-md-8">
-                            <input id="info-username" type="text" class="form-control" value="{{$user->username}}" disabled/>
-                        </div>
+                </div>
+                <div class="form-group user-form-line">
+                    <label for="info-username" class="col-md-2 user-form-lable-line">Username：</label>
+                    <div class="col-md-8">
+                        <input id="info-username" type="text" class="form-control" value="{{$user->username}}" readonly/>
                     </div>
-                    <div class="form-group user-form-line">
-                        <label for="info-email" class="col-md-2 user-form-lable-line">Email：</label>
-                        <div class="col-md-8">
-                            <input id="info-email" type="email" class="form-control" value="{{$user->email}}" disabled/>
-                        </div>
+                </div>
+                <div class="form-group user-form-line">
+                    <label for="info-email" class="col-md-2 user-form-lable-line">Email：</label>
+                    <div class="col-md-8">
+                        <input id="info-email" type="email" class="form-control" value="{{$user->email}}" readonly/>
                     </div>
                 </div>
             </div>

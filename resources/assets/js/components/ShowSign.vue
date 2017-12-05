@@ -1,7 +1,11 @@
-<!--显示每日签到日历的Vue.js组件-->
+<!--activity/sign.blade.php中显示每日签到日历的Vue.js组件-->
 <template>
     <div>
-        <div><span v-text="vyear"></span> 年 <span v-text="vmonth"></span> 月</div>
+        <div class="jumbotron activity-sign-jumbotron">
+            <div class="container text-center">
+                <h2><span v-text="vyear"></span> 年 <span v-text="vmonth"></span> 月</h2>
+            </div>
+        </div>
         <div>
             <table class="table table-bordered text-center">
                 <thead>

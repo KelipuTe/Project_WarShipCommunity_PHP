@@ -10,7 +10,7 @@
     <script type="text/javascript" src="https://cdn.bootcss.com/vue/2.4.4/vue.js"></script>
     @yield('head')
 </head>
-<body >
+<body class="master-body">
 <!-- 顶部导航条 -->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -71,45 +71,46 @@
     </div><!-- /.container-fluid -->
 </nav>
 <!-- 顶部巨幕-->
-<div class="jumbotron">
+<div class="jumbotron master-top-jumbotron">
     <div class="container">
         <h2>Welcome to WarShipCommunity</h2>
     </div>
 </div>
-<div class="container">
+<div class="container master-top">
     <div class="row">
         <!-- 顶部胶囊式标签页 -->
         <div>
             <ul class="nav nav-pills">
-                <li role="presentation"></li>
                 <li role="presentation" class="active"><a class="btn-primary">快捷导航</a></li>
-                <li role="presentation"><a href="/office">办公区</a></li>
-                <li role="presentation"><a href="/forum">讨论区</a></li>
-                <li role="presentation"><a href="/activity">活动区</a></li>
-                <li role="presentation"><a href="/spaceAdministration">冷月航天局</a></li>
-                <li role="presentation"><a href="/factory">冷月制造厂</a></li>
-                <li role="presentation"><a href="/archives">冷月档案馆</a></li>
+                <li role="presentation"><a href="/office" class="btn-primary">办公区</a></li>
+                <li role="presentation"><a href="/forum" class="btn-primary">讨论区</a></li>
+                <li role="presentation"><a href="/activity" class="btn-primary">活动区</a></li>
+                <li role="presentation"><a href="/spaceAdministration" class="btn-primary">冷月航天局</a></li>
+                <li role="presentation"><a href="/factory" class="btn-primary">冷月制造厂</a></li>
+                <li role="presentation"><a href="/archives" class="btn-primary">冷月档案馆</a></li>
             </ul>
         </div>
         <!-- 顶部路径导航条 -->
         <div>
             <ol class="breadcrumb">
                 @section('breadCrumb')
-                <li><a href="/welcome">主页</a></li>
+                <span>您现在的位置：</span><li><a href="/welcome">首页</a></li>
                 @show
             </ol>
         </div>
     </div>
 </div>
 <!-- 页面主体部分 -->
-@yield('content')
+<div class="container master-middle">
+    @yield('content')
+</div>
 <!-- 页面底部 -->
-<footer id="footer" class="footer">
+<footer id="footer" class="footer master-footer">
     <hr>
     <div class="text-center">
         <span> &copy; </span><span> 2017 </span><span class="glyphicon glyphicon-heart"></span><span> KelipuTe </span>
         <span> | </span>
-        <span> Powered by <a href="https://laravel-china.org/"> Laravel 5.5 </a></span>
+        <span> Powered by <a href="https://d.laravel-china.org/docs/5.5"> Laravel 5.5 </a></span>
     </div>
 </footer>
 </body>

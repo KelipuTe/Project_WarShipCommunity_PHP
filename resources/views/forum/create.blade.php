@@ -1,27 +1,26 @@
 @extends('forum.app')
 @section('breadCrumb')
     @parent
-    <li><a href="">发起讨论</a></li>
+    <li><a href="">发起新的讨论</a></li>
 @stop
 @section('content')
     @include('vendor.ueditor.assets')
-    <div class="container">
-        <div class="row">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1" role="main">
             @include('error.errorList')
             {!! Form::open(['url'=>'/forum/store']) !!}
             <div class="form-group">
-                {!! Form::label('title','Title:') !!}
-                {!! Form::text('title',null,['style'=>'width: 80%']) !!}
+                {!! Form::label('title','Title:',['class'=>'col-md-1']) !!}
+                {!! Form::text('title',null,['class'=>'col-md-7']) !!}
+                {!! Form::label('published_at','Published_at:',['class'=>'col-md-2']) !!}
+                {!! Form::input('date','published_at',date('Y-m-d'),['class'=>'col-md-2']) !!}
             </div>
+            <div class="clearfix"></div>
             <div class="form-group">
                 <!-- 编辑器容器 -->
                 <script id="container" name="body" type="text/plain"></script>
             </div>
             <div class="form-group">
-                {!! Form::label('published_at','Published_at:') !!}
-                {!! Form::input('date','published_at',date('Y-m-d'),['style'=>'width: 40%']) !!}
-            </div>
-            <div>
                 {!! Form::submit('提交',['class'=>'form-control btn btn-primary']) !!}
             </div>
             {!! Form::close() !!}
