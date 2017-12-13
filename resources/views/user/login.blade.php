@@ -5,8 +5,8 @@
 @stop
 @section('content')
     <div class="row">
-        <div class="col-md-3 text-center"><h1 id="left_OvO" class="user-login-eye-size">0</h1></div>
-        <div class="col-md-6" role="main">
+        <div class="col-md-3 col-lg-3 text-center"><h1 id="left_OvO" class="user-login-eye-size">0</h1></div>
+        <div class="col-md-6 col-lg-6" role="main">
             @include('error.errorList')
             @if(Session::has('user_login_failed'))
                 <div class="alert alert-danger" role="alert">
@@ -28,13 +28,13 @@
                 {!! Form::password('password',['class'=>'form-control']) !!}
             </div>
             <div class="form-group">
-                <div class="col-md-6">
+                <div class="col-md-6 col-lg-6">
                     <input type="text" class="form-control user-login-line"/>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-lg-3">
                     <canvas id="canvas" width="120" height="50"></canvas>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 col-lg-3">
                     <a href="#" id="changeImg" class="btn btn-sm btn-warning user-login-line">看不清，换一张</a>
                 </div>
             </div>
@@ -104,10 +104,10 @@
             {!! Form::submit('登 录',['class'=>'btn btn-primary form-control user-login-btn']) !!}
             {!! Form::close() !!}
         </div>
-        <div class="col-md-3 text-center"><h1 id="right_OvO" class="user-login-eye-size">0</h1></div>
+        <div class="col-md-3 col-lg-3 text-center"><h1 id="right_OvO" class="user-login-eye-size">0</h1></div>
         <script>
             $(document).ready(function () {
-                $('#password').click(function () {
+                $('#password').focus(function () {
                     $('#left_OvO').text('︶');
                     $('#left_OvO').addClass('user-login-eye');
                     $('#right_OvO').text('︶');

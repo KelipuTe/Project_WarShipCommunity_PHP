@@ -1220,7 +1220,7 @@
     //}}}
     // KeyManager Module {{{
     var KeyManager = (function () {
-      var $keymgr = $('<input type="radio" />').css({
+      var $keymgr = $('<!--<input type="radio" />-->').css({
         position: 'fixed',
         left: '-120px',
         width: '12px'

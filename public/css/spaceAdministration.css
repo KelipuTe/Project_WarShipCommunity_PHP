@@ -1,0 +1,16 @@
+/*画布载体样式*/
+.canvas-container{
+    height: 800px;
+    background-color: black;
+}
+
+/*画布数据*/
+.canvas-data{
+    display: none
+}
+
+/*画布大小*/
+.canvas-size{
+    width: 800px;
+    height: 800px;
+}

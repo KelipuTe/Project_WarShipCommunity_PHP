@@ -73,3 +73,9 @@ Route::get('/notification/showUnread','NotificationController@showUnread');//显
 
 //AccountController
 Route::get('/account/getLiveness/{id}','AccountController@getLiveness');//用户活跃值和等级
+
+//SpaceAdministrationController
+Route::get('/spaceAdministration/create','SpaceAdministrationController@create');//航天局发射新的卫星页面
+Route::post('/spaceAdministration/upload','SpaceAdministrationController@upload');//航天局发射新的卫星上传图片后台
+Route::post('/spaceAdministration/store','SpaceAdministrationController@store');//航天局发射新的卫星后台
+Route::get('/spaceAdministration/show/{id}','SpaceAdministrationController@show');//航天局卫星显示页面

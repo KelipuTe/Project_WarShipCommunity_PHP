@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>rainbow galaxy</title>
+  
+<style>
+body {
+
+  overflow: hidden;
+}
+canvas {
+  
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: black;
+}
+
+a {
+  
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  left: calc( 100% - 200px );
+  top: calc( 100% - 130px );
+}
+img {
+  width: 200px;
+}
+</style>
+
+</head>
+<body>
+<label id="data-lineCount" data-lineCount="1" style="display: none">1</label>
+<canvas id=c></canvas>
+<img src=a-colours-circle-rainbow-HD-Wallpaper.jpg>
+
+<!--<script src="https://cdn.bootcss.com/dat-gui/0.6.5/dat.gui.js"></script>-->
+<script type="text/javascript" src="../ThirdPartyLibrary/jquery-3.2.1.js"></script>
+<script src='js/dat.gui.js'></script>
+<!--<script src='js/dat.gui.min.js'></script>-->
+<script src="js/index.js"></script>
+</body>
+<script>
+    $(document).ready(function () {
+        $('.dg').hide();
+    });
+</script>
+</html>

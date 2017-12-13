@@ -126,6 +126,7 @@
                     setSelect: [120,120,10,10]
                 });
                 $('.jcrop-holder img').attr('src',response.avatar);
+
             }
         }
         /*在实现图片裁剪时添加的两个function*/

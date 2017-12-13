@@ -28,7 +28,6 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="/welcome">首 页</a></li>
-                <li><a href="/about">关 于</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if(Auth::check())
@@ -82,6 +81,7 @@
         <div>
             <ul class="nav nav-pills">
                 <li role="presentation" class="active"><a class="btn-primary">快捷导航</a></li>
+                <li role="presentation"><a href="/welcome" class="btn-primary">首页</a></li>
                 <li role="presentation"><a href="/office" class="btn-primary">办公区</a></li>
                 <li role="presentation"><a href="/forum" class="btn-primary">讨论区</a></li>
                 <li role="presentation"><a href="/activity" class="btn-primary">活动区</a></li>
@@ -107,6 +107,9 @@
 <!-- 页面底部 -->
 <footer id="footer" class="footer master-footer">
     <hr>
+    <div class="text-center">
+        <a href="/about" class="alert-link">关 于</a>
+    </div>
     <div class="text-center">
         <span> &copy; </span><span> 2017 </span><span class="glyphicon glyphicon-heart"></span><span> KelipuTe </span>
         <span> | </span>

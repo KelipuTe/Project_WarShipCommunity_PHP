@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SpaceAdministration;
 use Auth;
 use Illuminate\Support\Facades\Redis;
 
@@ -41,7 +42,9 @@ class MasterController extends Controller
     }
 
     public function spaceAdministration(){
-        return view('spaceAdministration/spaceAdministration');
+        $spaceAdministrations = SpaceAdministration::latest()->notDestroyed()->paginate(5);
+        $count = count(SpaceAdministration::all());
+        return view('spaceAdministration/spaceAdministration',compact('spaceAdministrations','count'));
     }
 
     public function factory(){

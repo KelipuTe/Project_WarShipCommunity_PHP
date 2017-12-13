@@ -13,7 +13,8 @@
         "laravelcollective/html": "^5.5",
         "overtrue/laravel-ueditor": "~1.0",
         "phpmailer/phpmailer": "^6.0",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "yuanchao/laravel-5-markdown-editor": "dev-master"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
