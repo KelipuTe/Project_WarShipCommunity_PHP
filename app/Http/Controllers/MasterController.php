@@ -42,8 +42,8 @@ class MasterController extends Controller
     }
 
     public function spaceAdministration(){
-        $spaceAdministrations = SpaceAdministration::latest()->notDestroyed()->paginate(5);
-        $count = count(SpaceAdministration::all());
+        $spaceAdministrations = SpaceAdministration::latest()->notDestroyed()->get();
+        $count = count($spaceAdministrations);
         return view('spaceAdministration/spaceAdministration',compact('spaceAdministrations','count'));
     }
 

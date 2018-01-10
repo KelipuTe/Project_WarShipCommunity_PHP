@@ -36,7 +36,7 @@ class PublicChatUserSignInListener
                 'data' => Redis::smembers($key)
             ];
             Redis::publish('public-channel-user', json_encode($data));
-        }elseif ($event->type == -1){
+        }else if ($event->type == -1){
             //type=-1表示有用户退出公共聊天室
             if(Redis::sismember($key,$event->username)){
                 Redis::srem($key, $event->username);

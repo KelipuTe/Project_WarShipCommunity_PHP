@@ -13,7 +13,7 @@ class Sign extends Model
 {
     protected $table = 'signs';
 
-    protected $fillable = ['user_id','year','month','day','combo'];
+    protected $fillable = ['user_id','year','month','day'];
 
     /**
      * 通过Sign找到User

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserUserTable extends Migration
+class CreateWarshipsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateUserUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_user', function (Blueprint $table) {
+        Schema::create('warships', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('follower_id')->unsigned()/*->index()*/; // 关注者id
-            $table->integer('followed_id')->unsigned()/*->index()*/; // 被关注者id
+            $table->string('classes'); // 舰船级别
+            $table->string('name'); // 舰船名字
+            $table->string('no'); // 舰船弦号
+            $table->string('type'); // 舰船类型
+            $table->string('country'); // 舰船国籍
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateUserUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_user');
+        Schema::dropIfExists('warships');
     }
 }

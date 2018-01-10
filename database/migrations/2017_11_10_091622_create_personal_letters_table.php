@@ -15,11 +15,12 @@ class CreatePersonalLettersTable extends Migration
     {
         Schema::create('personal_letters', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('from_user_id')->unsigned();
-            $table->integer('to_user_id')->unsigned();
-            $table->text('body');
-            $table->integer('has_read')->default(0);
-            $table->timestamp('read_at')->nullable();
+            $table->string('title'); // 私信正文
+            $table->text('body'); // 私信正文
+            $table->integer('from_user_id')->unsigned(); // 私信发起人
+            $table->integer('to_user_id')->unsigned(); // 私信接收人
+            $table->integer('has_read')->default(0); // 阅读状态
+            $table->timestamp('read_at')->nullable(); // 阅读时间
             $table->timestamps();
         });
     }

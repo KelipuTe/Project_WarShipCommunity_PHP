@@ -51,7 +51,7 @@ class QQMailer
      * 授权登录的密码
      * @var string
      */
-    private static $PASSWORD = 'slbrdgwiekijbgae';
+    private static $PASSWORD = 'ywbitbdktmmvbfbj';
 
     /**
      * 发件人的昵称
@@ -66,7 +66,7 @@ class QQMailer
     public function __construct($debug = false)
     {
         $this->mailer = new PHPMailer();
-        $this->mailer->SMTPDebug = $debug ? 1 : 0;
+        $this->mailer->SMTPDebug = $debug ? 1 : 0; // 是否开启 debug 模式
         $this->mailer->isSMTP();
     }
 

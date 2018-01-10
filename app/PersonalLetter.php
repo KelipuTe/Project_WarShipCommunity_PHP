@@ -13,7 +13,7 @@ class PersonalLetter extends Model
 {
     protected $table = 'personal_letter';
 
-    protected $fillable = ['from_user_id','to_user_id','body'];
+    protected $fillable = ['from_user_id','to_user_id','title','body'];
 
     /**
      * 通过personalLetter找到发送私信的user

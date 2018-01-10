@@ -15,13 +15,13 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username');//用户名
-            $table->string('email')->unique();//email
-            $table->string('email_confirm_code');//email验证码
-            $table->integer('email_confirm')->default(0);//email验证状态
-            $table->string('password');//密码
-            $table->string('avatar');//头像
-            $table->integer('blacklist')->default(0);//用户是否是黑名单
+            $table->string('username')->unique(); // 用户名
+            $table->string('email')->unique(); // email
+            $table->string('email_confirm_code'); // email验证码
+            $table->integer('email_confirm')->default(0); // email验证状态
+            $table->string('password'); // 密码
+            $table->string('avatar'); // 头像
+            $table->integer('blacklist')->default(0); // 黑名单
             $table->rememberToken();
             $table->timestamps();
         });

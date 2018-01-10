@@ -41,7 +41,7 @@ class OfficeController extends Controller
         ];
         $introduction = Introduction::create(array_merge($request->all(),$data));
         $accountController = new AccountController();
-        $accountController->officeStore(Auth::user()->id);//新人报道，增加活跃值
+        $accountController->officeStore(Auth::user()->id); // 新人报道，增加活跃值
         return redirect()->action('OfficeController@show',['id'=>$introduction->id]);
     }
 
@@ -85,9 +85,9 @@ class OfficeController extends Controller
     public function welcome(MessageRequest $request){
         Message::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
         $accountController = new AccountController();
-        $accountController->officeWelcomer(Auth::user()->id);//新人报道欢迎者，增加活跃值
+        $accountController->officeWelcomer(Auth::user()->id); // 新人报道欢迎者，增加活跃值
         $introduction = Introduction::findOrFail($request->get('introduction_id'));
-        $accountController->officeWelcome($introduction->user->id);//新人报道被欢迎，增加活跃值
+        $accountController->officeWelcome($introduction->user->id); // 新人报道被欢迎，增加活跃值
         return redirect()->action('OfficeController@show',['id'=>$request->get('introduction_id')]);
     }
 }

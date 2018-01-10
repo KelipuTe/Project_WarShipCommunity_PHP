@@ -1,16 +1,39 @@
-/*画布载体样式*/
+/*spaceAdministration.blade.php中画布载体样式*/
 .canvas-container{
-    height: 800px;
+    min-width: 800px;
+    min-height: 800px;
     background-color: black;
 }
 
-/*画布数据*/
+/*spaceAdministration.blade.php中画布数据区域*/
 .canvas-data{
     display: none
 }
 
-/*画布大小*/
+/*spaceAdministration.blade.php中画布样式*/
 .canvas-size{
     width: 800px;
     height: 800px;
+}
+
+/*spaceAdministration.blade.php中文字轮播载体*/
+.lunbo {
+    position: relative;
+    width: 600px;
+    height: 50px;
+    border: 1px solid red;
+    overflow: hidden;
+}
+.lunbo-dl {
+    position: absolute;
+    width: 600px;
+    height: auto;
+}
+.lunbo-dt {
+    width: 600px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 20px;
+    color: #333;
+    text-align: center
 }

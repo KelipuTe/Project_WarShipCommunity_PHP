@@ -1,12 +1,13 @@
 @extends('spaceAdministration.app')
 @section('breadCrumb')
+    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="" id="spaceAdministration-id" name="{{$spaceAdministration->id}}">{{$spaceAdministration->title}}</a></li>
 @stop
 @section('content')
     <div class="row">
         <div class="col-md-9">
-            {{--主体内容--}}
+            {{--卫星主体内容--}}
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     <h2>{{$spaceAdministration->title}}

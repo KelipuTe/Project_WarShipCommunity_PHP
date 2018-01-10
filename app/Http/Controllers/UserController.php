@@ -37,14 +37,14 @@ class UserController extends Controller
      */
     public function create(UserRegisterRequest $request){
         $data = [
-            'email_confirm_code'=>str_random(48),//生成48位邮箱验证码
-            'avatar'=>'/image/avatar/default_avatar.jpg'
+            'email_confirm_code'=>str_random(48), // 生成48位邮箱验证码
+            'avatar'=>'/image/avatar/default_avatar.jpg' // 生成默认头像
         ];
-        $status = $this->doEmailConfirm($request->get("email"),$data['email_confirm_code']);//发送账号激活邮件;
+        $status = $this->doEmailConfirm($request->get("email"),$data['email_confirm_code']); // 发送账号激活邮件;
         if($status) {
-            $user = User::create(array_merge($request->all(), $data));//创建新用户
-            Account::create(['user_id' => $user->id]);//为新用户创建对应账户
-            Auth::logout();//用户登出
+            $user = User::create(array_merge($request->all(), $data)); // 创建新用户
+            Account::create(['user_id' => $user->id]); // 为新用户创建对应账户
+            Auth::logout(); // 用户登出
             Session::flash('user_register_success','账号注册成功，已发送一封激活邮件到您的邮箱，在登陆之前您需要激活您的账号');
             return redirect('/user/login');
         }
@@ -60,11 +60,11 @@ class UserController extends Controller
      */
     public function doEmailConfirm($email,$email_confirm_code){
         $mailer = new QQMailer(false);
-        $title = "账号激活";//邮件标题
+        $title = "账号激活"; // 邮件标题
         $content = '<h1>Welcome to WarShipCommunity</h1>'
-            . '<a href="http://localhost/user/checkEmailConfirm/' . $email . '/' . $email_confirm_code . '">点击激活您的账号</a>';//邮件内容
-        //$mailer->addFile('image/avatar/ougen.jpg');//添加附件
-        $status = $mailer->send($email, $title, $content);//发送QQ邮件;
+            . '<a href="http://localhost/user/checkEmailConfirm/' . $email . '/' . $email_confirm_code . '">点击激活您的账号</a>'; // 邮件内容
+        //$mailer->addFile('image/avatar/ougen.jpg'); // 添加附件
+        $status = $mailer->send($email, $title, $content); // 发送QQ邮件;
         return $status;
     }
 
@@ -108,19 +108,19 @@ class UserController extends Controller
             'email'=>$request->get('email'),
             'password'=>$request->get('password')
         ];
-        /*登录验证*/
+        /* 登录验证 */
         if(Auth::attempt($data)){
             if(Auth::user()->email_confirm == 1) {
                 return redirect('/welcome');
             }
-            /*账号尚未激活*/
-            Auth::logout();//用户登出
+            /* 账号尚未激活 */
+            Auth::logout(); // 用户登出
             Session::flash('user_login_failed','账号尚未激活');
-            return redirect('/user/login')->withInput();//验证失败时返回登录页面并带回数据
+            return redirect('/user/login')->withInput(); // 验证失败时返回登录页面并带回数据
         }
-        /*密码输入错误，或用户不存在*/
+        /* 密码输入错误，或用户不存在 */
         Session::flash('user_login_failed','密码输入错误，或用户不存在');
-        return redirect('/user/login')->withInput();//验证失败时返回登录页面并带回数据
+        return redirect('/user/login')->withInput();
     }
 
     /**
@@ -158,37 +158,37 @@ class UserController extends Controller
      */
     public function avatar(Request $request){
         $file = $request->file('avatar');
-        /*验证////////////////////////////////////////////////////////////////*/
-        $input = array('image' => $file);//拿到上传的图片
+        /* 验证//////////////////////////////////////////////////////////////// */
+        $input = array('image' => $file); // 拿到上传的图片
         $rules = array(
             'image' => 'image'
-        );//验证规则，图片格式
-        $validator = Validator::make($input, $rules);//检查规则是否通过
-        if ( $validator->fails() ) {
+        ); // 验证规则，图片格式
+        $validator = Validator::make($input, $rules); // 检查规则是否通过
+        if ($validator->fails()){
             return Response::json([
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
             ]);
         }
-        /*验证////////////////////////////////////////////////////////////////*/
-        $destinationPath = 'uploads/avatar/';//保存上传头像的文件夹，在public目录下
-        $filename = Auth::user()->id.'_'.time().'_'.$file->getClientOriginalName();//拿到上传文件文件名
-        /*文件名重命名为用户id+上传时间+文件名*/
-        $file->move($destinationPath, $filename);//将上传的图片移到uploads文件夹下
-        Image::make($destinationPath.$filename)->fit(400)->save();//裁剪头像，缩略图
-        /*这里的Image类使用\Intervention\Image\Facades\Image*/
-        /*在实现图片裁剪时这三行代码在裁剪完成后在执行///////////////////////*/
+        /* 验证//////////////////////////////////////////////////////////////// */
+        $destinationPath = 'uploads/avatar/'; // 保存上传头像的文件夹，在public目录下
+        $filename = Auth::user()->id.'_'.time().'_'.$file->getClientOriginalName(); // 拿到上传文件文件名
+        /* 文件名重命名为用户id+上传时间+文件名 */
+        $file->move($destinationPath, $filename); // 将上传的图片移到uploads文件夹下
+        Image::make($destinationPath.$filename)->fit(400)->save(); // 裁剪头像，缩略图
+        /* 这里的Image类使用\Intervention\Image\Facades\Image */
+        /* 在实现图片裁剪时这三行代码在裁剪完成后在执行/////////////////////// */
         /*$user = User::find(\Auth::user()->id);
         $user->avatar = '/'.$destinationPath.$filename;
         $user->save();*/
-        /*在实现图片裁剪时这三行代码在裁剪完成后在执行///////////////////////*/
-        /*使用ajax时需要返回json格式的数据*/
+        /* 在实现图片裁剪时这三行代码在裁剪完成后在执行/////////////////////// */
+        /* 使用ajax时需要返回json格式的数据 */
         return Response::json([
             'success' => true,
             'avatar' => asset($destinationPath.$filename),
             'image' => $destinationPath.$filename
         ]);
-        //return redirect('/user/info');
+//        return redirect('/user/info');
     }
 
     /**

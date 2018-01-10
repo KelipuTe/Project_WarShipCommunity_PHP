@@ -17,7 +17,7 @@ class AccountController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('getLiveness');
     }
 
     /**
@@ -33,7 +33,7 @@ class AccountController extends Controller
      * @param $user_id
      */
     public function officeWelcome($user_id){
-        $this->update($user_id,Account::$livenessScore['forumWelcome']);
+        $this->update($user_id,Account::$livenessScore['officeWelcome']);
     }
 
     /**
@@ -41,7 +41,7 @@ class AccountController extends Controller
      * @param $user_id
      */
     public function officeWelcomer($user_id){
-        $this->update($user_id,Account::$livenessScore['forumWelcomer']);
+        $this->update($user_id,Account::$livenessScore['officeWelcomer']);
     }
 
     /**

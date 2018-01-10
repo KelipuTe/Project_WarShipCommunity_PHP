@@ -1,5 +1,6 @@
 @extends('spaceAdministration.app')
 @section('breadCrumb')
+    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="">发射新的卫星</a></li>
 @stop
