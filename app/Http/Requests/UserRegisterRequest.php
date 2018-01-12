@@ -4,6 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * 用户注册，提交时的验证条件
+ * Class UserRegisterRequest
+ * @package App\Http\Requests
+ */
 class UserRegisterRequest extends FormRequest
 {
     /**

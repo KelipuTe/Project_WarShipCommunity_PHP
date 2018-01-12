@@ -1,5 +1,6 @@
 @extends('office.app')
 @section('breadCrumb')
+    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="">修改报道</a></li>
 @stop

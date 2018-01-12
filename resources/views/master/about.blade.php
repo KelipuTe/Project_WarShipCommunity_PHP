@@ -1,5 +1,6 @@
 @extends('master.master')
 @section('breadCrumb')
+    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="/about">关于</a></li>
 @stop

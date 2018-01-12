@@ -33,8 +33,12 @@ class ChatMessage extends Model
 
     protected $dates = ['time'];
 
+    /**
+     * 预处理会话时间
+     * @param $date
+     */
     public function setPublishedAtAttribute($date){
-        $this->attributes['time'] = Carbon::createFromFormat('Y-m-d',$date);
+        $this->attributes['time'] = Carbon::createFromFormat('Y-m-d',$date); // 默认设置为会话发出的时间
     }
 
     /**

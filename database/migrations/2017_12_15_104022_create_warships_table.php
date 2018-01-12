@@ -20,6 +20,7 @@ class CreateWarshipsTable extends Migration
             $table->string('no'); // 舰船弦号
             $table->string('type'); // 舰船类型
             $table->string('country'); // 舰船国籍
+            $table->string('picture'); // 舰船图鉴
             $table->timestamps();
         });
     }

@@ -13,6 +13,7 @@
                     </h2>
                 </div>
             </div>
+            {{--显示讨论列表--}}
             <div>
                 @foreach($discussions as $discussion)
                     <div class="media forum-line">

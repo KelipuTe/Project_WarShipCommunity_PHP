@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 文章类
+ * 讨论类
  * Class Discussion
  * @package App
  */
@@ -17,14 +17,14 @@ class Discussion extends Model
     ];
 
     /**
-     * 可以将published_at变量转换为Carbon类型
+     * 可以将 published_at 变量转换为 Carbon 类型
      * @var array
      */
     protected $dates = ['published_at'];
 
     /**
      * 数据预处理 setAttribute
-     * set关键字+Name+Attribute关键字
+     * set 关键字 + Name + Attribute 关键字
      * Name 是开头大写的数据库列名
      * @param $date
      */
@@ -34,7 +34,7 @@ class Discussion extends Model
 
     /**
      * 查询语句 queryScope
-     * scope关键字+Name
+     * scope 关键字 + Name
      * Name 是方法名
      * @param $query
      */
@@ -43,7 +43,7 @@ class Discussion extends Model
     }
 
     /**
-     * 通过discussion找到user
+     * 通过 discussion 找到 user
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(){
@@ -51,7 +51,7 @@ class Discussion extends Model
     }
 
     /**
-     * 通过discussion找到所有的comment
+     * 通过 discussion 找到所有的 comment
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function comments(){
@@ -59,7 +59,7 @@ class Discussion extends Model
     }
 
     /**
-     * 定义user和discussion在user_discussion表中的多对多关系
+     * 定义 user 和 discussion 在 user_discussion 表中的多对多关系
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function userDiscussion(){

@@ -16,7 +16,7 @@ use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 
 /**
- * 这个控制器负责和用户
+ * 这个控制器负责处理和用户相关的事件
  * Class UserController
  * @package App\Http\Controllers
  */
@@ -108,8 +108,8 @@ class UserController extends Controller
             'email'=>$request->get('email'),
             'password'=>$request->get('password')
         ];
-        /* 登录验证 */
         if(Auth::attempt($data)){
+            /* 登录验证成功，表示用户存在 */
             if(Auth::user()->email_confirm == 1) {
                 return redirect('/welcome');
             }
@@ -158,7 +158,7 @@ class UserController extends Controller
      */
     public function avatar(Request $request){
         $file = $request->file('avatar');
-        /* 验证//////////////////////////////////////////////////////////////// */
+        /* ********** 验证 ********** */
         $input = array('image' => $file); // 拿到上传的图片
         $rules = array(
             'image' => 'image'
@@ -170,25 +170,31 @@ class UserController extends Controller
                 'errors' => $validator->getMessageBag()->toArray()
             ]);
         }
-        /* 验证//////////////////////////////////////////////////////////////// */
-        $destinationPath = 'uploads/avatar/'; // 保存上传头像的文件夹，在public目录下
-        $filename = Auth::user()->id.'_'.time().'_'.$file->getClientOriginalName(); // 拿到上传文件文件名
-        /* 文件名重命名为用户id+上传时间+文件名 */
-        $file->move($destinationPath, $filename); // 将上传的图片移到uploads文件夹下
+        /* ********** 验证 ********** */
+        $destinationPath = 'uploads/avatar/'; // 保存上传头像的文件夹，在 public/uploads/avatar 目录下
+        /*
+         * 拿到上传文件文件名并重命名
+         * 文件名重命名为用户 id + 上传时间 + 文件名
+         */
+        $filename = Auth::user()->id.'_'.time().'_'.$file->getClientOriginalName();
+        $file->move($destinationPath, $filename); // 将上传的图片移到 uploads 文件夹下
+        /*
+         * 注意这里的 Image 类
+         * \Intervention\Image\Facades\Image
+         */
         Image::make($destinationPath.$filename)->fit(400)->save(); // 裁剪头像，缩略图
-        /* 这里的Image类使用\Intervention\Image\Facades\Image */
-        /* 在实现图片裁剪时这三行代码在裁剪完成后在执行/////////////////////// */
+        /* ********** 在实现图片裁剪时这三行代码在裁剪完成后在执行 ********** */
         /*$user = User::find(\Auth::user()->id);
         $user->avatar = '/'.$destinationPath.$filename;
         $user->save();*/
-        /* 在实现图片裁剪时这三行代码在裁剪完成后在执行/////////////////////// */
-        /* 使用ajax时需要返回json格式的数据 */
+        /* ********** 在实现图片裁剪时这三行代码在裁剪完成后在执行 ********** */
+        /* 使用 ajax 时需要返回 json 格式的数据 */
         return Response::json([
             'success' => true,
             'avatar' => asset($destinationPath.$filename),
             'image' => $destinationPath.$filename
         ]);
-//        return redirect('/user/info');
+        //return redirect('/user/info');
     }
 
     /**
@@ -202,7 +208,7 @@ class UserController extends Controller
         $height = (int)$request->get('h');
         $xAlign = (int)$request->get('x');
         $yAlign = (int)$request->get('y');
-        Image::make($photo)->crop($width,$height,$xAlign,$yAlign)->save();
+        Image::make($photo)->crop($width,$height,$xAlign,$yAlign)->save(); // 裁剪图片
         $user = Auth::user();
         $user->avatar = asset($photo);
         $user->save();

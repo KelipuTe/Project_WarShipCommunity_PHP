@@ -121,44 +121,25 @@ class QQMailer
     }
 
     /*public function testSendEmail(){
-        // 实例化PHPMailer核心类
-        $mail = new PHPMailer();
-        // 是否启用smtp的debug进行调试 开发环境建议开启 生产环境注释掉即可 默认关闭debug调试模式
-        //$mail->SMTPDebug = 1;
-        // 使用smtp鉴权方式发送邮件
-        $mail->isSMTP();
-        // smtp需要鉴权 这个必须是true
-        $mail->SMTPAuth = true;
-        // 链接qq域名邮箱的服务器地址
-        $mail->Host = 'smtp.qq.com';
-        // 设置使用ssl加密方式登录鉴权
-        $mail->SMTPSecure = 'ssl';
-        // 设置ssl连接smtp服务器的远程服务器端口号
-        $mail->Port = 465;
-        // 设置发送的邮件的编码
-        $mail->CharSet = 'UTF-8';
-        // 设置发件人昵称 显示在收件人邮件的发件人邮箱地址前的发件人姓名
-        $mail->FromName = '冷月重工';
-        // smtp登录的账号 QQ邮箱即可
-        $mail->Username = '786907650@qq.com';
-        // smtp登录的密码 使用生成的授权码
-        $mail->Password = 'slbrdgwiekijbgae';
-        // 设置发件人邮箱地址 同登录账号
-        $mail->From = '786907650@qq.com';
-        // 邮件正文是否为html编码 注意此处是一个方法
-        $mail->isHTML(true);
-        // 设置收件人邮箱地址
-        $mail->addAddress('xhy_1365@sina.com');
-        // 添加多个收件人 则多次调用方法即可
-        //$mail->addAddress('xhy_1365@163.com');
-        // 添加该邮件的主题
-        $mail->Subject = 'HelloWorld';
-        // 添加邮件正文
-        $mail->Body = '<h1>Hello World</h1>';
-        // 为该邮件添加附件
-        $mail->addAttachment("image/avatar/ougen.jpg");
-        // 发送邮件 返回状态
-        $status = $mail->send();
+        $mail = new PHPMailer(); // 实例化PHPMailer核心类
+        $mail->SMTPDebug = 1; // 是否启用 smtp 的 debug 进行调试，开发环境建议开启，生产环境注释掉即可，默认关闭 debug 调试模式
+        $mail->isSMTP(); // 使用 smtp 鉴权方式发送邮件
+        $mail->SMTPAuth = true; // smtp 需要鉴权，这个必须是 true
+        $mail->Host = 'smtp.qq.com'; // 链接 qq 域名邮箱的服务器地址
+        $mail->SMTPSecure = 'ssl'; // 设置使用 ssl 加密方式登录鉴权
+        $mail->Port = 465; // 设置 ssl 连接 smtp 服务器的远程服务器端口号
+        $mail->CharSet = 'UTF-8'; // 设置发送的邮件的编码
+        $mail->FromName = '冷月重工'; // 设置发件人昵称，显示在收件人邮件的发件人邮箱地址前的发件人姓名
+        $mail->Username = '786907650@qq.com'; // smtp 登录的账号，QQ 邮箱即可
+        $mail->Password = 'slbrdgwiekijbgae'; // smtp 登录的密码，使用生成的授权码
+        $mail->From = '786907650@qq.com'; // 设置发件人邮箱地址，同登录账号
+        $mail->isHTML(true); // 邮件正文是否为 html 编码，注意此处是一个方法
+        $mail->addAddress('xhy_1365@sina.com'); // 设置收件人邮箱地址
+        //$mail->addAddress('xhy_1365@163.com'); // 添加多个收件人，则多次调用方法即可
+        $mail->Subject = 'HelloWorld'; // 添加该邮件的主题
+        $mail->Body = '<h1>Hello World</h1>'; // 添加邮件正文
+        $mail->addAttachment("image/avatar/ougen.jpg"); // 为该邮件添加附件
+        $status = $mail->send(); // 发送邮件，返回状态
         return $status;
     }*/
 }

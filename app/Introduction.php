@@ -16,7 +16,7 @@ class Introduction extends Model
     ];
 
     /**
-     * 通过introduction找到user
+     * 通过 introduction 找到 user
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(){
@@ -24,7 +24,7 @@ class Introduction extends Model
     }
 
     /**
-     * 通过introduction找到所有的message
+     * 通过 introduction 找到所有的 message
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function messages(){

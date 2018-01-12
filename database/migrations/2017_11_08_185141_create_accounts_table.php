@@ -19,7 +19,7 @@ class CreateAccountsTable extends Migration
             $table->integer('liveness')->default(0); // 用户活跃度
             $table->integer('bonus_points')->default(0); // 用户账户积分
             $table->double('balance')->default(0); // 用户账户余额
-            $table->integer('vip')->default(0); // 用户是否是vip
+            $table->integer('vip')->default(0); // 用户是否是 vip
             $table->timestamps();
         });
     }

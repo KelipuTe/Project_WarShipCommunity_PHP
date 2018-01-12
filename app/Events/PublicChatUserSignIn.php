@@ -10,12 +10,18 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * 用户进入聊天室事件触发器
+ * Class PublicChatUserSignIn
+ * @package App\Events
+ */
 class PublicChatUserSignIn
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * 用户登录状态，登入：1，登出：-1
+     * 用户登录状态
+     * 登入：1，登出：-1
      * @var
      */
     public $type;
@@ -27,9 +33,11 @@ class PublicChatUserSignIn
     public $username;
 
     /**
+     * 构造函数
      * Create a new event instance.
      *
-     * @return void
+     * @param $type
+     * @param $username
      */
     public function __construct($type,$username)
     {

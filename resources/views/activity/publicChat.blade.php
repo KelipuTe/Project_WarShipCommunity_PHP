@@ -1,5 +1,6 @@
 @extends('activity.app')
 @section('breadCrumb')
+    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="">公共聊天室</a></li>
 @stop
@@ -45,6 +46,7 @@
         </div>
     </div>
     <script>
+        /* 监听 127.0.0.1:3000 端口 */
         /*var socket = io('127.0.0.1:3000');
         socket.on('public-channel:publicChat',function (data) {
             $('#publicChatRoom').append($('<dt>').text(data.username));
@@ -52,13 +54,15 @@
             $('#publicChatRoom').append($('<dt>').text(data.chatMessage));
         });*/
 
+        /* 监听 172.17.93.1:3000 端口 */
         var socket = io('172.17.93.1:3000');
+        /* 获得实时聊天的数据 */
         socket.on('public-channel:publicChat',function (data) {
             $('#publicChatRoom').append($('<dt>').text(data.username));
             $('#publicChatRoom').append($('<dt>').text(data.time));
             $('#publicChatRoom').append($('<dt>').text(data.chatMessage));
         });
-
+        /* 获得进入聊天室用户的名单 */
         socket.on('public-channel-user:publicChatUserSignIn',function (data) {
             $('#userSignIn').empty();
             $('#userSignIn').append($('<dt>').text('室内成员：'));
@@ -69,6 +73,7 @@
 
         $(document).ready(function () {
             $('#chat_submit').on('click',function () {
+                /* 在 ajax 请求头部添加 _token 验证 */
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('#chat_form input[name="_token"]').val()
@@ -90,7 +95,7 @@
                         console.log("error：" +jqXHR.status);
                     }
                 });
-                $('#body').val('');
+                $('#body').val(''); // 输入框清空
             });
         });
     </script>

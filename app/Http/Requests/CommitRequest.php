@@ -4,6 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Commit 讨论评论，提交时的验证条件
+ * Class CommitRequest
+ * @package App\Http\Requests
+ */
 class CommitRequest extends FormRequest
 {
     /**

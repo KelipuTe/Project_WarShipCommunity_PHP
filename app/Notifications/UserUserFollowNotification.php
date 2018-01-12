@@ -15,7 +15,6 @@ class UserUserFollowNotification extends Notification
     /**
      * Create a new notification instance.
      *
-     * @return void
      */
     public function __construct()
     {
@@ -31,19 +30,23 @@ class UserUserFollowNotification extends Notification
     public function via($notifiable)
     {
         return ['database'];
-        /*database表示使用数据库站内信通知方式*/
-        /*mail表示使用邮件通知方式*/
-        /*return ['database','mail'];*/
+        /*
+         * database 表示使用数据库站内信通知方式
+         * mail 表示使用邮件通知方式
+         */
+        //return ['database','mail'];
     }
 
     /**
      * notification 需要执行的函数
-     * toDatabase()的函数名是根据via()中的database起的名字
+     * toDatabase() 的函数名是根据 via() 函数中的 database 起的名字
      * @param $notifiable
      * @return array
      */
     public function toDatabase($notifiable){
-        /*写入数据库中的数据*/
+        /*
+         * 写入数据库中的数据
+         */
         return [
             'follower_id' => Auth::user()->id,
             'follower' => Auth::user()->username

@@ -4,6 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 卫星类
+ * Class SpaceAdministration
+ * @package App
+ */
 class SpaceAdministration extends Model
 {
     protected $fillable = ['title','body','user_id'];

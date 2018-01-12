@@ -1,5 +1,6 @@
 @extends('forum.app')
 @section('breadCrumb')
+    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="">发起新的讨论</a></li>
 @stop

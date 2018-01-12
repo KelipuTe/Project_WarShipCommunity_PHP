@@ -1,5 +1,6 @@
 @extends('office.app')
 @section('breadCrumb')
+    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="">{{$introduction->title}}</a></li>
 @stop
@@ -12,6 +13,7 @@
                         <div class="media-left">
                             <img class="media-object img-circle img_avatar_middle" src="{{$introduction->user->avatar}}">
                         </div>
+                        {{--主体内容--}}
                         <div class="media-body">
                             <h2 class="media-heading">{{$introduction->title}}
                                 <a href="/user/userInfo/{{$introduction->user->id}}"><span>@</span>{{$introduction->user->username}}</a>
@@ -21,6 +23,7 @@
                     </div>
                 </div>
             </div>
+            {{--显示所有的新人报道回复--}}
             @foreach($introduction->messages as $message)
                 <hr>
                 <div class="media">
@@ -33,6 +36,7 @@
                     </div>
                 </div>
             @endforeach
+            {{--创建新人报道回复--}}
             @if(Auth::check())
                 <hr>
                 @if(Auth::user()->username != $introduction->user->username)

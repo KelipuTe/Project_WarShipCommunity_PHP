@@ -19,6 +19,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="introduction">
                     <div class="row">
+                        {{--显示新人报道列表--}}
                         <div class="col-md-10 col-md-offset-1" role="main">
                             @foreach($introductions as $introduction)
                                 <div class="media office-line">

@@ -74,8 +74,7 @@ class AccountController extends Controller
      * @param $power
      */
     public function activitySign($user_id,$power = 1){
-        /*$power 表示签到活跃值倍率*/
-        $this->update($user_id,$power * Account::$livenessScore['activitySign']);
+        $this->update($user_id,$power * Account::$livenessScore['activitySign']); // $power 表示签到活跃值倍率
     }
 
     /**

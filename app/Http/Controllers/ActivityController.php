@@ -32,10 +32,13 @@ class ActivityController extends Controller
     public function publicChat(){
         $key = "publicChatSignIn";
         if(Auth::check()){
-            /*PublicChatUserSignIn，type=1表示有用户进入公共聊天室*/
+            /*
+             * PublicChatUserSignIn
+             * type = 1 表示有用户进入公共聊天室
+             */
             event(new PublicChatUserSignIn(1,Auth::user()->username));
         }
-        $userLists = Redis::smembers($key);//从 Redis Set 集合里取数据
+        $userLists = Redis::smembers($key); // smembers() 函数用于返回 Set 集合元素
         return view('activity/publicChat',compact('userLists'));
     }
 
@@ -45,7 +48,10 @@ class ActivityController extends Controller
      */
     public function publicChatLogout(){
         if(Auth::check()){
-            /*PublicChatUserSignIn，type=-1表示有用户退出公共聊天室*/
+            /*
+             * PublicChatUserSignIn
+             * type = -1 表示有用户退出公共聊天室
+             */
             event(new PublicChatUserSignIn(-1,Auth::user()->username));
         }
         return redirect('/welcome');
@@ -83,7 +89,10 @@ class ActivityController extends Controller
             ->where('month','=',$nowTime->month)
             ->first();
         if($sign == null){
-            /*如果没有当前月份的签到信息就用当前月份的信息创建一个新的表*/
+            /*
+             * 如果没有当前月份的签到信息
+             * 就用当前月份的信息创建一个新的表
+             */
             $dayNum = $nowTime->daysInMonth;
             $day = "0";
             for($i = 1;$i < $dayNum;++$i){
@@ -119,7 +128,10 @@ class ActivityController extends Controller
             ->where('month','=',$nowTime->month)
             ->first();
         if($sign == null){
-            /*如果没有当前月份的签到信息就用当前月份的信息创建一个新的表*/
+            /*
+             * 如果没有当前月份的签到信息
+             * 就用当前月份的信息创建一个新的表
+             */
             $dayNum = $nowTime->daysInMonth;
             $day = "0";
             for($i = 1;$i < $dayNum;++$i){
@@ -133,14 +145,14 @@ class ActivityController extends Controller
             ];
             $sign = Sign::create(array_merge($data));
         }
-        $dayArray = explode(',',$sign->day);//把字符串拆分成数组
-        $dayArray[$nowDay-1] = '1';//今天签到
-        $daysign = $dayArray[0];//把拆分的数组组装成原来的字符串
+        $dayArray = explode(',',$sign->day); // 把字符串拆分成数组
+        $dayArray[$nowDay-1] = '1'; // 今天签到
+        $daysign = $dayArray[0]; // 把拆分的数组组装成原来的字符串
         for($i=1;$i<count($dayArray);++$i){
             $daysign = $daysign.','.$dayArray[$i];
         }
-        $sign->update(['day'=>$daysign]);//更新数据库
-        $this->livenessCount($sign->day,$nowTime->day);//签到获得活跃值
+        $sign->update(['day'=>$daysign]); // 更新数据库
+        $this->livenessCount($sign->day,$nowTime->day); // 签到获得活跃值
         return $this->showSign();
     }
 
@@ -149,13 +161,13 @@ class ActivityController extends Controller
      * @return int
      */
     function totalCount(){
-        $signs = Sign::all()->where('user_id',Auth::user()->id);//取出用户所有的签到表
+        $signs = Sign::all()->where('user_id',Auth::user()->id); // 取出用户所有的签到表
         if($signs == null){
             return 0;
         }
         $count = 0;
         foreach ($signs as $sign){
-            $count = $count + substr_count($sign->day,'1');//统计目标字符串内某字符串出现的次数
+            $count = $count + substr_count($sign->day,'1'); // 统计目标字符串内某字符串出现的次数
         }
         return $count;
     }
@@ -169,7 +181,11 @@ class ActivityController extends Controller
     function comboCount($day,$i_day){
         $combo = 0;
         $days = explode(',',$day);
-        /*这里先判断下表是否越界，如果从当月第一天就连续签到的话，先判断是否签到会造成下标越界错误*/
+        /*
+         * 这里先判断下表是否越界
+         * 如果从当月第一天就连续签到的话
+         * 先判断是否签到会造成下标越界错误
+         */
         while($i_day > 0 && $days[$i_day-1] != '0'){
             $combo = $combo + 1;
             --$i_day;
@@ -185,9 +201,13 @@ class ActivityController extends Controller
     function livenessCount($day,$i_day){
         $total = $this->totalCount();
         $combo = $this->comboCount($day,$i_day);
-        $power = 1 + (int)($total/10) + (int)($combo/7);//签到活跃值倍率=基础倍率1+用户累计签到天数/10+当月连续签到天数/7
+        /*
+         * 签到活跃值倍率计算方法
+         * 基础倍率 1 + 用户累计签到天数 / 10 + 当月连续签到天数 / 7
+         */
+        $power = 1 + (int)($total/10) + (int)($combo/7);
         $accountController = new AccountController();
-        $accountController->activitySign(Auth::user()->id,$power);//增加活跃值
+        $accountController->activitySign(Auth::user()->id,$power); // 增加活跃值
     }
 
 }

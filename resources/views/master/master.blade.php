@@ -31,6 +31,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if(Auth::check())
+                    {{--如果用户已经登录，则显示与账号有关的信息--}}
                     <li>
                         <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">消 息
                             @if(count(Auth::user()->unreadNotifications))
@@ -95,7 +96,7 @@
             <ol class="breadcrumb">
                 @section('breadCrumb')
                 <span>您现在的位置：</span><li><a href="/welcome">首页</a></li>
-                @show
+                @show{{--@show 定义并立即生成该区块--}}
             </ol>
         </div>
     </div>

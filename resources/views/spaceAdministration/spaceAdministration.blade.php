@@ -33,17 +33,20 @@
                     /* 卫星条目轮播效果 */
                     function lunbo( height) {
                         var ul = $('#lunbo-area');
-                        var liFirst = ul.find('dt:first');//获得 #lunbo-area 下第一个 <dt> 元素
-                        /*动画效果*/
-                        /*将 #aaa 元素上移 50px*/
-                        /*将 #aaa 元素第一个 <li> 子元素克隆并删除，在末尾添加该元素，将 #aaa 元素高度调整到相对位置 0*/
+                        var liFirst = ul.find('dt:first'); // 获得 #lunbo-area 下第一个 <dt> 元素
+                        /* 动画效果
+                         * 将 #lunbo-area 元素上移 50px
+                         * 将 #lunbo-area 元素第一个 <li> 子元素克隆并删除
+                         * 在 #lunbo-area 元素末尾添加该 <li> 子元素
+                         * 将 #lunbo-area 元素高度调整到相对位置 0
+                         */
                         $('#lunbo-area').animate({top: height}).animate({"top": 0}, 0, function () {
-                            var clone = liFirst.clone();//克隆 <dt> 元素
-                            $('#lunbo-area').append(clone);//将克隆的 <dt> 元素添加到 #lunbo-area 末尾
-                            liFirst.remove();//删除第一个 <dt> 元素
+                            var clone = liFirst.clone(); // 克隆 <dt> 元素
+                            $('#lunbo-area').append(clone); // 将克隆的 <dt> 元素添加到 #lunbo-area 末尾
+                            liFirst.remove() ;// 删除第一个 <dt> 元素
                         });
                     }
-                    setInterval("lunbo('-50px')", 3000);//每 3 秒执行一次 lunbo() 函数
+                    setInterval("lunbo('-50px')", 3000); // 每 3 秒执行一次 lunbo() 函数
                 </script>
             {{--下方的 3D 圆环效果--}}
             <div class="canvas-container text-center">
@@ -56,7 +59,7 @@
                 <script src='/ThirdPartyLibrary/satellite/js/dat.gui.js'></script>
                 <script src="/ThirdPartyLibrary/satellite/js/index.js"></script>
                 <script>
-                    /*隐藏 dat.gui.js 控件*/
+                    /* 隐藏 dat.gui.js 控件 */
                     $(document).ready(function () {
                         $('.dg').hide();
                     });

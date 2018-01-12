@@ -9,11 +9,24 @@ use Auth;
 
 use Illuminate\Http\Request;
 
+/**
+ * 这个控制器负责卫星区
+ * Class SpaceAdministrationController
+ * @package App\Http\Controllers
+ */
 class SpaceAdministrationController extends Controller
 {
-
+    /**
+     * Markdown 格式处理类
+     * @var Markdown
+     */
     protected $markdown;
 
+    /**
+     * 构造函数
+     * SpaceAdministrationController constructor.
+     * @param Markdown $markdown
+     */
     public function __construct(Markdown $markdown)
     {
         $this->markdown = $markdown;
@@ -29,6 +42,7 @@ class SpaceAdministrationController extends Controller
 
     /**
      * 发射新的卫星上传图片后台
+     * 这里集成了 Markdown 编辑器处理上传的图片
      * @return \Illuminate\Http\RedirectResponse
      */
     public function upload(){
@@ -56,7 +70,7 @@ class SpaceAdministrationController extends Controller
      */
     public function show($id){
         $spaceAdministration = SpaceAdministration::findOrFail($id);
-        $html = $this->markdown->markdown($spaceAdministration->body);
+        $html = $this->markdown->markdown($spaceAdministration->body); // 调用 Markdown 格式处理类将 Markdown 格式的文本转换为 html 格式的文本
         return view('spaceAdministration/show',compact('spaceAdministration','html'));
     }
 }

@@ -11,6 +11,11 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * 聊天事件触发器
+ * Class PublicChat
+ * @package App\Events
+ */
 class PublicChat
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -22,9 +27,10 @@ class PublicChat
     public $chatMessage;
 
     /**
+     * 构造函数
      * Create a new event instance.
      *
-     * @return void
+     * @param ChatMessage $chatMessage
      */
     public function __construct(ChatMessage $chatMessage)
     {

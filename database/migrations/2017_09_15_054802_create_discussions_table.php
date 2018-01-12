@@ -19,7 +19,6 @@ class CreateDiscussionsTable extends Migration
             $table->text('body'); // 论坛文章内容
             $table->integer('hot_discussion')->default(0); // 论坛热点文章
             $table->integer('nice_discussion')->default(0); // 论坛精华文章
-            $table->integer('blacklist')->default(0); // 黑名单
             $table->integer('user_id')->unsigned(); // 发表的用户
             $table->integer('last_user_id')->unsigned(); // 最后更新的用户
             $table->timestamp('published_at'); // 发表时间

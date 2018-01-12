@@ -16,7 +16,6 @@ class CreateMessagesTable extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->increments('id');
             $table->text('body'); // 对简介的留言内容
-            $table->integer('blacklist')->default(0); // 黑名单
             $table->integer('user_id')->unsigned();
             $table->integer('introduction_id')->unsigned();
             $table->timestamps();

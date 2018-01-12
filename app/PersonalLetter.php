@@ -16,7 +16,7 @@ class PersonalLetter extends Model
     protected $fillable = ['from_user_id','to_user_id','title','body'];
 
     /**
-     * 通过personalLetter找到发送私信的user
+     * 通过 personalLetter 找到发送私信的 user
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function fromUser(){
@@ -24,7 +24,7 @@ class PersonalLetter extends Model
     }
 
     /**
-     * 通过personalLetter找到接收私信的user
+     * 通过 personalLetter 找到接收私信的 user
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function toUser(){

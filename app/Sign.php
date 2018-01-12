@@ -16,7 +16,7 @@ class Sign extends Model
     protected $fillable = ['user_id','year','month','day'];
 
     /**
-     * 通过Sign找到User
+     * 通过 Sign 找到 User
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(){

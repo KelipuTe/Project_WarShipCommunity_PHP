@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 文章评论类
+ * 讨论评论类
  * Class Comment
  * @package App
  */
@@ -16,7 +16,7 @@ class Comment extends Model
     ];
 
     /**
-     * 通过comment找到user
+     * 通过 comment 找到 user
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(){
@@ -24,7 +24,7 @@ class Comment extends Model
     }
 
     /**
-     * 通过comment找到discussion
+     * 通过 comment 找到 discussion
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function discussion(){

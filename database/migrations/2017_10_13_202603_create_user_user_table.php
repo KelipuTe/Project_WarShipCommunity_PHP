@@ -15,8 +15,8 @@ class CreateUserUserTable extends Migration
     {
         Schema::create('user_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('follower_id')->unsigned()/*->index()*/; // 关注者id
-            $table->integer('followed_id')->unsigned()/*->index()*/; // 被关注者id
+            $table->integer('follower_id')->unsigned()/*->index()*/; // 关注者 id
+            $table->integer('followed_id')->unsigned()/*->index()*/; // 被关注者 id
             $table->timestamps();
         });
     }

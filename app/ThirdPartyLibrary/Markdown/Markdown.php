@@ -8,7 +8,11 @@
 
 namespace App\ThirdPartyLibrary\Markdown;
 
-
+/**
+ * Markdown 格式处理类
+ * Class Markdown
+ * @package App\ThirdPartyLibrary\Markdown
+ */
 class Markdown
 {
     protected $parser;

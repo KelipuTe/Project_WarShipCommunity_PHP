@@ -15,7 +15,7 @@ class Account extends Model
 
     /**
      * 活跃值
-     * 命名方式为"区域名"+"区域控制器方法名"
+     * 命名方式为"区域名" + "区域控制器方法名"
      * @var array
      */
     public static $livenessScore = array(
@@ -52,7 +52,7 @@ class Account extends Model
     }
 
     /**
-     * 通过账户找到其对应的用户
+     * 通过 account 找到 user
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(){

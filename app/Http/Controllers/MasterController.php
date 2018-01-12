@@ -17,9 +17,12 @@ use App\Introduction;
 class MasterController extends Controller
 {
     public function welcome(){
-        /*Redis::set('kelipute','kelipute');
-        $name = Redis::get('kelipute');
-        dd($name);*/
+        /*
+         * Redis 数据库使用案例
+         * Redis::set('kelipute','kelipute');
+         * $name = Redis::get('kelipute');
+         * dd($name);
+         */
         return view('master/welcome');
     }
 

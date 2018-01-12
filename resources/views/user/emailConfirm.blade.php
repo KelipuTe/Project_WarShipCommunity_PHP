@@ -1,5 +1,11 @@
 @extends('user.app')
+@section('breadCrumb')
+    {{--增加面包屑导航条目--}}
+    @parent
+    <li><a href="">邮箱验证码激活页面</a></li>
+@stop
 @section('content')
+    {{--网页部分--}}
     <div class="row">
         <div class="col-md-8 col-md-offset-2 text-center">
             @if($status)

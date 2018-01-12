@@ -7,6 +7,7 @@
     <script type="text/javascript" src="/ThirdPartyLibrary/Jcrop/js/jquery.Jcrop.js"></script>
 @stop
 @section('breadCrumb')
+    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="">个人信息修改</a></li>
 @stop

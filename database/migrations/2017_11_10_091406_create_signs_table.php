@@ -18,7 +18,12 @@ class CreateSignsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('year'); // 年
             $table->integer('month'); // 月
-            $table->string('day'); // 日，日的格式1,1,0,0,1...，1表示签到，0表示未签到
+            /*
+             * 日
+             * 日的格式 1,1,0,0,1...
+             * 1 表示签到，0 表示未签到
+             */
+            $table->string('day');
             $table->timestamps();
         });
     }

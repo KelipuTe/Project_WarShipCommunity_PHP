@@ -4,6 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Discussion 讨论，提交时的验证条件
+ * Class ForumStoreRequest
+ * @package App\Http\Requests
+ */
 class ForumStoreRequest extends FormRequest
 {
     /**
