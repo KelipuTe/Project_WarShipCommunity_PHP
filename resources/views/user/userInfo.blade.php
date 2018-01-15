@@ -14,19 +14,19 @@
         <div class="col-md-7 col-sm-12">
             <div>
                 <div class="form-group user-form-line">
-                    <label for="info-uid" class="col-md-2 user-form-lable-line">UID：</label>
+                    <label for="info-uid" class="col-md-2 user-form-label-line">UID：</label>
                     <div class="col-md-8">
                         <label id="info-uid" class="form-control">{{$user->id}}</label>
                     </div>
                 </div>
                 <div class="form-group user-form-line">
-                    <label for="info-username" class="col-md-2 user-form-lable-line">Username：</label>
+                    <label for="info-username" class="col-md-2 user-form-label-line">Username：</label>
                     <div class="col-md-8">
                         <label id="info-username" class="form-control">{{$user->username}}</label>
                     </div>
                 </div>
                 <div class="form-group user-form-line">
-                    <label for="info-email" class="col-md-2 user-form-lable-line">Email：</label>
+                    <label for="info-email" class="col-md-2 user-form-label-line">Email：</label>
                     <div class="col-md-8">
                         <label id="info-email" class="form-control">{{$user->email}}</label>
                     </div>

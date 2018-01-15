@@ -37,8 +37,8 @@
 
 /* 限制图片最大宽高 */
 img{
-    max-width: 400px;
-    max-height: 400px;
+    max-width: 500px;
+    max-height: 500px;
 }
 
 /* 不同部分图片的大小 */

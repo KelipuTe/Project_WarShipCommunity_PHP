@@ -35,19 +35,19 @@
             <div>
                 <input id="token" name="_token" value="{{csrf_token()}}" type="hidden">
                 <div class="form-group user-form-line">
-                    <label for="info-uid" class="col-md-2 user-form-lable-line">UID：</label>
+                    <label for="info-uid" class="col-md-2 col-md-offset-1 user-form-label-line">UID：</label>
                     <div class="col-md-8">
                         <input id="info-uid" type="text" class="form-control" value="{{$user->id}}" readonly/>
                     </div>
                 </div>
                 <div class="form-group user-form-line">
-                    <label for="info-username" class="col-md-2 user-form-lable-line">Username：</label>
+                    <label for="info-username" class="col-md-2 col-md-offset-1 user-form-label-line">Username：</label>
                     <div class="col-md-8">
                         <input id="info-username" type="text" class="form-control" value="{{$user->username}}" readonly/>
                     </div>
                 </div>
                 <div class="form-group user-form-line">
-                    <label for="info-email" class="col-md-2 user-form-lable-line">Email：</label>
+                    <label for="info-email" class="col-md-2 col-md-offset-1 user-form-label-line">Email：</label>
                     <div class="col-md-8">
                         <input id="info-email" type="email" class="form-control" value="{{$user->email}}" readonly/>
                     </div>

@@ -11,44 +11,59 @@
 @stop
 @section('content')
     <div class="row">
-        <div class="col-md-8 col-md-offset-2" role="main">
+        <div class="col-md-6 col-md-offset-1">
             @include('error.errorList')
             {!! Form::open(['url'=>'/office/warship/store']) !!}
-            <div class="form-group">
-                {!! Form::label('classes','Classes:') !!}
-                {!! Form::text('classes',null,['class'=>'form-control']) !!}
+            <div class="form-group warship-form-line">
+                {!! Form::label('classes','Classes:',['class'=>'col-md-3 warship-form-label-line']) !!}
+                <div class="col-md-9">
+                    {!! Form::text('classes',null,['class'=>'form-control']) !!}
+                </div>
             </div>
-            <div class="form-group">
-                {!! Form::label('name','Name:') !!}
-                {!! Form::text('name',null,['class'=>'form-control']) !!}
+            <div class="form-group warship-form-line">
+                {!! Form::label('name','Name:',['class'=>'col-md-3 warship-form-label-line']) !!}
+                <div class="col-md-9">
+                    {!! Form::text('name',null,['class'=>'form-control','id'=>'name']) !!}
+                </div>
             </div>
-            <div class="form-group">
-                {!! Form::label('no','No:') !!}
-                {!! Form::text('no',null,['class'=>'form-control']) !!}
+            <div class="form-group warship-form-line">
+                {!! Form::label('no','No:',['class'=>'col-md-3 warship-form-label-line']) !!}
+                <div class="col-md-9">
+                    {!! Form::text('no',null,['class'=>'form-control']) !!}
+                </div>
             </div>
-            <div class="form-group">
-                {!! Form::label('type','Type:') !!}
-                {!! Form::text('type',null,['class'=>'form-control']) !!}
+            <div class="form-group warship-form-line">
+                {!! Form::label('type','Type:',['class'=>'col-md-3 warship-form-label-line']) !!}
+                <div class="col-md-9">
+                    {!! Form::text('type',null,['class'=>'form-control']) !!}
+                </div>
             </div>
-            <div class="form-group">
-                {!! Form::label('country','Country:') !!}
-                {!! Form::text('country',null,['class'=>'form-control']) !!}
+            <div class="form-group warship-form-line">
+                {!! Form::label('country','Country:',['class'=>'col-md-3 warship-form-label-line']) !!}
+                <div class="col-md-9">
+                    {!! Form::text('country',null,['class'=>'form-control']) !!}
+                </div>
             </div>
-            <div class="form-group">
-                {!! Form::label('pictureUrl','PictureUrl:') !!}
-                {!! Form::text('pictureUrl',null,['class'=>'form-control']) !!}
+            <div class="form-group warship-form-line">
+                {!! Form::label('pictureUrl','PictureUrl:',['class'=>'col-md-3 warship-form-label-line']) !!}
+                <div class="col-md-9">
+                    {!! Form::text('pictureUrl',null,['class'=>'form-control','id'=>'picture-url','readonly']) !!}
+                </div>
             </div>
-            <div>
-                {!! Form::submit('提交',['class'=>'form-control btn btn-primary']) !!}
+            <div class="form-group warship-form-line">
+                {!! Form::submit('提交',['class'=>'form-control btn btn-primary','id'=>'warship-submit']) !!}
             </div>
             {!! Form::close() !!}
-
-            <div class="text-center">
+        </div>
+        <div class="col-md-4">
+            <div class="text-center warship-form-line">
+                <div class="thumbnail warship-form-line">
+                    <img src="/image/avatar/default_avatar.jpg" class="warship-picture-meddle" id="warship-picture" alt="300 x 480">
+                </div>
                 <div id="validation-errors"></div>
-                <img src="" width="120" class="" id="warship-picture" alt="">
                 {!! Form::open(['url'=>'/office/warship/picture','files'=>true,'id'=>'picture']) !!}
                 <div class="text-center">
-                    <button type="button" class="btn btn-success picture-button" id="upload-picture">上传新的头像</button>
+                    <button type="button" class="btn btn-success picture-button" id="upload-picture">上传新的立绘</button>
                 </div>
                 {!! Form::file('picture',['class'=>'picture','id'=>'image']) !!}
                 {!! Form::close() !!}
@@ -58,6 +73,24 @@
             </div>
             <script>
                 $(document).ready(function() {
+                    if($('#name').val() == "" || $('#name').val() == null){console.log(1);
+                        $('#warship-submit').attr('disabled',true);
+                        $('#picture').attr('disabled',true);
+                        $('#image').attr('disabled',true);
+                    }
+                    $('#name').blur(function () {
+
+                        if($('#name').val() != "" && $('#name').val() != null){console.log(2);
+                            $('#warship-submit').attr('disabled',false);
+                            $('#picture').attr('disabled',false);
+                            $('#image').attr('disabled',false);
+                        } else {console.log(3);
+                            $('#warship-submit').attr('disabled',true);
+                            $('#picture').attr('disabled',true);
+                            $('#image').attr('disabled',true);
+                        }
+                    });
+
                     var options = {
                         beforeSubmit: showRequest,
                         success: showResponse,
@@ -75,21 +108,19 @@
                     return true;
                 }
 
-                function showResponse(response)  {
-                    if(response.success == false)
-                    {
+                function showResponse(response) {
+                    if(response.success == false){
                         var responseErrors = response.errors;
-                        $.each(responseErrors, function(index, value)
-                        {
-                            if (value.length != 0)
-                            {
+                        $.each(responseErrors, function(index, value){
+                            if (value.length != 0){
                                 $("#validation-errors").append('<div class="alert alert-error"><strong>'+ value +'</strong><div>');
                             }
                         });
                         $("#validation-errors").show();
                     } else {
-                        $('#warship-picture').attr('src',response.avatar);
-                        $('#upload-picture').html('更换新的头像');
+                        $('#warship-picture').attr('src',response.picture);
+                        $('#picture-url').val(response.picture_url);
+                        $('#upload-picture').html('更换新的立绘');
                     }
                 }
             </script>

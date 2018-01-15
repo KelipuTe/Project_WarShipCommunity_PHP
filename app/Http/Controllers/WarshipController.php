@@ -52,7 +52,8 @@ class WarshipController extends Controller
         Image::make($destinationPath.$filename)->fit(200,320)->save();
         return Response::json([
             'success'=>true,
-            'avatar'=>asset($destinationPath.$filename)
+            'picture_url'=>'/'.$destinationPath.$filename,
+            'picture'=>asset($destinationPath.$filename)
         ]);
     }
 

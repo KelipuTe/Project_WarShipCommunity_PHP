@@ -11,5 +11,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Warship extends Model
 {
-    protected  $fillable = ['classes','name','no','type','country','picture'];
+    protected  $fillable = ['classes','name','no','type','country','pictureUrl'];
 }
