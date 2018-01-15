@@ -1,10 +1,10 @@
-/*office.blade.php中顶部巨幕*/
+/* office.blade.php 中顶部巨幕 */
 .office-jumbotron{
     /*background-color: #61ea49;*/
     background-color: rgba(97,234,73,0.8);
 }
 
-/*office.blade.php中报道标题间距*/
+/* office.blade.php 中报道标题间距 */
 .office-line{
     margin-top: 15px;
     margin-bottom: 15px;
@@ -14,7 +14,7 @@
     border-radius: 15px 45px;
 }
 
-/*show.blade.php中评论间距*/
+/* show.blade.php 中评论间距 */
 .office-message-line{
     padding-top: 15px;
 }

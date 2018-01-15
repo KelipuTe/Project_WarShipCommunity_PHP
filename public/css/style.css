@@ -1,48 +1,47 @@
-/*master/master.blade.php*/
-/*去掉顶部导航条下方的空白*/
+/* master/master.blade.php */
+/* 去掉顶部导航条下方的空白 */
 .navbar{
     margin-bottom: 0;
 }
 
-/*背景图片*/
+/* 背景图片 */
 .master-body{
     background: url('/image/background/ssv_fortress.jpg') fixed;
     background-size: 100%;
 }
-/*背景图片*/
 
-/*网页顶部巨幕*/
+/* 网页顶部巨幕 */
 .master-top-jumbotron{
     /*background-color: #6FAEF9;*/
     background-color: rgba(111,174,249,0.8);
 }
 
-/*网页顶部标签页，导航条*/
+/* 网页顶部标签页，导航条 */
 .master-top{
     /*background-color: #6FAEF9;*/
     background-color: rgba(111,174,249,0.8);
     border-radius: 5px;
 }
 
-/*网页主体*/
+/* 网页主体 */
 .master-middle{
     background-color: rgba(255,255,255,0.6);
     padding: 20px;
 }
 
-/*网页底部*/
+/* 网页底部 */
 .master-footer{
     background-color: #F8F8F8;
     padding-bottom: 15px;
 }
 
-/*限制图片最大宽高*/
+/* 限制图片最大宽高 */
 img{
     max-width: 400px;
     max-height: 400px;
 }
 
-/*不同部分图片的大小*/
+/* 不同部分图片的大小 */
 .img_welcome{
     width: 200px;
     height: 100px;

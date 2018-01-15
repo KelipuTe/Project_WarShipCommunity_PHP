@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class WarShip
  * @package App
  */
-class WarShip extends Model
+class Warship extends Model
 {
     protected  $fillable = ['classes','name','no','type','country','picture'];
 }

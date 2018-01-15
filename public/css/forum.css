@@ -1,10 +1,10 @@
-/*forum.blade.php中顶部巨幕*/
+/* forum.blade.php 中顶部巨幕 */
 .forum-jumbotron{
     /*background-color: #61ea49;*/
     background-color: rgba(97,234,73,0.8);
 }
 
-/*forum.blade.php中讨论标题间距*/
+/* forum.blade.php 中讨论标题间距 */
 .forum-line{
     margin-top: 15px;
     margin-bottom: 15px;
@@ -14,12 +14,12 @@
     border-radius: 45px 15px;
 }
 
-/*show.blade.php中评论标题间距*/
+/* show.blade.php 中评论标题间距 */
 .forum-comment-line{
     padding-top: 15px;
 }
 
-/*show.blade.php中右侧关于作者*/
+/* show.blade.php 中右侧关于作者 */
 .forum-user-statics{
     display: flex;
     margin-top: 20px;

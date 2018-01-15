@@ -1,0 +1,24 @@
+/* archives.blade.php 中滑动加载特效观察窗口 */
+.slipping-show {
+    width:150px;
+    height:250px;
+    margin:10px;
+    overflow:hidden;
+    position:relative;
+    float:left;
+}
+
+/* archives.blade.php 中滑动加载特效载体元素 */
+.slipping-main {
+    width:150px;
+    height:250px;
+    position:relative;
+    float:left;
+}
+
+/* archives.blade.php 中滑动加载特效基本元素 */
+.slipping-box {
+    width:150px;
+    height:250px;
+    float:left;
+}

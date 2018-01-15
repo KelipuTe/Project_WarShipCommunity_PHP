@@ -1,0 +1,12 @@
+/* create.blade.php 中上传按钮 */
+.picture{
+    margin: -34px auto 0;
+    width: 110px;
+    height: 34px;
+    opacity: 0;
+    z-index: 6;
+}
+.picture-button{
+    margin-top: 30px;
+    z-index: 3;
+}

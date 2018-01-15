@@ -1,4 +1,4 @@
-<!--forum/show.blade.php中用户关注讨论的Vue.js组件-->
+<!--forum/show.blade.php 中用户关注讨论的 Vue.js 组件-->
 <template>
     <div>
         <button class="btn" :class="vclass" @click="userDiscussionFollow()">
@@ -23,7 +23,7 @@
         },
         methods:{
             hasUserDiscussionFollow:function () {
-                var vm = this;//这里需要指定是Vue.js的this不是JavaScript的this
+                var vm = this; // 这里需要指定是 Vue.js 的 this 不是 JavaScript 的 this
                 var discussion_id = $('#discussion-id').attr('name');
                 $.ajax({
                     type:'GET',

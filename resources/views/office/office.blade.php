@@ -45,7 +45,9 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="violations"></div>
-                <div role="tabpanel" class="tab-pane" id="office"></div>
+                <div role="tabpanel" class="tab-pane" id="office">
+                    <a href="/office/warship">舰船信息管理中心</a>
+                </div>
             </div>
         </div>
     </div>

@@ -177,7 +177,7 @@ class UserController extends Controller
          * 文件名重命名为用户 id + 上传时间 + 文件名
          */
         $filename = Auth::user()->id.'_'.time().'_'.$file->getClientOriginalName();
-        $file->move($destinationPath, $filename); // 将上传的图片移到 uploads 文件夹下
+        $file->move($destinationPath, $filename); // 将上传的图片移到 uploads/avatar/ 文件夹下
         /*
          * 注意这里的 Image 类
          * \Intervention\Image\Facades\Image

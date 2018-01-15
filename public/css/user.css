@@ -1,4 +1,4 @@
-/*infoEdit.blade.php中上传按钮*/
+/* infoEdit.blade.php 中上传按钮 */
 .avatar{
     margin: -34px auto 0;
     width: 110px;
@@ -11,7 +11,7 @@
     z-index: 3;
 }
 
-/*infoEdit.blade.php中表单间距*/
+/* infoEdit.blade.php 中表单间距 */
 .user-form-line{
     padding-top: 25px;
     padding-bottom: 25px;
@@ -20,22 +20,22 @@
     padding-top: 5px;
 }
 
-/*login.blade.php中表单间距*/
+/* login.blade.php 中表单间距 */
 .user-login-line{
     margin-top: 10px;
 }
 
-/*login.blade.php中眼睛位置*/
+/* login.blade.php 中眼睛位置 */
 .user-login-eye{
     margin-top: 50px;
 }
 
-/*login.blade.php中眼睛大小*/
+/* login.blade.php 中眼睛大小 */
 .user-login-eye-size{
     font-size: 200px;
 }
 
-/*login.blade.php中按钮位置*/
+/* login.blade.php 中按钮位置 */
 .user-login-btn{
     margin-top: 20px;
     margin-bottom: 50px;

@@ -2,33 +2,22 @@
 @section('content')
     <div class="row">
         <div class="col-md-10 col-md-offset-1" role="main">
-            {{--判断用户是否登录--}}
-            @if(Auth::check())
-                <div class="jumbotron forum-jumbotron">
-                    <div class="container">
-                        <h2>Welcome！
-                            <a class="btn btn-danger btn-lg pull-right" href="/spaceAdministration/create" role="button">发射新的卫星</a>
-                        </h2>
-                    </div>
-                </div>
-            @endif
-            <div class="jumbotron forum-jumbotron">
+            <div class="jumbotron">
                 <div class="container">
                     <h2>侦测到在轨卫星 {{$count}} 个 </h2>
-                        <div class="lunbo">
-                            {{--卫星条目轮播区域--}}
-                            <dl id="lunbo-area" class="lunbo-dl">
-                                @foreach($spaceAdministrations as $spaceAdministration)
-                                    <dt class="lunbo-dt">
-                                        <span>{{$spaceAdministration->id}} 号卫星</span>
-                                        <a href="/spaceAdministration/show/{{$spaceAdministration->id}}"> {{$spaceAdministration->title}} </a>
-                                        <span>发射于 {{$spaceAdministration->created_at}}</span>
-                                    </dt>
-                                @endforeach
-                            </dl>
-                        </div>
+                    <div class="lunbo">
+                        {{--卫星条目轮播区域--}}
+                        <dl id="lunbo-area" class="lunbo-dl">
+                            @foreach($spaceAdministrations as $spaceAdministration)
+                                <dt class="lunbo-dt">
+                                    <span>{{$spaceAdministration->id}} 号卫星</span>
+                                    <a href="/spaceAdministration/show/{{$spaceAdministration->id}}"> {{$spaceAdministration->title}} </a>
+                                    <span>发射于 {{$spaceAdministration->created_at}}</span>
+                                </dt>
+                            @endforeach
+                        </dl>
+                    </div>
                 </div>
-            </div>
                 <script>
                     /* 卫星条目轮播效果 */
                     function lunbo( height) {
@@ -48,6 +37,7 @@
                     }
                     setInterval("lunbo('-50px')", 3000); // 每 3 秒执行一次 lunbo() 函数
                 </script>
+            </div>
             {{--下方的 3D 圆环效果--}}
             <div class="canvas-container text-center">
                 {{--设置后台获得的 3D 圆环效果相关参数--}}
@@ -65,6 +55,16 @@
                     });
                 </script>
             </div>
+            {{--判断用户是否登录--}}
+            @if(Auth::check())
+                <div class="jumbotron">
+                    <div class="container">
+                        <h2>Welcome！
+                            <a class="btn btn-danger btn-lg pull-right" href="/spaceAdministration/create" role="button">发射新的卫星</a>
+                        </h2>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 @stop

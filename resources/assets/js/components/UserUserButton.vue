@@ -1,4 +1,4 @@
-<!--forum/show.blade.php中用户关注用户的Vue.js组件-->
+<!--forum/show.blade.php 中用户关注用户的 Vue.js 组件-->
 <template>
     <div>
         <button class="btn" :class="vclass" @click="userUserFollow()">

@@ -1,4 +1,4 @@
-<!--forum/show.blade.php中用户等级的Vue.js组件-->
+<!--forum/show.blade.php 中用户等级的 Vue.js 组件-->
 <template>
     <div>
         <span v-text="vliveness"></span>

@@ -1,22 +1,22 @@
-/*spaceAdministration.blade.php中画布载体样式*/
+/* spaceAdministration.blade.php 中画布载体样式 */
 .canvas-container{
     min-width: 800px;
     min-height: 800px;
     background-color: black;
 }
 
-/*spaceAdministration.blade.php中画布数据区域*/
+/* spaceAdministration.blade.php 中画布数据区域 */
 .canvas-data{
     display: none
 }
 
-/*spaceAdministration.blade.php中画布样式*/
+/* spaceAdministration.blade.php 中画布样式 */
 .canvas-size{
     width: 800px;
     height: 800px;
 }
 
-/*spaceAdministration.blade.php中文字轮播载体*/
+/* spaceAdministration.blade.php 中文字轮播载体 */
 .lunbo {
     position: relative;
     width: 600px;
