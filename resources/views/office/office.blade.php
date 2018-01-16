@@ -46,7 +46,38 @@
                 </div>
                 <div role="tabpanel" class="tab-pane" id="violations"></div>
                 <div role="tabpanel" class="tab-pane" id="office">
-                    <a href="/office/warship">舰船信息管理中心</a>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-4">
+                            <div class="thumbnail">
+                                <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                                <div class="caption">
+                                    <h3 class="text-center">
+                                        <a href="/office/warship" class="btn btn-primary">舰船信息管理中心</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="thumbnail">
+                                <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                                <div class="caption" >
+                                    <h3 class="text-center">
+                                        <a href="/office/warship" class="btn btn-primary">舰船信息管理中心</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="thumbnail">
+                                <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                                <div class="caption">
+                                    <h3 class="text-center">
+                                        <a href="/office/warship" class="btn btn-primary">舰船信息管理中心</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

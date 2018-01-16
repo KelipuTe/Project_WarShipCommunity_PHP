@@ -71,9 +71,8 @@ Route::post('/office/show/welcome','OfficeController@welcome'); // 办公区新�
 Route::get('/office/warship/create','WarshipController@create'); // 办公区舰船管理创建页面
 Route::post('/office/warship/store','WarshipController@store'); // 办公区舰船管理创建页面后台
 Route::post('/office/warship/picture','WarshipController@changePicture'); // 更改舰船立绘
-Route::get('/office/warship/show/{id}','WarshipController@show'); // 办公区舰船管理显示页面
-Route::get('/office/warship/show/{id}/edit','WarshipController@edit'); // 办公区舰船管理修改页面
-Route::patch('/office/warship/show/{id}/update','WarshipController@update'); // 办公区舰船管理修改页面后台
+Route::get('/office/warship/{id}/edit','WarshipController@edit'); // 办公区舰船管理修改页面
+Route::patch('/office/warship/{id}/update','WarshipController@update'); // 办公区舰船管理修改页面后台
 Route::get('/office/warship/getWarship','WarshipController@getWarship'); // 获得所有舰船数据
 
 /* ForumController */

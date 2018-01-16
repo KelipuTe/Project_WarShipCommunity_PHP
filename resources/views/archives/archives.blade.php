@@ -5,8 +5,8 @@
     <script type="text/javascript">
         /*
          * 图片比例
-         * 宽度 : 高度 = 150 : 240
-         * 宽度 : 高度 = 200 : 320
+         * 宽度 : 高度 = 150 * 240
+         * 宽度 : 高度 = 200 * 320
          */
         var mainWidth = 150; // 图片宽度
         var mainMargin = 2 * 10; // margin 填充宽度

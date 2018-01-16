@@ -22,15 +22,29 @@ class WarshipController extends Controller
         //$this->middleware('auth')->except('show');
     }
 
+    /**
+     * 办公区舰船管理创建页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create(){
         return view('office/warship/create');
     }
 
+    /**
+     * 办公区舰船管理创建页面后台
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request){
         $warship = Warship::create(array_merge($request->all()));
         return redirect()->action('MasterController@warship');
     }
 
+    /**
+     * 更改舰船立绘
+     * @param Request $request
+     * @return mixed
+     */
     public function changePicture(Request $request){
         $file = $request->file('picture');
         /* ********** 验证 ********** */
@@ -49,11 +63,11 @@ class WarshipController extends Controller
         $destinationPath = 'uploads/warship/'; // 保存上传立绘的文件夹，在 public/uploads/avatar 目录下
         $filename = time().'_'.$file->getClientOriginalName();
         $file->move($destinationPath, $filename);
-        Image::make($destinationPath.$filename)->fit(200,320)->save();
+        Image::make($destinationPath.$filename)->fit(200,320)->save(); // 图片裁剪 200 * 320
         return Response::json([
             'success'=>true,
-            'picture_url'=>'/'.$destinationPath.$filename,
-            'picture'=>asset($destinationPath.$filename)
+            'picture_url'=>'/'.$destinationPath.$filename, // 返回图片所在路径
+            'picture'=>asset($destinationPath.$filename) // 返回图片所在服务器路径
         ]);
     }
 
@@ -64,5 +78,28 @@ class WarshipController extends Controller
     public function getWarship(){
         $warships = Warship::all();
         return Response::json($warships);
+    }
+
+    /**
+     * 办公区舰船管理修改页面
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit($id){
+        $warship = Warship::findOrFail($id);
+        return view('office/warship/edit',compact('warship'));
+    }
+
+    /**
+     * 办公区舰船管理修改页面后台
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     * @internal param $ |Request $request
+     */
+    public function update(Request $request,$id){
+        $warship = Warship::findOrFail($id);
+        $warship->update($request->all());
+        return redirect()->action('MasterController@warship');
     }
 }

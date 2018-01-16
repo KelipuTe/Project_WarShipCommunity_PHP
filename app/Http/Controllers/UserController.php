@@ -182,7 +182,7 @@ class UserController extends Controller
          * 注意这里的 Image 类
          * \Intervention\Image\Facades\Image
          */
-        Image::make($destinationPath.$filename)->fit(400)->save(); // 裁剪头像，缩略图
+        Image::make($destinationPath.$filename)->fit(400)->save(); // 裁剪头像 400 * 400
         /* ********** 在实现图片裁剪时这三行代码在裁剪完成后在执行 ********** */
         /*$user = User::find(\Auth::user()->id);
         $user->avatar = '/'.$destinationPath.$filename;
@@ -208,7 +208,7 @@ class UserController extends Controller
         $height = (int)$request->get('h');
         $xAlign = (int)$request->get('x');
         $yAlign = (int)$request->get('y');
-        Image::make($photo)->crop($width,$height,$xAlign,$yAlign)->save(); // 裁剪图片
+        Image::make($photo)->crop($width,$height,$xAlign,$yAlign)->save(); // 裁剪头像
         $user = Auth::user();
         $user->avatar = asset($photo);
         $user->save();
