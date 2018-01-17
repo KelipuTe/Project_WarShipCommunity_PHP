@@ -74,6 +74,7 @@ Route::post('/office/warship/picture','WarshipController@changePicture'); // 更
 Route::get('/office/warship/{id}/edit','WarshipController@edit'); // 办公区舰船管理修改页面
 Route::patch('/office/warship/{id}/update','WarshipController@update'); // 办公区舰船管理修改页面后台
 Route::get('/office/warship/getWarship','WarshipController@getWarship'); // 获得所有舰船数据
+Route::get('/office/warship/{no}','WarshipController@gotoOne'); // 获得所有舰船数据
 
 /* ForumController */
 Route::get('/forum/create','ForumController@create'); // 讨论区创建页面

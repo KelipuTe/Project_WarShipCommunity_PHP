@@ -102,4 +102,13 @@ class WarshipController extends Controller
         $warship->update($request->all());
         return redirect()->action('MasterController@warship');
     }
+
+    /**
+     * 去到某个具体舰船的页面
+     * @param $no
+     * @return mixed
+     */
+    public function gotoOne($no){
+        return view('archives/warship/'.$no);
+    }
 }

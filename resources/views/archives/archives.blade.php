@@ -39,7 +39,10 @@
                                 $(".slipping-show-" + x + y).append("<div class='slipping-main slipping-main-" + x + y + "'></div>"); // 添加载体元素
                                 /* 添加图片，在修改过显示规格后，需要手动调整图片的高度宽度 */
                                 //$(".slipping-main-"+x+y).append("<div class='slipping-box thumbnail'><img src='/uploads/warship/Lexington.png' style='width:150px;height:240px'></div>");
-                                $(".slipping-main-"+ x + y).append("<div class='slipping-box thumbnail'><img src='" + data[ (x - 1) * MAX_Y + (y - 1) ].pictureUrl + "' style='width:150px;height:240px'></div>");
+                                $(".slipping-main-"+ x + y).append("<div class='slipping-box thumbnail'>" +
+                                    "<a href='/office/warship/" + data[ (x - 1) * MAX_Y + (y - 1) ].no + "'>" +
+                                        "<img src='" + data[ (x - 1) * MAX_Y + (y - 1) ].pictureUrl + "' style='width:150px;height:240px'>" +
+                                    "</a></div>");
                                 $(".slipping-main-" + x + y).append("<div class='slipping-box'></div>"); // 添加空白
                                 $(".slipping-main-" + x + y).width(mainWidth * 2); // 设置载体元素宽度，滑动时滑动的距离是固定的
                                 right(x, y); // 载体元素左移，显示空白部分，隐藏图片部分
