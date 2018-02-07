@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Introduction extends Model
 {
+    protected $table = 'introductions';
+
     protected $fillable = [
         'title','body','user_id','last_user_id'
     ];

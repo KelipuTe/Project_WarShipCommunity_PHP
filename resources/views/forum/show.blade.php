@@ -26,7 +26,7 @@
                     <div class="panel-heading">
                         <div class="media">
                             <div class="media-left">
-                                <img class="media-object img-circle img_avatar_small" src="{{$comment->user->avatar}}">
+                                <img class="media-object img-circle img-avatar-small" src="{{$comment->user->avatar}}">
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading forum-comment-line">{{$comment->user->username}}</h4>
@@ -57,7 +57,7 @@
                 <script type="text/javascript">
                     var ue = UE.getEditor('container');
                     ue.ready(function() {
-                        ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');/*设置CSRFtoken*/
+                        ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');/* 设置CSRFtoken */
                     });
                 </script>
             @else
@@ -72,10 +72,10 @@
                     <span>已关注</span>
                 </div>
                 <div class="panel-body">
-                    {{--用户关注讨论的Vue.js组件--}}
+                    {{--用户关注讨论的 Vue.js 组件--}}
                     <div id="user-discussion">
                         @if(Auth::check())
-                            {{--用户关注讨论的Vue.js组件--}}
+                            {{--用户关注讨论的 Vue.js 组件--}}
                             <user-discussion-button></user-discussion-button>
                         @else
                             <a href="/user/login" class="btn btn-danger">
@@ -93,7 +93,7 @@
                 <div class="panel-body">
                     <div class="media">
                         <div class="media-left">
-                            <img src="{{$discussion->user->avatar}}" class="img_avatar_small" alt="{{$discussion->user->username}}">
+                            <img src="{{$discussion->user->avatar}}" class="img-avatar-small" alt="{{$discussion->user->username}}">
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">
@@ -130,7 +130,7 @@
                         @else
                             <div class="forum-user-statics-item">
                                 <a href="/user/login" class="btn btn-danger">
-                                    <span class="glyphicon glyphicon-star-empty"></span>关注该TA
+                                    <span class="glyphicon glyphicon-star-empty"></span>关注 TA
                                 </a>
                             </div>
                         @endif
@@ -139,195 +139,6 @@
             </div>
         </div>
     </div>
-    {{--用户关注讨论的Vue.js组件--}}
-    {{--<template id="template-user-discussion-button">
-        <div>
-            <button class="btn btn-default" :class="vclass" @click="userDiscussionFollow()">
-                <span class="glyphicon " :class="vglyphicon"></span>
-                <span v-text="vtext"></span>
-            </button>
-        </div>
-    </template>
-    <script>
-        Vue.component('user-discussion-button',{
-            template:'#template-user-discussion-button',
-            data:function () {
-                return{
-                    userDiscussion:0
-                }
-            },
-            created:function () {
-                this.userDiscussion = this.hasUserDiscussionFollow();
-            },
-            methods:{
-                hasUserDiscussionFollow:function () {
-                    var vm = this;//这里需要指定是Vue.js的this不是JavaScript的this
-                    var discussion_id = $('#discussion-id').attr('name');
-                    $.ajax({
-                        type:'GET',
-                        url:'/VueHttp/hasUserDiscussionFollow/' + discussion_id,
-                        dataType:'json',
-                        success:function (data) {
-                            vm.userDiscussion = data.userDiscussion;
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
-                        }
-                    });
-                },
-                userDiscussionFollow:function () {
-                    var vm = this;
-                    var discussion_id = $('#discussion-id').attr('name');
-                    $.ajax({
-                        type:'GET',
-                        url:'/VueHttp/userDiscussionFollow/' + discussion_id,
-                        dataType:'json',
-                        success:function (data) {
-                            vm.userDiscussion = data.userDiscussion;
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
-                        }
-                    });
-                }
-            },
-            computed:{
-                vclass:function () {
-                    return this.userDiscussion ? 'btn-success' : '';
-                },
-                vglyphicon:function () {
-                    return this.userDiscussion ? 'glyphicon-star' : 'glyphicon-star-empty';
-                },
-                vtext:function () {
-                    return this.userDiscussion ? '已关注' : '关注该讨论';
-                }
-            }
-        });
-        new Vue({
-            el:'#user-discussion'
-        });
-    </script>--}}
-    {{--用户关注讨论的Vue.js组件--}}
-    {{--用户关注用户的Vue.js组件--}}
-    {{--<template id="template-user-user-button">
-        <div>
-            <button class="btn btn-default" :class="vclass" @click="userUserFollow()">
-                <span class="glyphicon " :class="vglyphicon"></span>
-                <span v-text="vtext"></span>
-            </button>
-        </div>
-    </template>
-    <script>
-        Vue.component('user-user-button',{
-            template:'#template-user-user-button',
-            data:function () {
-                return{
-                    userUser:0
-                }
-            },
-            created:function () {
-                this.userUser = this.hasUserUserFollow();
-            },
-            methods:{
-                hasUserUserFollow:function () {
-                    var vm = this;
-                    var discussion_id = $('#discussion-id').attr('name');
-                    $.ajax({
-                        type:'GET',
-                        url:'/follow/hasUserUserFollow/' + discussion_id,
-                        dataType:'json',
-                        success:function (data) {
-                            vm.userUser = data.userUser;
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
-                        }
-                    });
-                },
-                userUserFollow:function () {
-                    var vm = this;
-                    var discussion_id = $('#discussion-id').attr('name');
-                    $.ajax({
-                        type:'GET',
-                        url:'/follow/userUserFollow/' + discussion_id,
-                        dataType:'json',
-                        success:function (data) {
-                            vm.userUser = data.userUser;
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
-                        }
-                    });
-                }
-            },
-            computed:{
-                vclass:function () {
-                    return this.userUser ? 'btn-success' : '';
-                },
-                vglyphicon:function () {
-                    return this.userUser ? 'glyphicon-star' : 'glyphicon-star-empty';
-                },
-                vtext:function () {
-                    return this.userUser ? '已关注' : '关注TA';
-                }
-            }
-        });
-        new Vue({
-            el:'#user-user'
-        });
-    </script>--}}
-    {{--用户关注用户的Vue.js组件--}}
-    {{--用户等级的Vue.js组件--}}
-    {{--<template id="template-liveness">
-        <div>
-            <span v-text="vliveness"></span>
-            <span v-text="vlevel"></span>
-        </div>
-    </template>
-    <script>
-        Vue.component('liveness',{
-            template:'#template-liveness',
-            data:function () {
-                return{
-                    liveness:0,
-                    level:0
-                }
-            },
-            created:function () {
-                this.init();
-            },
-            methods:{
-                init:function () {
-                    var vm = this;
-                    var discussion_id = $('#discussion-id').attr('name');
-                    $.ajax({
-                        type:'GET',
-                        url:'/account/getLiveness/' + discussion_id,
-                        dataType:'json',
-                        success:function (data) {
-                            vm.liveness = data.liveness;
-                            vm.level = data.level;
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
-                        }
-                    });
-                }
-            },
-            computed:{
-                vliveness:function () {
-                    return '活跃值：'+this.liveness;
-                },
-                vlevel:function () {
-                    return '等级：'+this.level;
-                }
-            }
-        });
-        new Vue({
-            el:'#liveness'
-        });
-    </script>--}}
-    {{--用户等级的Vue.js组件--}}
-    {{--引入经过编译的Vuejs组件--}}
+    {{--引入经过编译的 Vuejs 组件--}}
     <script src="/js/forumShow.js" type="text/javascript" rel="script"></script>
 @stop

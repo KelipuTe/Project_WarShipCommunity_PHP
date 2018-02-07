@@ -1,13 +1,40 @@
 /* master/master.blade.php */
-/* 去掉顶部导航条下方的空白 */
-.navbar{
-    margin-bottom: 0;
-}
 
 /* 背景图片 */
 .master-body{
     background: url('/image/background/ssv_fortress.jpg') fixed;
     background-size: 100%;
+    min-width: 1170px;
+}
+
+/* 容器最小宽度 */
+.container-size{
+    min-width: 1170px;
+}
+
+/* 限制图片最大宽高 */
+img{
+    max-width: 500px;
+    max-height: 500px;
+}
+
+/* 不同部分图片的大小 */
+.img-welcome{
+    width: 200px;
+    height: 100px;
+}
+.img-avatar-small{
+    width: 50px;
+    height: 50px;
+}
+.img-avatar-middle{
+    width: 150px;
+    height: 150px;
+}
+
+/* 去掉顶部导航条下方的空白 */
+.navbar{
+    margin-bottom: 0;
 }
 
 /* 网页顶部巨幕 */
@@ -16,11 +43,65 @@
     background-color: rgba(111,174,249,0.8);
 }
 
-/* 网页顶部标签页，导航条 */
+/* 网页顶部 */
 .master-top{
     /*background-color: #6FAEF9;*/
     background-color: rgba(111,174,249,0.8);
     border-radius: 5px;
+}
+
+/* 解决网页顶部导航区域栅格在填充内容后不一样高的问题 */
+.row [class *= "col-"]{
+    margin-bottom: -50px;
+    padding-bottom: 50px;
+    padding-left: 0;
+    padding-right: 0;
+}
+.row{
+    overflow: hidden;
+}
+
+/* 顶部导航区域主页导航按钮 */
+.master-top-home{
+    width:100%;
+    height: 100px;
+    font-size: 30px;
+    padding-top: 30px;
+}
+
+/* 顶部导航区域 <dt> 排列方式 */
+.dt-row-by-3>dt{
+    width:33.333%;
+    float:left;
+}
+
+/* 顶部导航区域 <dt> 内部 <a> */
+.dt-row-by-3>dt>a{
+    width:100%;
+    height: 50px;
+    font-size: 18px;
+    padding-top: 13px;
+}
+
+/* 顶部导航区域已登录用户信息 */
+.master-top-user-login{
+    width:100%;
+    height: 100px;
+    font-size: 20px;
+    padding-top: 15px;
+}
+
+/* 顶部导航区域未登录用户信息 */
+.master-top-user-logout{
+    width:100%;
+    height: 100px;
+    font-size: 20px;
+    padding-top: 35px;
+}
+
+/* 去掉顶部面包屑导航条下方的空白 */
+.breadcrumb{
+    margin-bottom: 0;
 }
 
 /* 网页主体 */
@@ -31,26 +112,8 @@
 
 /* 网页底部 */
 .master-footer{
-    background-color: #F8F8F8;
+    /* background-color: #F8F8F8; */
+    background-color: rgb(248,248,248);
     padding-bottom: 15px;
 }
 
-/* 限制图片最大宽高 */
-img{
-    max-width: 500px;
-    max-height: 500px;
-}
-
-/* 不同部分图片的大小 */
-.img_welcome{
-    width: 200px;
-    height: 100px;
-}
-.img_avatar_small{
-    width: 50px;
-    height: 50px;
-}
-.img_avatar_middle{
-    width: 150px;
-    height: 150px;
-}

@@ -18,7 +18,7 @@
             {{--头像裁剪--}}
             <div class="text-center">
                 <div id="validation-errors"></div>
-                <img src="{{$user->avatar}}" class="img_avatar_middle img-circle" id="user-avatar">
+                <img src="{{$user->avatar}}" class="img-avatar-middle img-circle" id="user-avatar">
                 {!! Form::open(['url'=>'/user/avatar','files'=>true,'id'=>'avatar']) !!}
                 <div class="text-center">
                     <button type="button" class="btn btn-success avatar-button" id="upload-avatar">更换新的头像</button>

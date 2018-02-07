@@ -28,7 +28,7 @@
                 {!! Form::label('password','Password:') !!}
                 {!! Form::password('password',['class'=>'form-control']) !!}
             </div>
-            <div class="form-group">
+            <div class="form-group text-center">
                 <div class="col-md-6 col-lg-6">
                     <input type="text" class="form-control user-login-line"/>
                 </div>

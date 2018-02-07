@@ -52,6 +52,9 @@ class ForumController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id){
+        if($id != null){
+
+        }
         $discussion = Discussion::findOrFail($id);
         $comments = $discussion->comments()->paginate(10); // 分页
         return view('forum/show',compact('discussion','comments'));

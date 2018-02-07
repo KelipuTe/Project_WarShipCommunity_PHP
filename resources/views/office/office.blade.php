@@ -24,7 +24,7 @@
                             @foreach($introductions as $introduction)
                                 <div class="media office-line">
                                     <div class="media-left">
-                                        <img class="media-object img-circle img_avatar_small" src="{{$introduction->user->avatar}}">
+                                        <img class="media-object img-circle img-avatar-small" src="{{$introduction->user->avatar}}">
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading">

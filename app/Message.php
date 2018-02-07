@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Message extends Model
 {
+    protected $table = 'messages';
+
     protected $fillable = [
         'body','user_id','introduction_id'
     ];

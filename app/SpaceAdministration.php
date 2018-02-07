@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class SpaceAdministration extends Model
 {
+    protected $table = 'space_administrations';
+
     protected $fillable = ['title','body','user_id'];
 
     /**

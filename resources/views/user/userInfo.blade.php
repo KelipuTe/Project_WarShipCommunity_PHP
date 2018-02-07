@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-md-3 col-md-offset-1 col-sm-12" role="main">
             <div class="text-center">
-                <img src="{{$user->avatar}}" class="img_avatar_middle img-circle" id="user-avatar">
+                <img src="{{$user->avatar}}" class="img-avatar-middle img-circle" id="user-avatar">
             </div>
         </div>
         <div class="col-md-7 col-sm-12">

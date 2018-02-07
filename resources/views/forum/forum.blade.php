@@ -18,7 +18,7 @@
                 @foreach($discussions as $discussion)
                     <div class="media forum-line">
                         <div class="media-left">
-                            <img class="media-object img-circle img_avatar_small" src="{{$discussion->user->avatar}}">
+                            <img class="media-object img-circle img-avatar-small" src="{{$discussion->user->avatar}}">
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">

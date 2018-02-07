@@ -11,7 +11,7 @@
                 <div class="container">
                     <div class="media">
                         <div class="media-left">
-                            <img class="media-object img-circle img_avatar_middle" src="{{$introduction->user->avatar}}">
+                            <img class="media-object img-circle img-avatar-middle" src="{{$introduction->user->avatar}}">
                         </div>
                         {{--主体内容--}}
                         <div class="media-body">
