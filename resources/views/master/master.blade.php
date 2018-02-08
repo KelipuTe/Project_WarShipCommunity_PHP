@@ -13,7 +13,7 @@
     @yield('head')
 </head>
 <body class="master-body">
-<!-- 顶部导航条 -->
+{{--顶部导航条--}}
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -72,13 +72,14 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-<!-- 顶部巨幕 -->
+{{--顶部巨幕--}}
 <div class="jumbotron master-top-jumbotron">
     <div class="container">
         <h2>Welcome to WarShipCommunity</h2>
     </div>
 </div>
 <div class="container container-size">
+    {{--页面顶部快捷导航--}}
     <div class="row master-top">
         <div class="col-lg-2">
             <a href="/welcome" class="btn btn-warning master-top-home"><span class="fa fa-home fa-lg"></span> 首页 </a>
@@ -105,7 +106,7 @@
                 </div>
             @endif
         </div>
-        <!-- 顶部路径导航条 -->
+        {{--顶部路径导航条--}}
         <div class="col-lg-12">
             <ol class="breadcrumb">
                 @section('breadCrumb')
@@ -114,12 +115,12 @@
             </ol>
         </div>
     </div>
-    <!-- 页面主体部分 -->
+    {{--页面主体部分--}}
     <div class="row master-middle">
         @yield('content')
     </div>
 </div>
-<!-- 页面底部 -->
+{{--页面底部--}}
 <footer id="footer" class="footer master-footer">
     <hr>
     <div class="text-center">

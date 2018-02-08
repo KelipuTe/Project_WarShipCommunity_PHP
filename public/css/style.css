@@ -51,13 +51,22 @@ img{
 }
 
 /* 解决网页顶部导航区域栅格在填充内容后不一样高的问题 */
-.row [class *= "col-"]{
+/*.row [class *= "col-"]{
     margin-bottom: -50px;
     padding-bottom: 50px;
     padding-left: 0;
     padding-right: 0;
 }
 .row{
+    overflow: hidden;
+}*/
+.master-top [class *= "col-"]{
+    margin-bottom: -50px;
+    padding-bottom: 50px;
+    padding-left: 0;
+    padding-right: 0;
+}
+.master-top{
     overflow: hidden;
 }
 
@@ -117,3 +126,11 @@ img{
     padding-bottom: 15px;
 }
 
+/* 警告框位置 */
+.master-alert{
+    position: fixed;
+    bottom: 10%;
+    left: 0;
+    width: 100%;
+    z-index: 50;
+}

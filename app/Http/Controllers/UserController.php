@@ -109,18 +109,22 @@ class UserController extends Controller
             'password'=>$request->get('password')
         ];
         if(Auth::attempt($data)){
-            /* 登录验证成功，表示用户存在 */
             if(Auth::user()->email_confirm == 1) {
-                return redirect('/welcome');
+                $status = 1; // 状态 1 ：账号已激活，登陆成功
+                $message = "欢迎回来！！！";
+            } else {
+                Auth::logout(); // 用户登出
+                $status = -1; // 状态 -1 ： 账号未激活，登陆失败
+                $message = "账号未激活！！！";
             }
-            /* 账号尚未激活 */
-            Auth::logout(); // 用户登出
-            Session::flash('user_login_failed','账号尚未激活');
-            return redirect('/user/login')->withInput(); // 验证失败时返回登录页面并带回数据
+        } else {
+            $status = 0; // 状态 0 ： 密码错误或用户不存在，登陆失败
+            $message = "密码错误或用户不存在！！！";
         }
-        /* 密码输入错误，或用户不存在 */
-        Session::flash('user_login_failed','密码输入错误，或用户不存在');
-        return redirect('/user/login')->withInput();
+        return Response::json([
+            'status' => $status,
+            'message' => $message
+        ]);
     }
 
     /**
