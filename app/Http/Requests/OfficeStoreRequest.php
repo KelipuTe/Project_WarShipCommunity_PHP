@@ -33,4 +33,16 @@ class OfficeStoreRequest extends FormRequest
             'body'=>'required',
         ];
     }
+
+    /**
+     * 自定义错误提示信息
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'title.required' => '标题不能为空',
+            'body.required' => '内容不能为空'
+        ];
+    }
 }

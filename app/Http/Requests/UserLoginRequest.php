@@ -33,4 +33,18 @@ class UserLoginRequest extends FormRequest
             'password'=>'required|min:6'
         ];
     }
+
+    /**
+     * 自定义错误提示信息
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'email.required' => '此项必填',
+            'email.email' => '必须是电子邮箱格式',
+            'password.required'  => '此项必填',
+            'password.min'  => '登录密码长度必须大于等于6个字符'
+        ];
+    }
 }

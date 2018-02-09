@@ -14,26 +14,26 @@
 @section('content')
     {{--网页部分--}}
     <div class="row">
-        <div class="col-md-3 col-md-offset-1 col-sm-12" role="main">
+        <div class="col-md-3 col-md-offset-1" role="main">
             {{--头像裁剪--}}
             <div class="text-center">
                 <div id="validation-errors"></div>
-                <img src="{{$user->avatar}}" class="img-avatar-middle img-circle" id="user-avatar">
-                {!! Form::open(['url'=>'/user/avatar','files'=>true,'id'=>'avatar']) !!}
-                <div class="text-center">
-                    <button type="button" class="btn btn-success avatar-button" id="upload-avatar">更换新的头像</button>
-                </div>
-                {{--这里将<input>type=file标签透明度设为0，并调整z-index使其悬浮于按钮上方--}}
-                {!! Form::file('avatar',['class'=>'avatar','id'=>'image']) !!}
-                {!! Form::close() !!}
+                <img src="{{$user->avatar}}" class="img-avatar-middle img-circle" id="user-avatar"> {{--显示头像--}}
+                <form action="/user/avatar" id="avatar" method="post">
+                    <input id="token" name="_token" value="{{csrf_token()}}" type="hidden"> {{--CSRF--}}
+                    <div class="text-center">
+                        <button type="button" class="btn btn-success avatar-button" id="upload-avatar">更换新的头像</button>
+                    </div>
+                    {{--这里将<input>type=file标签透明度设为0，并调整z-index使其悬浮于按钮上方--}}
+                    <input type="file" name="avatar" id="image" class="avatar" >
+                </form>
                 <div class="span5">
                     <div id="output" style="display:none"></div>
                 </div>
             </div>
         </div>
-        <div class="col-md-7 col-sm-12">
+        <div class="col-md-7">
             <div>
-                <input id="token" name="_token" value="{{csrf_token()}}" type="hidden">
                 <div class="form-group user-form-line">
                     <label for="info-uid" class="col-md-2 col-md-offset-1 user-form-label-line">UID：</label>
                     <div class="col-md-8">
@@ -59,9 +59,9 @@
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                {!! Form::open( [ 'url' => ['/user/cropAvatar'], 'method' => 'POST', 'onsubmit'=>'return checkCoords();','files' => true ] ) !!}
+                {!! Form::open( [ 'url' => ['/user/avatarCrop'], 'method' => 'POST', 'onsubmit'=>'return checkCoords();','files' => true ] ) !!}
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="color: #66ffcc">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="exampleModalLabel">裁剪头像</h4>
                 </div>
                 <div class="modal-body">
@@ -112,10 +112,6 @@
                 });
                 $("#validation-errors").show();
             } else {
-                /*这段代码在实现图片裁剪时不用//////////////////////////////*/
-                /*$('#user-avatar').attr('src',response.avatar);
-                $('#upload-avatar').html('更换新的头像');*/
-                /*这段代码在实现图片裁剪时不用//////////////////////////////*/
                 var cropBox = $("#cropbox");
                 cropBox.attr('src',response.avatar);
                 $('#photo').val(response.image);
@@ -130,8 +126,10 @@
 
             }
         }
-        /*在实现图片裁剪时添加的两个function*/
-        /*获得需要传递到服务器的图片的四个数据*/
+        /*
+         * 在实现图片裁剪时添加的两个 function
+         * 获得需要传递到服务器的图片的四个数据
+         */
         function updateCoords(c) {
             $('#x').val(c.x);
             $('#y').val(c.y);

@@ -6,12 +6,12 @@
 @stop
 @section('content')
     <div class="row">
-        <div class="col-md-3 col-md-offset-1 col-sm-12" role="main">
+        <div class="col-md-3 col-md-offset-1" role="main">
             <div class="text-center">
                 <img src="{{$user->avatar}}" class="img-avatar-middle img-circle" id="user-avatar">
             </div>
         </div>
-        <div class="col-md-7 col-sm-12">
+        <div class="col-md-7">
             <div>
                 <div class="form-group user-form-line">
                     <label for="info-uid" class="col-md-2 user-form-label-line">UID：</label>

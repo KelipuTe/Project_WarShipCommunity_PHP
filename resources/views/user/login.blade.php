@@ -6,13 +6,12 @@
 @stop
 @section('content')
     <div class="row">
-        <div class="col-lg-3 text-center">
+        <div class="col-md-3 text-center">
             <h1 id="left_OvO" class="user-login-eye-size">0</h1>
         </div>
-        <div class="col-lg-6" role="main">
+        <div class="col-md-6" role="main">
             <div>
-                {{--CSRF--}}
-                <input id="token" name="_token" value="{{csrf_token()}}" type="hidden">
+                <input id="token" name="_token" value="{{csrf_token()}}" type="hidden"> {{--CSRF--}}
                 <div class="form-group input-group user-login-line">
                     <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
                     <input id="email" name="email" class="form-control" type="text" placeholder="请输入登录账号">
@@ -22,14 +21,14 @@
                     <input id="password" name="password" class="form-control" type="password" placeholder="请输入登录密码">
                 </div>
                 <div class="form-group text-center user-login-line">
-                    <div class="col-lg-6">
+                    <div class="col-md-6">
                         <input id="captcha" name="captcha" type="text" class="form-control user-login-line-captcha" placeholder="请输入右侧验证码"/>
                         <input id="captcha_code" name="captcha_code" type="hidden"/>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-md-3">
                         <canvas id="canvas" width="120" height="50"></canvas>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-md-3">
                         <a href="#" id="changeImg" class="btn btn-sm btn-warning user-login-line-captcha">看不清，换一张</a>
                     </div>
                 </div>
@@ -38,12 +37,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 text-center">
+        <div class="col-md-3 text-center">
             <h1 id="right_OvO" class="user-login-eye-size">0</h1>
         </div>
         {{--可关闭的警告框--}}
         <div class="master-alert">
-            <div id="master-alert-container" class="col-lg-4 col-lg-offset-4"></div>
+            <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
         </div>
     </div>
     <script>
@@ -69,6 +68,8 @@
             /* 提交按钮 */
             $('#submit').on('click', function () {
                 if( $('#captcha').val() == captcha_code){
+                    $('#submit').text('');
+                    $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
                     $.ajax({
                         type: 'post',
                         url: '/user/signIn',
@@ -78,29 +79,34 @@
                         },
                         dataType: 'json',
                         success: function (data) {
+                            $('#submit').empty();
+                            $('#submit').text('登录');
                             if(data.status == 1){
-                                console.log(data.message);
+                                // 登陆成功
+                                window.location.href = "/welcome";
                             } else if(data.status == -1){
-                                console.log(data.message);
+                                // 账号未激活
+                                makeAlertBox('info',data.message,'reSendEmailConfirm');
                             } else if(data.status == 0){
-                                makeAlertBox('danger',data.message);
+                                makeAlertBox('danger',data.message,'');
                             } else {
-                                makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！','');
                             }
                         },
                         error: function (jqXHR) {
-                            /* 遍历被 Laravel Request 拦截后返回的错误提示 */
+                            $('#submit').empty();
+                            $('#submit').text('登录');
                             if(jqXHR.status == 422){
+                                // 遍历被 Laravel Request 拦截后返回的错误提示
                                 $.each(jqXHR.responseJSON.errors,function (index,value) {
-                                    makeAlertBox('danger',value);
+                                    makeAlertBox('danger',value,'');
                                 });
                             }
                         }
                     });
                 } else {
-                    alert('验证码错误');
+                    makeAlertBox('danger','验证码错误！！！','');
                 }
-
             });
         });
 
@@ -108,13 +114,62 @@
          * 生成警告框
          * type 警告框类型
          * value 警告框提示信息
+         * link 警告框链接
          */
-        function makeAlertBox(type,value){
-            $('#master-alert-container').append(
-                '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                '<strong>错误！</strong>' + value +
-                '</div>');
+        function makeAlertBox(type,value,link){
+            var title;
+            switch (type) {
+                case 'success' :
+                    title = '成功！';
+                    break;
+                case 'info' :
+                    title = '信息！';
+                    break;
+                case 'warning' :
+                    title = '警告！';
+                    break;
+                case 'danger' :
+                    title = '错误！';
+                    break;
+                default :
+                    title = '错误！';
+            }
+            if(link != null && link != ''){
+                $('#master-alert-container').append(
+                    '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                    '<strong>' + title + '</strong>' + value + '<a id="reSendEmailConfirm" href="#" class="alert-link">点击重新发送邮箱验证邮件</a>' +
+                    '</div>');
+                $('#reSendEmailConfirm').on('click',function () {
+                    if($('#email').val() != null && $('#email').val() != '') {
+                        $.ajax({
+                            type: 'get',
+                            url: '/user/reSendEmailConfirm/' + $('#email').val(),
+                            dataType: 'json',
+                            success: function (data) {
+                                if(data.status == 1){
+                                    makeAlertBox('success',data.message);
+                                } else if(data.status == 0){
+                                    makeAlertBox('danger',data.message);
+                                } else {
+                                    makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                }
+                            },
+                            error: function (jqXHR) {
+                                if (jqXHR.status == 500){
+                                    makeAlertBox('danger','很抱歉，服务器正忙，请稍后再试！！！');
+                                }
+                            }
+                        });
+                    }
+                });
+            } else {
+                $('#master-alert-container').append(
+                    '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                    '<strong>' + title + '</strong>' + value +
+                    '</div>');
+            }
         }
 
         /* 控制输入密码时两侧眼睛变化 */

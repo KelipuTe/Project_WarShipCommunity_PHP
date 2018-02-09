@@ -32,4 +32,15 @@ class CommitRequest extends FormRequest
             'body'=>'required'
         ];
     }
+
+    /**
+     * 自定义错误提示信息
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'body.required' => '内容不能为空'
+        ];
+    }
 }

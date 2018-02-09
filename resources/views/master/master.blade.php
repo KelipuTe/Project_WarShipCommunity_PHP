@@ -34,7 +34,7 @@
             <ul class="nav navbar-nav navbar-right">
                 @if(Auth::check())
                     {{--如果用户已经登录，则显示与账号有关的信息--}}
-                    <li>
+                    {{--<li>
                         <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">消 息
                             @if(count(Auth::user()->unreadNotifications))
                                 <span class="badge">{{count(Auth::user()->unreadNotifications)}}</span>
@@ -50,7 +50,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>--}}
                     <li><img src="{{Auth::user()->avatar}}" class="img-circle img-avatar-small" alt="50x50"></li>
                     <li>
                         <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -58,8 +58,8 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-                            <li><a href="/user/infoEdit">个人信息</a></li>
-                            <li><a href="#">暂无内容</a></li>
+                            <li><a href="/user/userCenter">个人中心</a></li>
+                            <li><a href="#">消息中心</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/user/logout">退出登录</a></li>
                         </ul>
@@ -81,10 +81,10 @@
 <div class="container container-size">
     {{--页面顶部快捷导航--}}
     <div class="row master-top">
-        <div class="col-lg-2">
+        <div class="col-md-2">
             <a href="/welcome" class="btn btn-warning master-top-home"><span class="fa fa-home fa-lg"></span> 首页 </a>
         </div>
-        <div class="col-lg-6">
+        <div class="col-md-6">
             <dl class="dt-row-by-3 text-center">
                 <dt><a href="/office" class="btn btn-info"><span class="fa fa-book fa-lg"></span> 办公区 </a></dt>
                 <dt><a href="/forum" class="btn btn-info"><span class="fa fa-commenting-o fa-lg"></span> 讨论区 </a></dt>
@@ -94,7 +94,7 @@
                 <dt><a href="/archives" class="btn btn-info"><span class="fa fa-archive fa-lg"></span> 冷月档案馆 </a></dt>
             </dl>
         </div>
-        <div class="col-lg-4">
+        <div class="col-md-4">
             @if(Auth::check())
                 <div class="master-top-user-login text-center">
                     <p><strong>欢迎回来，{{Auth::user()->username}}</strong></p>
@@ -107,7 +107,7 @@
             @endif
         </div>
         {{--顶部路径导航条--}}
-        <div class="col-lg-12">
+        <div class="col-md-12">
             <ol class="breadcrumb">
                 @section('breadCrumb')
                     <span>您现在的位置：</span><li><a href="/welcome">首页</a></li>

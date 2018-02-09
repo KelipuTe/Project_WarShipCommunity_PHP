@@ -34,4 +34,17 @@ class ForumStoreRequest extends FormRequest
             'published_at'=>'required'
         ];
     }
+
+    /**
+     * 自定义错误提示信息
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'title.required' => '标题不能为空',
+            'body.required' => '内容不能为空',
+            'published_at.required' => '发布日期不能为空'
+        ];
+    }
 }

@@ -1,15 +1,15 @@
 /* master/master.blade.php */
 
-/* 背景图片 */
+/* 网页主体和背景图片 */
 .master-body{
     background: url('/image/background/ssv_fortress.jpg') fixed;
     background-size: 100%;
-    min-width: 1170px;
+    min-width: 970px;
 }
 
 /* 容器最小宽度 */
 .container-size{
-    min-width: 1170px;
+    min-width: 970px;
 }
 
 /* 限制图片最大宽高 */
