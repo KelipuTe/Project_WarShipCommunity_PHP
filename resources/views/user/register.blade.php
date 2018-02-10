@@ -1,6 +1,5 @@
-@extends('user.app')
+@extends('user.master')
 @section('breadCrumb')
-    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="/user/register">注册</a></li>
 @stop
@@ -10,27 +9,24 @@
             <h1 id="left_OvO" class="user-login-eye-size">0</h1>
         </div>
         <div class="col-md-6" role="main">
-            <div>
-                <input id="token" name="_token" value="{{csrf_token()}}" type="hidden"> {{--CSRF--}}
-                <div class="form-group input-group user-login-line">
-                    <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-                    <input id="email" name="email" class="form-control" type="text" placeholder="请输入登录账号">
-                </div>
-                <div class="form-group input-group user-login-line">
-                    <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-                    <input id="password" name="password" class="form-control" type="password" placeholder="请输入登录密码">
-                </div>
-                <div class="form-group input-group user-login-line">
-                    <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-                    <input id="password_confirmation" name="password_confirmation" class="form-control" type="password" placeholder="请确认登录密码">
-                </div>
-                <div class="form-group input-group user-login-line">
-                    <span class="input-group-addon"><i class="fa fa-user-o fa-fw"></i></span>
-                    <input id="username" name="username" class="form-control" type="text" placeholder="请输入用户名">
-                </div>
-                <div class="form-group">
-                    <button id="submit" class="btn btn-success form-control user-login-line">注册</button>
-                </div>
+            <div class="form-group input-group user-login-line">
+                <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                <input id="email" name="email" class="form-control" type="text" placeholder="请输入登录账号">
+            </div>
+            <div class="form-group input-group user-login-line">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                <input id="password" name="password" class="form-control" type="password" placeholder="请输入登录密码">
+            </div>
+            <div class="form-group input-group user-login-line">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                <input id="password_confirmation" name="password_confirmation" class="form-control" type="password" placeholder="请确认登录密码">
+            </div>
+            <div class="form-group input-group user-login-line">
+                <span class="input-group-addon"><i class="fa fa-user-o fa-fw"></i></span>
+                <input id="username" name="username" class="form-control" type="text" placeholder="请输入用户名">
+            </div>
+            <div class="form-group">
+                <button id="submit" class="btn btn-success form-control user-login-line">注册</button>
             </div>
         </div>
         <div class="col-md-3 text-center">
@@ -43,13 +39,6 @@
     </div>
     <script>
         $(document).ready(function () {
-            /* 添加 CSRF 保护 */
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('#token').val()
-                }
-            });
-
             /* 提交按钮 */
             $('#submit').on('click', function () {
                 $('#submit').text('');

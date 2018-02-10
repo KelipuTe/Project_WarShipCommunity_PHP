@@ -163,8 +163,8 @@ class UserController extends Controller
      * 个人中心页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function userCenter(){
-        return view('user/userCenter');
+    public function center(){
+        return view('user/center/center');
     }
 
     /**
@@ -172,18 +172,27 @@ class UserController extends Controller
      * @param $user_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function userInfo($user_id){
+    public function info($user_id){
         $user = User::findOrFail($user_id);
-        return view('user/userInfo',compact('user'));
+        return view('user/center/info',compact('user'));
     }
 
     /**
      * 个人信息修改页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function userInfoEdit(){
+    public function infoEdit(){
         $user = Auth::user();
-        return view('user/userInfoEdit',compact('user'));
+        return view('user/center/infoEdit',compact('user'));
+    }
+
+    /**
+     * 个人头像修改页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function avatarEdit(){
+        $user = Auth::user();
+        return view('user/center/avatarEdit',compact('user'));
     }
 
     /**
@@ -241,6 +250,6 @@ class UserController extends Controller
         $user = Auth::user(); // 获得当前用户
         $user->avatar = asset($photo); // 获得头像路径
         $user->save(); // 保存头像路径
-        return redirect('/user/infoEdit');
+        return redirect('/user/center/avatarEdit');
     }
 }

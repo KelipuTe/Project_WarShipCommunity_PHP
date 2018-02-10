@@ -50,11 +50,13 @@ Route::get('/user/logout','UserController@logout'); // 退出登录
 //Route::get('/user/sendEmailConfirm/{email}/{emailConfirmCode}','UserController@sendEmailConfirm'); // 发送邮箱验证邮件
 Route::get('/user/reSendEmailConfirm/{email}','UserController@reSendEmailConfirm'); // 重新发送邮箱验证邮件
 Route::get('/user/checkEmailConfirm/{email}/{emailConfirmCode}','UserController@checkEmailConfirm'); // 邮箱验证
-Route::get('/user/userCenter','UserController@userCenter'); // 个人信息页面
-Route::get('/user/userInfo/{id}','UserController@userInfo'); // 个人信息页面
-Route::get('/user/userInfoEdit','UserController@userInfoEdit'); // 个人信息修改页面
-Route::post('/user/avatar','UserController@avatar'); // 上传头像
-Route::post('/user/avatarCrop','UserController@avatarCrop'); // 裁剪上传头像
+
+Route::get('/user/center','UserController@center'); // 个人中心页面
+Route::get('/user/center/info/{id}','UserController@info'); // 我的信息查看页面
+Route::get('/user/center/infoEdit','UserController@infoEdit'); // 我的信息修改页面
+Route::get('/user/center/avatarEdit','UserController@avatarEdit'); // 我的头像修改页面
+Route::post('/user/center/avatar','UserController@avatar'); // 上传头像
+Route::post('/user/center/avatarCrop','UserController@avatarCrop'); // 裁剪上传头像
 
 /* NotificationController */
 Route::get('/notification/showAll','NotificationController@showAll'); // 显示用户所有消息通知
@@ -64,8 +66,6 @@ Route::get('/notification/showUnread','NotificationController@showUnread'); // �
 Route::get('/office/create','OfficeController@create'); // 办公区新人报道创建页面
 Route::post('/office/store','OfficeController@store'); // 办公区新人报道创建页面后台
 Route::get('/office/show/{id}','OfficeController@show'); // 办公区新人报道显示页面
-//Route::get('/office/show/{id}/edit','OfficeController@edit'); // 办公区新人报道修改页面
-//Route::patch('/office/show/{id}/update','OfficeController@update'); // 办公区新人报道修改页面后台
 Route::post('/office/show/welcome','OfficeController@welcome'); // 办公区新人报道显示页面迎新后台
 
 /* WarshipController */

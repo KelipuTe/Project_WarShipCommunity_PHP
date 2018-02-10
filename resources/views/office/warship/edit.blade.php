@@ -12,7 +12,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-6 col-md-offset-1">
-            @include('error.errorList')
+            @include('master.errorList')
             {!! Form::model($warship,['method'=>'PATCH','url'=>'/office/warship/'.$warship->id.'/update']) !!}
             <div class="form-group warship-form-line">
                 {!! Form::label('classes','Classes:',['class'=>'col-md-3 warship-form-label-line']) !!}

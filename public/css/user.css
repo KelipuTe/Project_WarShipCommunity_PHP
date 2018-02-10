@@ -18,33 +18,23 @@
 }
 /* ********** login.blade.php ********** */
 
-/* ********** userCenter.blade.php ********** */
+/* ********** center/master.blade.php ********** */
 .master-user-center [class *= "col-"]{
     padding-left: 0;
     padding-right: 0;
 }
 
-.list-dl{
-    margin: 0;
-    padding: 10px 0;
-}
-.list-dt{
+/* 左侧导航列表样式 */
+.list-li{
     background: #f5f5f5;
     width: 100%;
-    height: 34px;
-    line-height: 34px;
-    padding: 0 30px;
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
-.list-dt:hover{
+.list-li:hover{
     background: #e1e4ea;
 }
-/* ********** userCenter.blade.php ********** */
+/* ********** list.blade.php ********** */
 
-/* ********** userInfoEdit.blade.php ********** */
+/* ********** infoEdit.blade.php ********** */
 /* 上传按钮 */
 .avatar{
     margin: -34px auto 0;
@@ -66,4 +56,4 @@
 .user-form-label-line{
     padding-top: 5px;
 }
-/* ********** userInfoEdit.blade.php ********** */
+/* ********** infoEdit.blade.php ********** */

@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>WarShipCommunity</title>
     {{--引入需要用到的文件--}}
     <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
@@ -58,7 +59,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-                            <li><a href="/user/userCenter">个人中心</a></li>
+                            <li><a href="/user/center">个人中心</a></li>
                             <li><a href="#">消息中心</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/user/logout">退出登录</a></li>
@@ -135,5 +136,15 @@
         <span> Powered by <a href="https://d.laravel-china.org/docs/5.5"> Laravel 5.5 </a></span>
     </div>
 </footer>
+<script>
+    $(document).ready(function () {
+        /* 添加 CSRF 保护 */
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    });
+</script>
 </body>
 </html>

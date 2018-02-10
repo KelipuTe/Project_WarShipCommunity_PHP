@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Response;
 
 use App\Http\Requests\MessageRequest;
 use App\Http\Requests\OfficeStoreRequest;
@@ -40,42 +41,35 @@ class OfficeController extends Controller
             'last_user_id'=>Auth::user()->id,
         ];
         $introduction = Introduction::create(array_merge($request->all(),$data));
-        $accountController = new AccountController();
-        $accountController->officeStore(Auth::user()->id); // 新人报道，增加活跃值
-        return redirect()->action('OfficeController@show',['id'=>$introduction->id]);
+        if($introduction != null){
+            $accountController = new AccountController();
+            $accountController->officeStore(Auth::user()->id); // 新人报道，增加活跃值
+            $status = 1;
+            $message = "新人报道创建成功！！！";
+        } else {
+            $status = 0;
+            $message = "新人报道创建失败！！！";
+        }
+        return Response::json([
+            'status' => $status,
+            'message' => $message,
+            'introduction_id' => $introduction->id
+        ]);
     }
 
     /**
      * 新人报道显示页面
-     * @param $id
+     * @param $introduction_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show($id){
-        $introduction = Introduction::findOrFail($id);
+    public function show($introduction_id){
+        $introduction = Introduction::findOrFail($introduction_id);
         return view('office/show',compact('introduction'));
     }
 
-    /**
-     * 新人报道修改页面
-     * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    /*public function edit($id){
-        $introduction = Introduction::findOrFail($id);
-        return view('office/edit',compact('introduction'));
-    }*/
-
-    /**
-     * 新人报道修改页面后台
-     * @param OfficeStoreRequest $request
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    /*public function update(OfficeStoreRequest $request,$id){
-        $introduction = Introduction::findOrFail($id);
-        $introduction->update($request->all());
-        return redirect()->action('OfficeController@show',['id'=>$id]);
-    }*/
+    public function getIntroduction(){
+        $introductions = Introduction::latest()->paginate(10);
+    }
 
     /**
      * 新人报道显示页面迎新后台

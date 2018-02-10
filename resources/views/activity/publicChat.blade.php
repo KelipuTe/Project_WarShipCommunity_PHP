@@ -25,7 +25,7 @@
                 <dl id="publicChatRoom"></dl>
             </div>
             @if(Auth::check())
-                @include('error.errorList')
+                @include('master.errorList')
                 {!! Form::open(['url'=>'/activity/showPublicChat','id'=>'chat_form']) !!}
                 <div class="form-group">
                     <input type="text" id="username" name="username" value="{{\Auth::user()->username}}" style="display:none">

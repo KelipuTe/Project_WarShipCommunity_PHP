@@ -42,7 +42,7 @@
             {{--创建评论部分--}}
             @if(Auth::check())
                 @include('vendor.ueditor.assets'){{--使用ueditor编辑器时需要添加--}}
-                @include('error.errorList')
+                @include('master.errorList')
                 {!! Form::open(['url'=>'/forum/show/commit']) !!}
                 {!! Form::hidden('discussion_id',$discussion->id) !!}
                 <div class="form-group">

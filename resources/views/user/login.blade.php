@@ -1,6 +1,5 @@
-@extends('user.app')
+@extends('user.master')
 @section('breadCrumb')
-    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="/user/login">登录</a></li>
 @stop
@@ -10,31 +9,28 @@
             <h1 id="left_OvO" class="user-login-eye-size">0</h1>
         </div>
         <div class="col-md-6" role="main">
-            <div>
-                <input id="token" name="_token" value="{{csrf_token()}}" type="hidden"> {{--CSRF--}}
-                <div class="form-group input-group user-login-line">
-                    <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-                    <input id="email" name="email" class="form-control" type="text" placeholder="请输入登录账号">
+            <div class="form-group input-group user-login-line">
+                <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                <input id="email" name="email" class="form-control" type="text" placeholder="请输入登录账号">
+            </div>
+            <div class="form-group input-group user-login-line">
+                <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+                <input id="password" name="password" class="form-control" type="password" placeholder="请输入登录密码">
+            </div>
+            <div class="form-group text-center user-login-line">
+                <div class="col-md-6">
+                    <input id="captcha" name="captcha" type="text" class="form-control user-login-line-captcha" placeholder="请输入右侧验证码"/>
+                    <input id="captcha_code" name="captcha_code" type="hidden"/>
                 </div>
-                <div class="form-group input-group user-login-line">
-                    <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-                    <input id="password" name="password" class="form-control" type="password" placeholder="请输入登录密码">
+                <div class="col-md-3">
+                    <canvas id="canvas" width="120" height="50"></canvas>
                 </div>
-                <div class="form-group text-center user-login-line">
-                    <div class="col-md-6">
-                        <input id="captcha" name="captcha" type="text" class="form-control user-login-line-captcha" placeholder="请输入右侧验证码"/>
-                        <input id="captcha_code" name="captcha_code" type="hidden"/>
-                    </div>
-                    <div class="col-md-3">
-                        <canvas id="canvas" width="120" height="50"></canvas>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" id="changeImg" class="btn btn-sm btn-warning user-login-line-captcha">看不清，换一张</a>
-                    </div>
+                <div class="col-md-3">
+                    <a href="#" id="changeImg" class="btn btn-sm btn-warning user-login-line-captcha">看不清，换一张</a>
                 </div>
-                <div class="form-group">
-                    <button id="submit" class="btn btn-success form-control user-login-line">登录</button>
-                </div>
+            </div>
+            <div class="form-group">
+                <button id="submit" class="btn btn-success form-control user-login-line">登录</button>
             </div>
         </div>
         <div class="col-md-3 text-center">
@@ -56,13 +52,6 @@
                 e.preventDefault();
                 captcha_code = drawPic();
                 $('#captcha_code').val(captcha_code);
-            });
-
-            /* 添加 CSRF 保护 */
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('#token').val()
-                }
             });
 
             /* 提交按钮 */

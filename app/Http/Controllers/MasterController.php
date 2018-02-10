@@ -44,8 +44,7 @@ class MasterController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function office(){
-        $introductions = Introduction::latest()->get();
-        return view('office/office',compact('introductions'));
+        return view('office/office');
     }
 
     /**
@@ -54,7 +53,7 @@ class MasterController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function warship(){
-        $warships = Warship::latest()->paginate(20);
+        $warships = Warship::latest()->paginate(10);
         return view('office/warship/warship',compact('warships'));
     }
 

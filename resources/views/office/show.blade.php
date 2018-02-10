@@ -1,4 +1,4 @@
-@extends('office.app')
+@extends('office.master')
 @section('breadCrumb')
     {{--增加面包屑导航条目--}}
     @parent
@@ -16,7 +16,7 @@
                         {{--主体内容--}}
                         <div class="media-body">
                             <h2 class="media-heading">{{$introduction->title}}
-                                <a href="/user/userInfo/{{$introduction->user->id}}"><span>@</span>{{$introduction->user->username}}</a>
+                                <a href="/user/center/info/{{$introduction->user->id}}"><span>@</span>{{$introduction->user->username}}</a>
                             </h2>
                             <h3>{!! $introduction->body !!}</h3>
                         </div>

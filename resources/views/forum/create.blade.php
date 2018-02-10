@@ -8,7 +8,7 @@
     @include('vendor.ueditor.assets')
     <div class="row">
         <div class="col-md-10 col-md-offset-1" role="main">
-            @include('error.errorList')
+            @include('master.errorList')
             {!! Form::open(['url'=>'/forum/store']) !!}
             <div class="form-group">
                 {!! Form::label('title','Title:',['class'=>'col-md-1']) !!}
