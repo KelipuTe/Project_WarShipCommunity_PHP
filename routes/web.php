@@ -62,26 +62,35 @@ Route::post('/user/center/avatarCrop','UserController@avatarCrop'); // 裁剪上
 Route::get('/notification/showAll','NotificationController@showAll'); // 显示用户所有消息通知
 Route::get('/notification/showUnread','NotificationController@showUnread'); // 显示用户未读消息通知
 
-/* OfficeController */
-Route::get('/office/create','OfficeController@create'); // 办公区新人报道创建页面
-Route::post('/office/store','OfficeController@store'); // 办公区新人报道创建页面后台
-Route::get('/office/show/{id}','OfficeController@show'); // 办公区新人报道显示页面
-Route::post('/office/show/welcome','OfficeController@welcome'); // 办公区新人报道显示页面迎新后台
+/* OfficeController 办公区 */
+Route::get('/office/getIntroductions','OfficeController@getIntroductions'); // 获取新人报道列表
+Route::get('/office/getIntroduction/{id}','OfficeController@getIntroduction'); // 获取新人报道
+Route::get('/office/getMessages/{id}','OfficeController@getMessages'); // 获取新人报道回复列表
 
-/* WarshipController */
-Route::get('/office/warship/create','WarshipController@create'); // 办公区舰船管理创建页面
-Route::post('/office/warship/store','WarshipController@store'); // 办公区舰船管理创建页面后台
+Route::get('/office/create','OfficeController@create'); // 新人报道创建页面
+Route::post('/office/store','OfficeController@store'); // 新人报道创建页面后台
+Route::get('/office/show/{id}','OfficeController@show'); // 新人报道显示页面
+Route::post('/office/show/welcome','OfficeController@welcome'); // 新人报道显示页面迎新后台
+
+
+/* WarshipController 办公区舰船管理 */
+Route::get('/office/warship/create','WarshipController@create'); // 舰船管理创建页面
+Route::post('/office/warship/store','WarshipController@store'); // 舰船管理创建页面后台
 Route::post('/office/warship/picture','WarshipController@changePicture'); // 更改舰船立绘
-Route::get('/office/warship/{id}/edit','WarshipController@edit'); // 办公区舰船管理修改页面
-Route::patch('/office/warship/{id}/update','WarshipController@update'); // 办公区舰船管理修改页面后台
+Route::get('/office/warship/{id}/edit','WarshipController@edit'); // 舰船管理修改页面
+Route::patch('/office/warship/{id}/update','WarshipController@update'); // 舰船管理修改页面后台
 Route::get('/office/warship/getWarship','WarshipController@getWarship'); // 获得所有舰船数据
 Route::get('/office/warship/{no}','WarshipController@gotoOne'); // 获得所有舰船数据
 
 /* ForumController */
+Route::get('/forum/getDiscussions','ForumController@getDiscussions'); // 获取讨论列表
+Route::get('/forum/getDiscussion/{id}','ForumController@getDiscussion'); // 获取讨论
+Route::get('/forum/getComments/{id}','ForumController@getComments'); // 获取评论列表
+
 Route::get('/forum/create','ForumController@create'); // 讨论区创建页面
 Route::post('/forum/store','ForumController@store'); // 讨论区创建页面后台
 Route::get('/forum/show/{id}','ForumController@show'); // 讨论区显示页面
-Route::post('/forum/show/commit','ForumController@commit'); // 讨论区评论后台
+Route::post('/forum/show/comment','ForumController@comment'); // 讨论区评论后台
 
 /* FollowController */
 Route::get('/follow/userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow'); // 用户关注讨论

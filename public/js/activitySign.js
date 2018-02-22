@@ -11371,7 +11371,7 @@ module.exports = __webpack_require__(21);
 
 window.Vue = __webpack_require__(1);
 
-/*显示每日签到日历的Vue.js组件*/
+/* 显示每日签到日历的 Vue.js 组件 */
 Vue.component('show-sign', __webpack_require__(22));
 
 var activityShowSign = new Vue({
@@ -11526,7 +11526,7 @@ function sign() {
         showDay: function showDay(day) {
             var i_day = 1;
             for (; i_day <= day.length; ++i_day) {
-                /*按一排一周的格式输出日历*/
+                /* 按一排一周的格式输出日历 */
                 if (i_day % 7 === 1) {
                     var i_week = Math.ceil(i_day / 7);
                     var tr_id = "week" + i_week;
@@ -11534,7 +11534,7 @@ function sign() {
                 }
                 var td_id = "day" + i_day;
                 jQuery('#' + tr_id).append('<td id=' + td_id + '>' + i_day + '号<br></td>');
-                /*添加按钮并绑定事件*/
+                /* 添加按钮并绑定事件 */
                 var nowTime = new Date();
                 var td_text = "";
                 var td_btn_class = "";

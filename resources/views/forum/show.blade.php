@@ -2,68 +2,237 @@
 @section('breadCrumb')
     {{--增加面包屑导航条目--}}
     @parent
-    <li><a href="" id="discussion-id" name="{{$discussion->id}}">{{$discussion->title}}</a></li>
+    <li><a href="#" id="discussion-title"></a></li>
 @stop
 @section('content')
     <div class="row">
         <div class="col-md-9">
             {{--主体内容--}}
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <h2>{{$discussion->title}}
-                        @if(Auth::check() && Auth::user()->id == $discussion->user_id)
-                            <a class="btn btn-danger btn-sm pull-right" href="" role="button">爆破</a>
-                        @endif
-                    </h2>
-                </div>
-                <div class="panel-body">
-                    {!! $discussion->body !!}
-                </div>
+            <div id="discussion">
+                <discussion></discussion>
             </div>
+            <template id="template-discussion">
+                <div>
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h2> @{{ discussion.title }}
+                                <a class="btn btn-danger btn-sm pull-right" href="#" role="button" v-if="isUser">爆破</a>
+                            </h2>
+                        </div>
+                        <div class="panel-body" v-html="discussion.body"></div>
+                    </div>
+                </div>
+            </template>
+            <script>
+                Vue.component('discussion',{
+                    template:"#template-discussion",
+                    data:function () {
+                        return {
+                            discussion: '',
+                            isUser: false,
+                            avatar: '',
+                            username: ''
+                        };
+                    },
+                    created:function () {
+                        this.getDiscussion();
+                    },
+                    methods:{
+                        getDiscussion:function(){
+                            var vm = this;
+                            var href = location.href.split('/');
+                            if( location.href.indexOf('?') != -1 ){
+                                //判断是不是翻页后的地址，携带 ?page=number
+                                href = location.href.split('?');
+                                href = href[0].split('/');
+                            }
+                            var id = href[href.length-1];
+                            $.ajax({
+                                type:'GET',
+                                url:'/forum/getDiscussion/' + id,
+                                dataType:'json',
+                                success:function (data) {
+                                    vm.discussion = data.discussion;
+                                    vm.isUser = data.isUser;
+                                    vm.avatar = data.discussion.user_avatar[0].avatar;
+                                    vm.username = data.discussion.username[0].username;
+                                    $('#discussion-title').text(data.discussion.title);
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        }
+                    }
+                });
+                new Vue({
+                    el:"#discussion"
+                });
+            </script>
             {{--评论部分--}}
-            @foreach($comments as $comment)
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <div class="media">
-                            <div class="media-left">
-                                <img class="media-object img-circle img-avatar-small" src="{{$comment->user->avatar}}">
+            <div id="comment-list">
+                <comment-list></comment-list>
+            </div>
+            <div class="text-center">
+                <ul id="page-list" class="pagination"></ul>
+            </div>
+            <template id="template-comment-list">
+                <div>
+                    <div v-for="comment in comments">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <img class="media-object img-circle img-avatar-small" src="" :src="comment.user_avatar[0].avatar">
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading forum-comment-line"> @{{comment.username[0].username}} </h4>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="media-body">
-                                <h4 class="media-heading forum-comment-line">{{$comment->user->username}}</h4>
-                            </div>
+                            <div class="panel-body" v-html="comment.body"></div>
                         </div>
                     </div>
-                    <div class="panel-body">
-                        {!! $comment->body !!}
-                    </div>
                 </div>
-            @endforeach
-            <div class="text-center">{!! $comments->render() !!}</div>{{--分页--}}
+            </template>
+            <script>
+                Vue.component('comment-list',{
+                    template:"#template-comment-list",
+                    data:function () {
+                        return {
+                            comments: ''
+                        };
+                    },
+                    created:function () {
+                        this.getComments();
+                    },
+                    methods:{
+                        getComments:function(){
+                            var vm = this;
+                            var href = location.href.split('/');
+                            if( location.href.indexOf('?') != -1 ){
+                                //判断是不是翻页后的地址，携带 ?page=number
+                                href = location.href.split('?');
+                                href = href[0].split('/');
+                            }
+                            var id = href[href.length-1];
+
+                            var url = '/forum/getComments/'+id;
+                            if( location.href.indexOf('?') != -1 ){
+                                //判断是不是翻页后的地址，携带 ?page=number
+                                var href = location.href.split('=');
+                                url = '/forum/getComments/'+id+'?page='+ href[href.length-1];
+                            }
+
+                            $.ajax({
+                                type:'GET',
+                                url:url,
+                                dataType:'json',
+                                success:function (data) {
+                                    vm.comments = data.comments.data;
+                                    pageList(data.comments,'http://localhost/forum/show/'+id); // 构造分页按钮列表
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        }
+                    }
+                });
+                new Vue({
+                    el:"#comment-list"
+                });
+            </script>
+
+
+
             {{--创建评论部分--}}
             @if(Auth::check())
                 @include('vendor.ueditor.assets'){{--使用ueditor编辑器时需要添加--}}
                 @include('master.errorList')
-                {!! Form::open(['url'=>'/forum/show/commit']) !!}
-                {!! Form::hidden('discussion_id',$discussion->id) !!}
-                <div class="form-group">
-                    {{--编辑器容器--}}
-                    <script id="container" name="body" type="text/plain"></script>
+                <div>
+                    <div class="form-group">
+                        {{--编辑器容器--}}
+                        <script id="ue-container" type="text/plain"></script>
+                    </div>
+                    <div class="form-group">
+                        <button id="submit" class="btn btn-success form-control">提交</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    {!! Form::submit('提交',['class'=>'form-control btn btn-primary']) !!}
-                </div>
-                {!! Form::close() !!}
                 {{--实例化编辑器--}}
                 <script type="text/javascript">
-                    var ue = UE.getEditor('container');
+                    var ue = UE.getEditor('ue-container');
                     ue.ready(function() {
                         ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');/* 设置CSRFtoken */
                     });
                 </script>
+                {{--可关闭的警告框--}}
+                <div class="master-alert">
+                    <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
+                </div>
+
+
+                <script>
+                    $(document).ready(function () {
+                        /* 提交按钮 */
+                        $('#submit').on('click', function () {
+                            $('#submit').text('');
+                            $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
+
+
+                            var href = location.href.split('/');
+                            if( location.href.indexOf('?') != -1 ){
+                                //判断是不是翻页后的地址，携带 ?page=number
+                                href = location.href.split('?');
+                                href = href[0].split('/');
+                            }
+                            var id = href[href.length-1];
+
+                            console.log(id);
+                            console.log(UE.getEditor('ue-container').getContent());
+                            $.ajax({
+                                type: 'post',
+                                url: '/forum/show/comment',
+                                data: {
+                                    'discussion_id': id,
+                                    'body': UE.getEditor('ue-container').getContent()
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    $('#submit').empty();
+                                    $('#submit').text('提交');
+                                    if(data.status == 1){
+                                        window.location.reload();
+                                    } else if(data.status == 0){
+                                        makeAlertBox('danger',data.message);
+                                    } else {
+                                        makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    $('#submit').empty();
+                                    $('#submit').text('提交');
+                                    if(jqXHR.status == 422){
+                                        // 遍历被 Laravel Request 拦截后返回的错误提示
+                                        $.each(jqXHR.responseJSON.errors,function (index,value) {
+                                            makeAlertBox('danger',value);
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                    });
+                </script>
+
+
             @else
                 <a href="/user/login" class="form-control btn btn-success">登录参与讨论</a>
             @endif
         </div>
+
+
+
+
         <div class="col-md-3">
             {{--关于文章--}}
             <div class="panel panel-info">

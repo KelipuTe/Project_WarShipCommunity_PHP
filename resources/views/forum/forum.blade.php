@@ -14,26 +14,72 @@
                 </div>
             </div>
             {{--显示讨论列表--}}
-            <div>
-                @foreach($discussions as $discussion)
-                    <div class="media forum-line">
-                        <div class="media-left">
-                            <img class="media-object img-circle img-avatar-small" src="{{$discussion->user->avatar}}">
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">
-                                <a href="/forum/show/{{$discussion->id}}">{{$discussion->title}}</a>
-                            </h4>
-                            {{$discussion->user->username}}
-                            <div class="pull-right">
-                                <span>共{{count($discussion->comments)}}条回复，</span>
-                                <span>用户{{$discussion->last_user_id}}最后更新于{{$discussion->updated_at->diffForHumans()}}</span>
+            <div id="discussion-list">
+                <discussion-list></discussion-list>
+            </div>
+            <div class="text-center">
+                <ul id="page-list" class="pagination"></ul>
+            </div>
+            <template id="template-discussion-list">
+                <div>
+                    <div v-for="discussion in discussions">
+                        <div class="media forum-line">
+                            <div class="media-left">
+                                <img class="media-object img-circle img-avatar-small" style="margin-left: 20px" src="" :src="discussion.user_avatar[0].avatar">
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a href="#" :href="['/forum/show/'+discussion.id]"> @{{ discussion.title }} </a>
+                                </h4>
+                                @{{ discussion.username[0].username }}
+                                <div class="pull-right" style="margin-right: 20px">
+                                    <span> 共 @{{ discussion.count_comments }} 条回复 </span>
+                                    <span> 最后更新于 @{{ discussion.update_diff }} </span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
-                <div class="text-center">{!! $discussions->render() !!}</div>{{--分页--}}
-            </div>
+                </div>
+            </template>
+            <script>
+                Vue.component('discussion-list',{
+                    template:"#template-discussion-list",
+                    data:function () {
+                        return {
+                            discussions:''
+                        };
+                    },
+                    created:function () {
+                        this.getDiscussions();
+                    },
+                    methods:{
+                        getDiscussions:function(){
+                            var vm = this;
+                            var url = '/forum/getDiscussions';
+                            if( location.href.indexOf('=') != -1 ){
+                                //判断是不是翻页后的地址，携带 ?page=number
+                                var href = location.href.split('=');
+                                url = '/forum/getDiscussions?page='+ href[href.length-1];
+                            }
+                            $.ajax({
+                                type:'GET',
+                                url:url,
+                                dataType:'json',
+                                success:function (data) {
+                                    vm.discussions = data.discussions.data;
+                                    pageList(data.discussions,'http://localhost/forum'); // 构造分页按钮列表
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        }
+                    }
+                });
+                new Vue({
+                    el:"#discussion-list"
+                });
+            </script>
         </div>
     </div>
 @stop

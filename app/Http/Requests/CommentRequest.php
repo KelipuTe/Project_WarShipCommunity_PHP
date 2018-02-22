@@ -5,11 +5,11 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Commit 讨论评论，提交时的验证条件
- * Class CommitRequest
+ * Comment 讨论评论，提交时的验证条件
+ * Class CommentRequest
  * @package App\Http\Requests
  */
-class CommitRequest extends FormRequest
+class CommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

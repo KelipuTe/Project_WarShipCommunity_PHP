@@ -62,8 +62,7 @@ class MasterController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function forum(){
-        $discussions = Discussion::latest()->published()->paginate(10);
-        return view('forum/forum',compact('discussions'));
+        return view('forum/forum');
     }
 
     /**

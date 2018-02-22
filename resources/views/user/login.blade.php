@@ -18,14 +18,14 @@
                 <input id="password" name="password" class="form-control" type="password" placeholder="请输入登录密码">
             </div>
             <div class="form-group text-center user-login-line">
-                <div class="col-md-6">
-                    <input id="captcha" name="captcha" type="text" class="form-control user-login-line-captcha" placeholder="请输入右侧验证码"/>
+                <div class="col-md-4">
+                    <input id="captcha" name="captcha" type="text" class="form-control user-login-line-captcha" placeholder="请输入验证码"/>
                     <input id="captcha_code" name="captcha_code" type="hidden"/>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <canvas id="canvas" width="120" height="50"></canvas>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <a href="#" id="changeImg" class="btn btn-sm btn-warning user-login-line-captcha">看不清，换一张</a>
                 </div>
             </div>
@@ -75,11 +75,11 @@
                                 window.location.href = "/welcome";
                             } else if(data.status == -1){
                                 // 账号未激活
-                                makeAlertBox('info',data.message,'reSendEmailConfirm');
+                                makeAlertBox2('info',data.message,'reSendEmailConfirm');
                             } else if(data.status == 0){
-                                makeAlertBox('danger',data.message,'');
+                                makeAlertBox('danger',data.message);
                             } else {
-                                makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！','');
+                                makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
                             }
                         },
                         error: function (jqXHR) {
@@ -88,24 +88,26 @@
                             if(jqXHR.status == 422){
                                 // 遍历被 Laravel Request 拦截后返回的错误提示
                                 $.each(jqXHR.responseJSON.errors,function (index,value) {
-                                    makeAlertBox('danger',value,'');
+                                    makeAlertBox('danger',value);
                                 });
+                            } else {
+                                console.log("出现错误：" +jqXHR.status);
                             }
                         }
                     });
                 } else {
-                    makeAlertBox('danger','验证码错误！！！','');
+                    makeAlertBox('danger','验证码错误！！！');
                 }
             });
         });
 
         /*
-         * 生成警告框
+         * 生成带链接的警告框
          * type 警告框类型
          * value 警告框提示信息
          * link 警告框链接
          */
-        function makeAlertBox(type,value,link){
+        function makeAlertBox2(type,value,link){
             var title;
             switch (type) {
                 case 'success' :

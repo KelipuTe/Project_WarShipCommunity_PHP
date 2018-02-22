@@ -11359,21 +11359,21 @@ module.exports = __webpack_require__(10);
  */
 window.Vue = __webpack_require__(1);
 
-/*用户关注讨论的Vue.js组件*/
+/* 用户关注讨论的 Vue.js 组件 */
 Vue.component('user-discussion-button', __webpack_require__(11));
 
 var forumUserDiscussion = new Vue({
     el: '#user-discussion'
 });
 
-/*用户关注用户的Vue.js组件*/
+/* 用户关注用户的 Vue.js 组件 */
 Vue.component('user-user-button', __webpack_require__(14));
 
 var forumUserUser = new Vue({
     el: '#user-user'
 });
 
-/*用户等级的Vue.js组件*/
+/* 用户等级的 Vue.js 组件 */
 Vue.component('liveness', __webpack_require__(17));
 
 var forumLiveness = new Vue({
@@ -11460,8 +11460,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         hasUserDiscussionFollow: function hasUserDiscussionFollow() {
-            var vm = this; //这里需要指定是Vue.js的this不是JavaScript的this
-            var discussion_id = $('#discussion-id').attr('name');
+            var vm = this; // 这里需要指定是 Vue.js 的 this 不是 JavaScript 的 this
+            var href = location.href.split('/');
+            var discussion_id = href[href.length - 1];
             $.ajax({
                 type: 'GET',
                 url: '/follow/hasUserDiscussionFollow/' + discussion_id,
@@ -11476,7 +11477,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         userDiscussionFollow: function userDiscussionFollow() {
             var vm = this;
-            var discussion_id = $('#discussion-id').attr('name');
+            var href = location.href.split('/');
+            var discussion_id = href[href.length - 1];
             $.ajax({
                 type: 'GET',
                 url: '/follow/userDiscussionFollow/' + discussion_id,
@@ -11622,7 +11624,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         hasUserUserFollow: function hasUserUserFollow() {
             var vm = this;
-            var discussion_id = $('#discussion-id').attr('name');
+            var href = location.href.split('/');
+            var discussion_id = href[href.length - 1];
             $.ajax({
                 type: 'GET',
                 url: '/follow/hasUserUserFollow/' + discussion_id,
@@ -11637,7 +11640,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         userUserFollow: function userUserFollow() {
             var vm = this;
-            var discussion_id = $('#discussion-id').attr('name');
+            var href = location.href.split('/');
+            var discussion_id = href[href.length - 1];
             $.ajax({
                 type: 'GET',
                 url: '/follow/userUserFollow/' + discussion_id,
@@ -11782,7 +11786,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         init: function init() {
             var vm = this;
-            var discussion_id = $('#discussion-id').attr('name');
+            var href = location.href.split('/');
+            var discussion_id = href[href.length - 1];
             $.ajax({
                 type: 'GET',
                 url: '/account/getLiveness/' + discussion_id,

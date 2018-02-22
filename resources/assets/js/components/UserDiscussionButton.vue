@@ -24,7 +24,8 @@
         methods:{
             hasUserDiscussionFollow:function () {
                 var vm = this; // 这里需要指定是 Vue.js 的 this 不是 JavaScript 的 this
-                var discussion_id = $('#discussion-id').attr('name');
+                var href = location.href.split('/');
+                var discussion_id = href[href.length-1];
                 $.ajax({
                     type:'GET',
                     url:'/follow/hasUserDiscussionFollow/' + discussion_id,
@@ -39,7 +40,8 @@
             },
             userDiscussionFollow:function () {
                 var vm = this;
-                var discussion_id = $('#discussion-id').attr('name');
+                var href = location.href.split('/');
+                var discussion_id = href[href.length-1];
                 $.ajax({
                     type:'GET',
                     url:'/follow/userDiscussionFollow/' + discussion_id,

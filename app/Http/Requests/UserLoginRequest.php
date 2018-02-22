@@ -41,9 +41,9 @@ class UserLoginRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.required' => '此项必填',
+            'email.required' => '登录账号必填',
             'email.email' => '必须是电子邮箱格式',
-            'password.required'  => '此项必填',
+            'password.required'  => '登录密码必填',
             'password.min'  => '登录密码长度必须大于等于6个字符'
         ];
     }

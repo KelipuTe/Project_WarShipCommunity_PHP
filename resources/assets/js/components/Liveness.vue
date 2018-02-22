@@ -23,7 +23,8 @@
         methods:{
             init:function () {
                 var vm = this;
-                var discussion_id = $('#discussion-id').attr('name');
+                var href = location.href.split('/');
+                var discussion_id = href[href.length-1];
                 $.ajax({
                     type:'GET',
                     url:'/account/getLiveness/' + discussion_id,

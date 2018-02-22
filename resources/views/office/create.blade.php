@@ -62,35 +62,5 @@
                 });
             });
         });
-
-        /*
-         * 生成警告框
-         * type 警告框类型
-         * value 警告框提示信息
-         */
-        function makeAlertBox(type,value){
-            var title;
-            switch (type) {
-                case 'success' :
-                    title = '成功！';
-                    break;
-                case 'info' :
-                    title = '信息！';
-                    break;
-                case 'warning' :
-                    title = '警告！';
-                    break;
-                case 'danger' :
-                    title = '错误！';
-                    break;
-                default :
-                    title = '错误！';
-            }
-            $('#master-alert-container').append(
-                '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
-                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                '<strong>' + title + '</strong>' + value +
-                '</div>');
-        }
     </script>
 @stop

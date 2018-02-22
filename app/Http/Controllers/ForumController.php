@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Response;
 use Illuminate\Http\Request;
 
 use App\Comment;
 use App\Discussion;
-use App\Http\Requests\CommitRequest;
+use App\Http\Requests\CommentRequest;
 use App\Http\Requests\ForumStoreRequest;
 
 /**
@@ -19,7 +20,36 @@ class ForumController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('show');
+        $this->middleware('auth')->except('show','getDiscussions','getDiscussion','getComments');
+    }
+
+    public function getDiscussions(){
+        $discussions = Discussion::latest()->published()->paginate(10);
+        return Response::json([
+            'discussions' => $discussions,
+        ]);
+    }
+
+    public function getDiscussion($discussion_id){
+        $discussion = Discussion::findOrFail($discussion_id);
+        $isUser = false;
+        if(Auth::user()){
+            if(Auth::user()->id == $discussion->user_id) {
+                $isUser = true;
+            }
+        }
+        return Response::json([
+            'discussion' => $discussion,
+            'isUser' => $isUser
+        ]);
+    }
+
+    public function getComments($discussion_id){
+        $discussion = Discussion::findOrFail($discussion_id);
+        $comments = $discussion->comments()->latest()->paginate(10);
+        return Response::json([
+            'comments' => $comments,
+        ]);
     }
 
     /**
@@ -62,16 +92,27 @@ class ForumController extends Controller
 
     /**
      * 讨论显示页面评论后台
-     * @param CommitRequest $request
+     * @param CommentRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function commit(CommitRequest $request){
-        Comment::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
-        $discussion = Discussion::findOrFail($request->get('discussion_id'));
-        $discussion->update(['last_user_id'=>Auth::user()->id]);
-        $accountController = new AccountController();
-        $accountController->officeWelcomer(Auth::user()->id); // 讨论评论提供者，增加活跃值
-        $accountController->officeWelcome($discussion->user->id); // 讨论被评论，增加活跃值
-        return redirect()->action('ForumController@show',['id'=>$request->get('discussion_id')]);
+    public function comment(CommentRequest $request){
+        $comment = Comment::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
+        if($comment != null){
+            $discussion = Discussion::findOrFail($request->get('discussion_id'));
+            $discussion->update(['last_user_id'=>Auth::user()->id]);
+            $accountController = new AccountController();
+            $accountController->officeWelcomer(Auth::user()->id); // 讨论评论提供者，增加活跃值
+            $accountController->officeWelcome($discussion->user->id); // 讨论被评论，增加活跃值
+            $status = 1;
+            $message = "评论创建成功！！！";
+        } else {
+            $status = 0;
+            $message = "评论创建失败！！！";
+        }
+
+        return Response::json([
+            'status' => $status,
+            'message' => $message
+        ]);
     }
 }

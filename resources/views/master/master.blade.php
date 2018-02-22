@@ -145,6 +145,85 @@
             }
         });
     });
+
+    /*
+     * 生成警告框
+     * type 警告框类型
+     * value 警告框提示信息
+     *
+     * 在页面中需要如下结构
+     * <div class="master-alert">
+     *     <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
+     * </div>
+     */
+    function makeAlertBox(type,value){
+        var title;
+        switch (type) {
+            case 'success' :
+                title = '成功！';
+                break;
+            case 'info' :
+                title = '信息！';
+                break;
+            case 'warning' :
+                title = '警告！';
+                break;
+            case 'danger' :
+                title = '错误！';
+                break;
+            default :
+                title = '错误！';
+        }
+        $('#master-alert-container').append(
+            '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+            '<strong>' + title + '</strong>' + value +
+            '</div>');
+    }
+
+    /*
+     * 构造分页按钮列表
+     * data 分页数据
+     * page_url_before 地址前缀
+     *
+     * 在页面中需要如下结构
+     * <div class="text-center">
+     *     <ul id="page-list" class="pagination"></ul>
+     * </div>
+     */
+    function pageList (data,page_url_before) {
+        // 构造当前位置
+        $('#page-list').append('<li class="active"><span>'+data.current_page+'</span></li>');
+        var page_url = page_url_before;
+        // 向前构造分页按钮
+        if (data.current_page > 1) {
+            for (var page = data.current_page - 1; page >= 1; --page) {
+                page_url = page_url_before + '?page=' + page;
+                $('#page-list').prepend('<li><a href="' + page_url + '">' + page + '</a></li>');
+            }
+        }
+        // 构造上一页按钮
+        if (data.current_page == 1){
+            $('#page-list').prepend('<li class="disabled"><span>«</span></li>');
+        } else {
+            page_url = page_url_before + '?page='+(data.current_page - 1);
+            $('#page-list').prepend('<li><a href="' +page_url+ '" rel="prev">«</a></li>');
+        }
+        // 向后构造分页按钮
+        if(data.current_page < data.last_page) {
+            for (var page = data.current_page + 1; page <= data.last_page; ++page) {
+                page_url = page_url_before + '?page=' + page;
+                $('#page-list').append('<li><a href="' + page_url + '">' + page + '</a></li>');
+            }
+        }
+        // 构造下一页按钮
+        if (data.current_page == data.last_page){
+            $('#page-list').append('<li class="disabled"><span>»</span></li>');
+        } else {
+            page_url = page_url_before + '?page='+(data.current_page + 1);
+            $('#page-list').append('<li><a href="' +page_url+ '" rel="next">»</a></li>');
+        }
+    }
 </script>
 </body>
 </html>

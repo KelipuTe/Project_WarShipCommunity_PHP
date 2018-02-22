@@ -35,6 +35,45 @@ class Discussion extends Model
     }
 
     /**
+     * 声明向模型中添加的数据
+     * @var array
+     */
+    protected $appends = ['username','user_avatar','count_comments','update_diff'];
+
+    /**
+     * 获得 username 用户名
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getUsernameAttribute(){
+        return $this->user()->get(['username']);
+    }
+
+    /**
+     * 获得 user 头像
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getUserAvatarAttribute(){
+        return $this->user()->get(['avatar']);
+    }
+
+    /**
+     * 获得 comment 数量
+     * @return int
+     */
+    public function getCountCommentsAttribute(){
+        return $this->comments()->count();
+    }
+
+    /**
+     * 获得 Carbon 类 diffForHumans() 方法处理过的 updated_at 字段的数据
+     * @return string
+     */
+    public function getUpdateDiffAttribute(){
+        $update_diff = Carbon::parse($this->attributes['updated_at']);
+        return $update_diff->diffForHumans();
+    }
+
+    /**
      * 查询语句 queryScope
      * scope 关键字 + Name
      * Name 是方法名
