@@ -89,11 +89,11 @@ class AccountController extends Controller
     }
 
     /**
-     * 获得用户活跃值
+     * 获得用户活跃值和等级
      * @param $user_id
      * @return mixed
      */
-    public function getLiveness($user_id){
+    public function getLivenessAndLevel($user_id){
         $discussion = Discussion::find($user_id);
         $liveness = $discussion->user->account->liveness;
         $level = $discussion->user->account->level($liveness);

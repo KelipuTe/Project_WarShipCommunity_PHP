@@ -24,24 +24,28 @@ class FollowController extends Controller
 
     /**
      * user 关注 discussion
-     * @param $discussion
+     * @param $discussion_id
      * @return mixed
      */
-    public function userDiscussionFollow($discussion){
-        Auth::user()->userDiscussionFollow($discussion); // 获取自己的 user 对象调用关注用户讨论函数
+    public function userDiscussionFollow($discussion_id){
+        Auth::user()->userDiscussionFollow($discussion_id); // 获取自己的 user 对象调用关注用户讨论函数
+        $discussion = Discussion::findOrFail($discussion_id);
         return Response::json([
-            'userDiscussion' => Auth::user()->hasFollowedDiscussion($discussion)
+            'userDiscussion' => Auth::user()->hasFollowedDiscussion($discussion_id),
+            'countFollowedUser' => $discussion->countFollowedUser()
         ]);
     }
 
     /**
      * 检查 user 是否关注 discussion
-     * @param $discussion
+     * @param $discussion_id
      * @return mixed
      */
-    public function hasUserDiscussionFollow($discussion){
+    public function hasUserDiscussionFollow($discussion_id){
+        $discussion = Discussion::findOrFail($discussion_id);
         return Response::json([
-            'userDiscussion' => Auth::user()->hasFollowedDiscussion($discussion)
+            'userDiscussion' => Auth::user()->hasFollowedDiscussion($discussion_id),
+            'countFollowedUser' => $discussion->countFollowedUser()
         ]);
     }
 
@@ -75,7 +79,13 @@ class FollowController extends Controller
         $user = User::find($discussion->user->id); // 通过 discussion 对象找到 user 对象
         $followers = $user->userUserFollower()->pluck('follower_id')->toArray(); // 通过 user 对象找到所有的 follower
         return Response::json([
-            'userUser' => in_array(Auth::user()->id,$followers)
+            'userAvatar' => $discussion->user->avatar,
+            'username' => $discussion->user->username,
+            'user_id' => $discussion->user_id,
+            'countUserDiscussions' => $discussion->user->discussions->count(),
+            'countUserComments' => $discussion->user->comments->count(),
+            'countUserFollowers' => $discussion->user->userUserFollower->count(),
+            'userUser' => in_array(Auth::user()->id,$followers),
         ]);
     }
 }

@@ -23,6 +23,10 @@ class ForumController extends Controller
         $this->middleware('auth')->except('show','getDiscussions','getDiscussion','getComments');
     }
 
+    /**
+     * 获得讨论列表
+     * @return mixed
+     */
     public function getDiscussions(){
         $discussions = Discussion::latest()->published()->paginate(10);
         return Response::json([
@@ -30,6 +34,11 @@ class ForumController extends Controller
         ]);
     }
 
+    /**
+     * 获得讨论内容
+     * @param $discussion_id
+     * @return mixed
+     */
     public function getDiscussion($discussion_id){
         $discussion = Discussion::findOrFail($discussion_id);
         $isUser = false;
@@ -44,6 +53,11 @@ class ForumController extends Controller
         ]);
     }
 
+    /**
+     * 获得讨论评论列表
+     * @param $discussion_id
+     * @return mixed
+     */
     public function getComments($discussion_id){
         $discussion = Discussion::findOrFail($discussion_id);
         $comments = $discussion->comments()->latest()->paginate(10);
@@ -78,16 +92,10 @@ class ForumController extends Controller
 
     /**
      * 讨论显示页面
-     * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show($id){
-        if($id != null){
-
-        }
-        $discussion = Discussion::findOrFail($id);
-        $comments = $discussion->comments()->paginate(10); // 分页
-        return view('forum/show',compact('discussion','comments'));
+    public function show(){
+        return view('forum/show');
     }
 
     /**
@@ -109,7 +117,6 @@ class ForumController extends Controller
             $status = 0;
             $message = "评论创建失败！！！";
         }
-
         return Response::json([
             'status' => $status,
             'message' => $message

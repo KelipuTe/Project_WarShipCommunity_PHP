@@ -107,7 +107,7 @@ Route::get('/activity/showSign','ActivityController@showSign'); // 活动区显�
 Route::get('/activity/signIn/{nowDay}','ActivityController@signIn'); // 每日签到或者补签
 
 /* AccountController */
-Route::get('/account/getLiveness/{id}','AccountController@getLiveness'); // 获得用户活跃值和等级
+Route::get('/account/getLivenessAndLevel/{id}','AccountController@getLivenessAndLevel'); // 获得用户活跃值和等级
 
 /* SpaceAdministrationController */
 Route::get('/spaceAdministration/create','SpaceAdministrationController@create'); // 航天局发射新的卫星页面

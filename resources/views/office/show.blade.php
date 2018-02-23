@@ -15,7 +15,7 @@
                     <div class="jumbotron">
                         <div class="media">
                             <div class="media-left">
-                                <img class="media-object img-circle img-avatar-middle" src="" :src="avatar">
+                                <img class="media-object img-circle img-avatar-middle" src="" :src="avatar" alt="username">
                             </div>
                             {{--主体内容--}}
                             <div class="media-body">

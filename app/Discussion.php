@@ -111,7 +111,7 @@ class Discussion extends Model
      * 计算已经关注该讨论的用户数量
      * @return int
      */
-    public function hasFollowedUser(){
+    public function countFollowedUser(){
         return $this->userDiscussion()->where('discussion_id',$this->id)->count();
     }
 }
