@@ -19,7 +19,7 @@ class FollowController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('hasUserDiscussionFollow','hasUserUserFollow');
     }
 
     /**
@@ -43,8 +43,12 @@ class FollowController extends Controller
      */
     public function hasUserDiscussionFollow($discussion_id){
         $discussion = Discussion::findOrFail($discussion_id);
+        $userDiscussion = false;
+        if(Auth::user()){
+            $userDiscussion = Auth::user()->hasFollowedDiscussion($discussion_id);
+        }
         return Response::json([
-            'userDiscussion' => Auth::user()->hasFollowedDiscussion($discussion_id),
+            'userDiscussion' => $userDiscussion,
             'countFollowedUser' => $discussion->countFollowedUser()
         ]);
     }
@@ -78,6 +82,10 @@ class FollowController extends Controller
         $discussion = Discussion::find($discussion_id); // 通过 discussion_id 找到 discussion 对象
         $user = User::find($discussion->user->id); // 通过 discussion 对象找到 user 对象
         $followers = $user->userUserFollower()->pluck('follower_id')->toArray(); // 通过 user 对象找到所有的 follower
+        $userUser = false;
+        if(Auth::user()){
+            $userUser = in_array(Auth::user()->id,$followers);
+        }
         return Response::json([
             'userAvatar' => $discussion->user->avatar,
             'username' => $discussion->user->username,
@@ -85,7 +93,7 @@ class FollowController extends Controller
             'countUserDiscussions' => $discussion->user->discussions->count(),
             'countUserComments' => $discussion->user->comments->count(),
             'countUserFollowers' => $discussion->user->userUserFollower->count(),
-            'userUser' => in_array(Auth::user()->id,$followers),
+            'userUser' => $userUser,
         ]);
     }
 }

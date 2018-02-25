@@ -15,7 +15,7 @@ class CreatePersonalLettersTable extends Migration
     {
         Schema::create('personal_letters', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title'); // 私信正文
+            $table->string('title'); // 私信标题
             $table->text('body'); // 私信正文
             $table->integer('from_user_id')->unsigned(); // 私信发起人
             $table->integer('to_user_id')->unsigned(); // 私信接收人

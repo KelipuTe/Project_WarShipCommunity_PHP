@@ -19,6 +19,7 @@ class CreateIntroductionsTable extends Migration
             $table->text('body'); // 简介内容
             $table->integer('user_id')->unsigned(); // 发表的用户
             $table->integer('last_user_id')->unsigned(); // 最后更新的用户
+            $table->softDeletes(); // 软删除
             $table->timestamps();
         });
     }

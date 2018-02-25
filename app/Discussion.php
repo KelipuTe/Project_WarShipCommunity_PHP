@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * 讨论类
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Discussion extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'discussions';
 
     protected $fillable = [
@@ -22,7 +25,7 @@ class Discussion extends Model
      * 可以将 published_at 变量转换为 Carbon 类型
      * @var array
      */
-    protected $dates = ['published_at'];
+    protected $dates = ['published_at','deleted_at'];
 
     /**
      * 数据预处理 setAttribute

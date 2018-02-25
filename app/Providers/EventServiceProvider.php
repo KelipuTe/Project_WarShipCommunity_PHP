@@ -22,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\PublicChatUserSignIn' => [
             'App\Listeners\PublicChatUserSignInListener',
         ],
+        'App\Events\HotDiscussion' => [
+            'App\Listeners\HotDiscussionListener',
+        ],
     ];
 
     /**

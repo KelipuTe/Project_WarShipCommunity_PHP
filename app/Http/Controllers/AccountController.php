@@ -17,7 +17,7 @@ class AccountController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('getLiveness');
+        $this->middleware('auth')->except('getLivenessAndLevel');
     }
 
     /**

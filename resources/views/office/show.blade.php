@@ -165,7 +165,7 @@
                             dataType: 'json',
                             success: function (data) {
                                 $('#submit').empty();
-                                $('#submit').text('提交');
+                                $('#submit').text('打个招呼');
                                 if(data.status == 1){
                                     window.location.href = "/office/show/"+ data.introduction_id;
                                 } else if(data.status == 0){
@@ -176,9 +176,8 @@
                             },
                             error: function (jqXHR) {
                                 $('#submit').empty();
-                                $('#submit').text('提交');
+                                $('#submit').text('打个招呼');
                                 if(jqXHR.status == 422){
-                                    // 遍历被 Laravel Request 拦截后返回的错误提示
                                     $.each(jqXHR.responseJSON.errors,function (index,value) {
                                         makeAlertBox('danger',value);
                                     });

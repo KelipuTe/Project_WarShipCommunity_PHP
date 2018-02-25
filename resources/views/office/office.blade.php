@@ -63,7 +63,7 @@
                                             var vm = this;
                                             var url = '/office/getIntroductions';
                                             var href = location.href; // 获得地址栏地址
-                                            if( href.indexOf('=') != -1 ){
+                                            if( href.indexOf('?') != -1 ){
                                                 //判断是不是翻页后的地址，携带 ?page=number
                                                 href = location.href.split('=');
                                                 url = '/office/getIntroductions?page='+ href[href.length-1];

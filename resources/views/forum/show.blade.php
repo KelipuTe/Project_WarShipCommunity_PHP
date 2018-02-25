@@ -17,7 +17,7 @@
                     <div class="panel panel-danger">
                         <div class="panel-heading">
                             <h2> @{{ discussion.title }}
-                                <a class="btn btn-danger btn-sm pull-right" href="#" role="button" v-if="isUser">爆破</a>
+                                <button class="btn btn-danger btn-sm pull-right" role="button" v-if="isUser" @click="softDelete()">爆破</button>
                             </h2>
                         </div>
                         <div class="panel-body" v-html="discussion.body"></div>
@@ -47,10 +47,10 @@
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
-                            var id = href[href.length-1];
+                            var discussion_id = href[href.length-1];
                             $.ajax({
                                 type:'GET',
-                                url:'/forum/getDiscussion/' + id,
+                                url:'/forum/getDiscussion/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
                                     vm.discussion = data.discussion;
@@ -58,6 +58,32 @@
                                     vm.avatar = data.discussion.user_avatar[0].avatar;
                                     vm.username = data.discussion.username[0].username;
                                     $('#discussion-title').text(data.discussion.title);
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        softDelete:function(){
+                            var vm = this;
+                            var href = location.href.split('/');
+                            if( location.href.indexOf('?') != -1 ){
+                                //判断是不是翻页后的地址，携带 ?page=number
+                                href = location.href.split('?');
+                                href = href[0].split('/');
+                            }
+                            var discussion_id = href[href.length-1];
+                            $.ajax({
+                                type:'GET',
+                                url:'/forum/softdelete/' + discussion_id,
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.status == true){
+                                        alert(data.message);
+                                        window.location.href = "/forum";
+                                    } else {
+                                        alert(data.message);
+                                    }
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -116,8 +142,8 @@
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
-                            var id = href[href.length-1];
-                            var url = '/forum/getComments/'+id;
+                            var discussion_id = href[href.length-1];
+                            var url = '/forum/getComments/' + discussion_id;
                             if( location.href.indexOf('?') != -1 ){
                                 //判断是不是翻页后的地址，携带 ?page=number
                                 var href = location.href.split('=');
@@ -164,52 +190,6 @@
                     <div class="master-alert">
                         <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
                     </div>
-                    <script>
-                        $(document).ready(function () {
-                            /* 提交按钮 */
-                            $('#submit').on('click', function () {
-                                $('#submit').text('');
-                                $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
-                                var href = location.href.split('/');
-                                if( location.href.indexOf('?') != -1 ){
-                                    //判断是不是翻页后的地址，携带 ?page=number
-                                    href = location.href.split('?');
-                                    href = href[0].split('/');
-                                }
-                                var id = href[href.length-1];
-                                $.ajax({
-                                    type: 'post',
-                                    url: '/forum/show/comment',
-                                    data: {
-                                        'discussion_id': id,
-                                        'body': UE.getEditor('ue-container').getContent()
-                                    },
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        $('#submit').empty();
-                                        $('#submit').text('提交');
-                                        if(data.status == 1){
-                                            window.location.reload();
-                                        } else if(data.status == 0){
-                                            makeAlertBox('danger',data.message);
-                                        } else {
-                                            makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
-                                        }
-                                    },
-                                    error: function (jqXHR) {
-                                        $('#submit').empty();
-                                        $('#submit').text('提交');
-                                        if(jqXHR.status == 422){
-                                            // 遍历被 Laravel Request 拦截后返回的错误提示
-                                            $.each(jqXHR.responseJSON.errors,function (index,value) {
-                                                makeAlertBox('danger',value);
-                                            });
-                                        }
-                                    }
-                                });
-                            });
-                        });
-                    </script>
                 @else
                     <a href="/user/login" class="form-control btn btn-success">登录参与讨论</a>
                 @endif
@@ -469,6 +449,7 @@
                                 dataType:'json',
                                 success:function (data) {
                                     vm.userUser = data.userUser;
+                                    vm.countUserFollowers = data.countUserFollowers;
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -479,6 +460,52 @@
                 });
                 new Vue({
                     el:"#about-user"
+                });
+            </script>
+            <script>
+                $(document).ready(function () {
+                    /* 提交按钮 */
+                    $('#submit').on('click', function () {
+                        $('#submit').text('');
+                        $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
+                        var href = location.href.split('/');
+                        if( location.href.indexOf('?') != -1 ){
+                            //判断是不是翻页后的地址，携带 ?page=number
+                            href = location.href.split('?');
+                            href = href[0].split('/');
+                        }
+                        var id = href[href.length-1];
+                        $.ajax({
+                            type: 'post',
+                            url: '/forum/show/comment',
+                            data: {
+                                'discussion_id': id,
+                                'body': UE.getEditor('ue-container').getContent()
+                            },
+                            dataType: 'json',
+                            success: function (data) {
+                                $('#submit').empty();
+                                $('#submit').text('提交');
+                                if(data.status == 1){
+                                    window.location.reload();
+                                } else if(data.status == 0){
+                                    makeAlertBox('danger',data.message);
+                                } else {
+                                    makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                }
+                            },
+                            error: function (jqXHR) {
+                                $('#submit').empty();
+                                $('#submit').text('提交');
+                                if(jqXHR.status == 422){
+                                    // 遍历被 Laravel Request 拦截后返回的错误提示
+                                    $.each(jqXHR.responseJSON.errors,function (index,value) {
+                                        makeAlertBox('danger',value);
+                                    });
+                                }
+                            }
+                        });
+                    });
                 });
             </script>
         </div>

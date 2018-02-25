@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\HotDiscussion;
 use Auth;
 use Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 use App\Comment;
 use App\Discussion;
@@ -37,10 +39,19 @@ class ForumController extends Controller
     /**
      * 获得讨论内容
      * @param $discussion_id
+     * @param Request $request
      * @return mixed
      */
-    public function getDiscussion($discussion_id){
+    public function getDiscussion($discussion_id,Request $request){
         $discussion = Discussion::findOrFail($discussion_id);
+        $ip = $request->ip(); // 获取 ip 地址
+        /*$hot_discussion = Redis::get('warshipcommunity:discussion:'.$discussion_id); // 获取 redis 数据库中的点击量
+        if($hot_discussion == null){
+            // 如果 redis 数据库中没有数据
+            $hot_discussion = $discussion->hot_discussion;
+        }*/
+        event(new HotDiscussion($discussion,$ip)); // 触发访问 discussion 事件
+        $hot_discussion = Redis::hget('warshipcommunity:discussion:viewcount',$discussion_id); // 获取 redis 数据库中的点击量
         $isUser = false;
         if(Auth::user()){
             if(Auth::user()->id == $discussion->user_id) {
@@ -49,6 +60,8 @@ class ForumController extends Controller
         }
         return Response::json([
             'discussion' => $discussion,
+            'ip' => $ip,
+            'hot_discussion' => $hot_discussion,
             'isUser' => $isUser
         ]);
     }
@@ -85,9 +98,20 @@ class ForumController extends Controller
             'last_user_id'=>Auth::user()->id,
         ];
         $discussion = Discussion::create(array_merge($request->all(),$data));
-        $accountController = new AccountController();
-        $accountController->forumStore(Auth::user()->id); // 创建讨论，增加活跃值
-        return redirect()->action('ForumController@show',['id'=>$discussion->id]);
+        if($discussion != null){
+            $accountController = new AccountController();
+            $accountController->forumStore(Auth::user()->id); // 创建讨论，增加活跃值
+            $status = 1;
+            $message = "讨论创建成功！！！";
+        } else {
+            $status = 0;
+            $message = "讨论创建失败！！！";
+        }
+        return Response::json([
+            'status' => $status,
+            'message' => $message,
+            'discussion_id' => $discussion->id
+        ]);
     }
 
     /**
@@ -105,6 +129,8 @@ class ForumController extends Controller
      */
     public function comment(CommentRequest $request){
         $comment = Comment::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
+        $status = 0;
+        $message = "评论创建失败！！！";
         if($comment != null){
             $discussion = Discussion::findOrFail($request->get('discussion_id'));
             $discussion->update(['last_user_id'=>Auth::user()->id]);
@@ -113,9 +139,20 @@ class ForumController extends Controller
             $accountController->officeWelcome($discussion->user->id); // 讨论被评论，增加活跃值
             $status = 1;
             $message = "评论创建成功！！！";
-        } else {
-            $status = 0;
-            $message = "评论创建失败！！！";
+        }
+        return Response::json([
+            'status' => $status,
+            'message' => $message
+        ]);
+    }
+
+
+    public function softdelete($discussion_id){
+        $discussion = Discussion::findOrFail($discussion_id);
+        $status = $discussion->delete();
+        $message = "爆破失败";
+        if($status) {
+            $message = "爆破成功";
         }
         return Response::json([
             'status' => $status,

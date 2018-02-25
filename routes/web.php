@@ -92,6 +92,8 @@ Route::post('/forum/store','ForumController@store'); // 讨论区创建页面后
 Route::get('/forum/show/{id}','ForumController@show'); // 讨论区显示页面
 Route::post('/forum/show/comment','ForumController@comment'); // 讨论区评论后台
 
+Route::get('/forum/softdelete/{id}','ForumController@softDelete'); //讨论软删除
+
 /* FollowController */
 Route::get('/follow/userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow'); // 用户关注讨论
 Route::get('/follow/hasUserDiscussionFollow/{discussion}','FollowController@hasUserDiscussionFollow'); // 检查用户是否关注讨论
