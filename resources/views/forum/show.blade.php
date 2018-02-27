@@ -21,6 +21,11 @@
                             </h2>
                         </div>
                         <div class="panel-body" v-html="discussion.body"></div>
+                        <div class="panel-footer">
+                            <span> 浏览量 </span><span v-text="hot_discussion"></span>
+                            <span class="fa fa-thumbs-o-up"> 赞一个 </span>
+                            <span class="fa fa-thumbs-up"> 赞一个 </span>
+                        </div>
                     </div>
                 </div>
             </template>
@@ -30,6 +35,7 @@
                     data:function () {
                         return {
                             discussion: '',
+                            hot_discussion: '',
                             isUser: false,
                             avatar: '',
                             username: ''
@@ -54,6 +60,7 @@
                                 dataType:'json',
                                 success:function (data) {
                                     vm.discussion = data.discussion;
+                                    vm.hot_discussion = data.hot_discussion;
                                     vm.isUser = data.isUser;
                                     vm.avatar = data.discussion.user_avatar[0].avatar;
                                     vm.username = data.discussion.username[0].username;
@@ -155,7 +162,7 @@
                                 dataType:'json',
                                 success:function (data) {
                                     vm.comments = data.comments.data;
-                                    pageList(data.comments,'http://localhost/forum/show/'+id); // 构造分页按钮列表
+                                    pageList(data.comments,'http://localhost/forum/show/'+discussion_id); // 构造分页按钮列表
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -197,6 +204,192 @@
         </div>
         {{--右侧部分--}}
         <div class="col-md-3">
+            {{--关于标签--}}
+            <div id="about-tags">
+                <about-tags></about-tags>
+            </div>
+            <template id="tamplate-about-tags">
+                <div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading text-center">
+                            <h3> 所属标签 </h3>
+                        </div>
+                        <div class="panel-body">
+                            <button v-for="tag in tags" class="btn btn-warning btn-xs" style="margin: 5px 5px">
+                                <span class="fa fa-tag"></span> @{{ tag.body }}
+                            </button>
+                        </div>
+                        @if(Auth::check() && Auth::user()->id == $discussion->user_id)
+                            <div class="panel-footer text-center">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" @click="getAllTags" data-toggle="modal" data-target="#tagsModal">
+                                    <span class="fa fa-tags"></span> 添加标签
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="tagsModal" tabindex="-1" role="dialog" aria-labelledby="tagsModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="tagsModalLabel">
+                                                    <span class="fa fa-tags"></span> 所有标签
+                                                </h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <button v-for="tag in allTags" class="btn" :class="changeClass(tag)" style="margin: 5px 10px" @click="changeTag(tag)">
+                                                    <span class="fa fa-tag"></span> @{{ tag.body }}
+                                                </button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="form-group">
+                                                    <label for="tags-body"><input type="text" id="tags-body" /></label>
+                                                    <button id="tags-submit" type="button" class="btn btn-primary" @click="createTags">
+                                                        <span class="fa fa-tags"></span> 新增标签
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </template>
+            <script>
+                Vue.component('about-tags',{
+                    template:"#tamplate-about-tags",
+                    data:function () {
+                        return{
+                            tags:'',
+                            allTags:'',
+                            isUser:false
+                        }
+                    },
+                    computed:{
+
+                    },
+                    created:function () {
+                        this.getTags();
+                    },
+                    methods:{
+                        getTags:function () {
+                            var vm = this; // 这里需要指定是 Vue.js 的 this 不是 JavaScript 的 this
+                            var href = location.href.split('/');
+                            if( location.href.indexOf('?') != -1 ){
+                                href = location.href.split('?');
+                                href = href[0].split('/');
+                            }
+                            var id = href[href.length-1];
+                            var type = 'discussion';
+                            $.ajax({
+                                type:'GET',
+                                url:'/tag/getTags/' + type + '/' + id,
+                                dataType:'json',
+                                success:function (data) {
+                                    vm.tags = data.tags;
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        getAllTags:function () {
+                            var vm = this;
+                            $.ajax({
+                                type:'GET',
+                                url:'/tag/getAllTags',
+                                dataType:'json',
+                                success:function (data) {
+                                    vm.allTags = data.allTags;
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        createTags:function () {
+                            var vm = this;
+                            $('#tags-submit').text('');
+                            $('#tags-submit').append('<span class="fa fa-spinner fa-pulse"></span>');
+                            $.ajax({
+                                type: 'post',
+                                url: '/tag/createTag',
+                                data: {
+                                    'body': $('#tags-body').val()
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    $('#tags-submit').empty();
+                                    $('#tags-submit').text('新增标签');
+                                    if(data.status == 1){
+                                        $('#tags-body').val('');
+                                        vm.getAllTags();
+                                    } else if(data.status == 0){
+                                        makeAlertBox('danger',data.message);
+                                    } else {
+                                        makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    $('#tags-submit').empty();
+                                    $('#tags-submit').text('新增标签');
+                                    if(jqXHR.status == 422){
+                                        // 遍历被 Laravel Request 拦截后返回的错误提示
+                                        $.each(jqXHR.responseJSON.errors,function (index,value) {
+                                            makeAlertBox('danger',value);
+                                        });
+                                    }
+                                }
+                            });
+                        },
+                        changeTag:function (tag) {
+                            var vm = this;
+                            var href = location.href.split('/');
+                            if( location.href.indexOf('?') != -1 ){
+                                href = location.href.split('?');
+                                href = href[0].split('/');
+                            }
+                            var id = href[href.length-1];
+                            var type = 'discussion';
+                            $.ajax({
+                                type: 'post',
+                                url: '/tag/changeTag',
+                                data: {
+                                    'tag_id': tag.id,
+                                    'type':type,
+                                    'target':id
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    if(data.status == 1 || data.status == 2){
+                                        $('#tagsModal').modal('toggle');
+                                        vm.getTags();
+                                    } else {
+                                        makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        changeClass:function (tag) {
+                            var vm = this;
+                            var isInArray = false;
+                            $.each(vm.tags,function (index,obj) {
+                                if(tag.body == obj.body){
+                                    isInArray = true;
+                                }
+                            });
+                            return isInArray ? 'btn-success' : 'btn-warning';
+                        }
+                    }
+                });
+                new Vue({
+                    el:"#about-tags"
+                });
+            </script>
             {{--关于讨论--}}
             <div id="about-discussion">
                 <about-discussion></about-discussion>
@@ -212,12 +405,12 @@
                             {{--用户关注讨论按钮--}}
                             @if(Auth::check())
                                 <button class="btn" :class="vbtnclass" @click="userDiscussionFollow()">
-                                    <span class="glyphicon" :class="vbtnglyphicon"></span>
+                                    <span class="fa" :class="vbtnglyphicon"></span>
                                     <span v-text="vbtntext"></span>
                                 </button>
                             @else
                                 <a href="/user/login" class="btn btn-danger">
-                                    <span class="glyphicon glyphicon-star-empty"></span>关注该讨论
+                                    <span class="fa fa-star-o"></span>关注该讨论
                                 </a>
                             @endif
                         </div>
@@ -238,7 +431,7 @@
                             return this.userDiscussion ? 'btn-success' : 'btn-danger';
                         },
                         vbtnglyphicon:function () {
-                            return this.userDiscussion ? 'glyphicon-star' : 'glyphicon-star-empty';
+                            return this.userDiscussion ? 'fa-star' : 'fa-star-o';
                         },
                         vbtntext:function () {
                             return this.userDiscussion ? '已关注' : '关注该讨论';
@@ -340,13 +533,17 @@
                                 @if(Auth::check())
                                     {{--用户关注用户按钮--}}
                                     <button class="btn" :class="vbtnclass" @click="userUserFollow()">
-                                        <span class="glyphicon " :class="vbtnglyphicon"></span>
+                                        <span class="fa " :class="vbtnglyphicon"></span>
                                         <span v-text="vbtntext"></span>
+                                    </button>
+                                    <button class="btn btn-primary">
+                                        <span class="fa fa-envelope"></span>
+                                        <span>发私信</span>
                                     </button>
                                 @else
                                     <div class="forum-user-statics-item">
                                         <a href="/user/login" class="btn btn-danger">
-                                            <span class="glyphicon glyphicon-star-empty"></span>关注 TA
+                                            <span class="fa fa-star-o"></span>关注 TA
                                         </a>
                                     </div>
                                 @endif
@@ -377,7 +574,7 @@
                             return this.userUser ? 'btn-success' : 'btn-danger';
                         },
                         vbtnglyphicon:function () {
-                            return this.userUser ? 'glyphicon-star' : 'glyphicon-star-empty';
+                            return this.userUser ? 'fa-star' : 'fa-star-o';
                         },
                         vbtntext:function () {
                             return this.userUser ? '已关注' : '关注TA';

@@ -23,6 +23,7 @@
  * OfficeController
  * WarshipController
  * ForumController
+ * TagController
  * FollowController
  * ActivityController
  * AccountController
@@ -72,7 +73,6 @@ Route::post('/office/store','OfficeController@store'); // 新人报道创建页�
 Route::get('/office/show/{id}','OfficeController@show'); // 新人报道显示页面
 Route::post('/office/show/welcome','OfficeController@welcome'); // 新人报道显示页面迎新后台
 
-
 /* WarshipController 办公区舰船管理 */
 Route::get('/office/warship/create','WarshipController@create'); // 舰船管理创建页面
 Route::post('/office/warship/store','WarshipController@store'); // 舰船管理创建页面后台
@@ -92,7 +92,13 @@ Route::post('/forum/store','ForumController@store'); // 讨论区创建页面后
 Route::get('/forum/show/{id}','ForumController@show'); // 讨论区显示页面
 Route::post('/forum/show/comment','ForumController@comment'); // 讨论区评论后台
 
-Route::get('/forum/softdelete/{id}','ForumController@softDelete'); //讨论软删除
+Route::get('/forum/softdelete/{id}','ForumController@softdelete'); //讨论软删除
+
+/* TagController */
+Route::get('/tag/getTags/{type}/{id}','TagController@getTags');
+Route::get('/tag/getAllTags','TagController@getAllTags');
+Route::post('/tag/createTag','TagController@createTag');
+Route::post('/tag/changeTag','TagController@changeTag');
 
 /* FollowController */
 Route::get('/follow/userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow'); // 用户关注讨论

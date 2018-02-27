@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommentsTable extends Migration
+class CreateTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('Tags', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('body'); // 论坛文章回复内容
-            $table->integer('nice_comment')->default(0); // 论坛精华回复
-            $table->integer('user_id')->unsigned();
-            $table->integer('discussion_id')->unsigned();
+            $table->string('body'); // 标签内容
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('Tags');
     }
 }

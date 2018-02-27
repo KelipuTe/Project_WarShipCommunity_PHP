@@ -192,36 +192,38 @@
      * </div>
      */
     function pageList (data,page_url_before) {
-        // 构造当前位置
-        $('#page-list').append('<li class="active"><span>'+data.current_page+'</span></li>');
-        var page_url = page_url_before;
-        // 向前构造分页按钮
-        if (data.current_page > 1) {
-            for (var page = data.current_page - 1; page >= 1; --page) {
-                page_url = page_url_before + '?page=' + page;
-                $('#page-list').prepend('<li><a href="' + page_url + '">' + page + '</a></li>');
+        if(data.total != 0) {
+            // 构造当前位置
+            $('#page-list').append('<li class="active"><span>' + data.current_page + '</span></li>');
+            var page_url = page_url_before;
+            // 向前构造分页按钮
+            if (data.current_page > 1) {
+                for (var page = data.current_page - 1; page >= 1; --page) {
+                    page_url = page_url_before + '?page=' + page;
+                    $('#page-list').prepend('<li><a href="' + page_url + '">' + page + '</a></li>');
+                }
             }
-        }
-        // 构造上一页按钮
-        if (data.current_page == 1){
-            $('#page-list').prepend('<li class="disabled"><span>«</span></li>');
-        } else {
-            page_url = page_url_before + '?page='+(data.current_page - 1);
-            $('#page-list').prepend('<li><a href="' +page_url+ '" rel="prev">«</a></li>');
-        }
-        // 向后构造分页按钮
-        if(data.current_page < data.last_page) {
-            for (var page = data.current_page + 1; page <= data.last_page; ++page) {
-                page_url = page_url_before + '?page=' + page;
-                $('#page-list').append('<li><a href="' + page_url + '">' + page + '</a></li>');
+            // 构造上一页按钮
+            if (data.current_page == 1) {
+                $('#page-list').prepend('<li class="disabled"><span>«</span></li>');
+            } else {
+                page_url = page_url_before + '?page=' + (data.current_page - 1);
+                $('#page-list').prepend('<li><a href="' + page_url + '" rel="prev">«</a></li>');
             }
-        }
-        // 构造下一页按钮
-        if (data.current_page == data.last_page){
-            $('#page-list').append('<li class="disabled"><span>»</span></li>');
-        } else {
-            page_url = page_url_before + '?page='+(data.current_page + 1);
-            $('#page-list').append('<li><a href="' +page_url+ '" rel="next">»</a></li>');
+            // 向后构造分页按钮
+            if (data.current_page < data.last_page) {
+                for (var page = data.current_page + 1; page <= data.last_page; ++page) {
+                    page_url = page_url_before + '?page=' + page;
+                    $('#page-list').append('<li><a href="' + page_url + '">' + page + '</a></li>');
+                }
+            }
+            // 构造下一页按钮
+            if (data.current_page == data.last_page) {
+                $('#page-list').append('<li class="disabled"><span>»</span></li>');
+            } else {
+                page_url = page_url_before + '?page=' + (data.current_page + 1);
+                $('#page-list').append('<li><a href="' + page_url + '" rel="next">»</a></li>');
+            }
         }
     }
 </script>

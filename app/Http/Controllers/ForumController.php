@@ -116,10 +116,12 @@ class ForumController extends Controller
 
     /**
      * 讨论显示页面
+     * @param $discussion_id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(){
-        return view('forum/show');
+    public function show($discussion_id){
+        $discussion = Discussion::findOrFail($discussion_id);
+        return view('forum/show',compact('discussion'));
     }
 
     /**
@@ -146,7 +148,11 @@ class ForumController extends Controller
         ]);
     }
 
-
+    /**
+     * 讨论软删除
+     * @param $discussion_id
+     * @return mixed
+     */
     public function softdelete($discussion_id){
         $discussion = Discussion::findOrFail($discussion_id);
         $status = $discussion->delete();
