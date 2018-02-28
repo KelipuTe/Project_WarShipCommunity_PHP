@@ -13,7 +13,7 @@ class HotDiscussionListener
     /**
      * 讨论浏览数量增加多少次后，刷新数据库
      */
-    const refreshLimit = 50;
+    const refreshLimit = 30;
 
     /**
      * 同一个 ip 有效访问的时间间隔
@@ -41,7 +41,7 @@ class HotDiscussionListener
         // 判断下 ipExpireSecond 时间内，同一 ip 多次访问
         if($this->ipViewLimit($discussion->id,$ip)){
             // 一个 ip 在 3600 秒时间内访问第一次时，刷新下该篇导论的浏览量
-            $this->updateCacheViewCount($discussion->id,$ip);
+            $this->updateCacheViewCount($discussion->id);
         }
     }
 
@@ -53,7 +53,7 @@ class HotDiscussionListener
      * @return bool
      */
     public function ipViewLimit($discussion_id,$ip){
-        $ipDiscussionViewKey = 'warshipcommunity:discussion:viewlimit';
+        $ipDiscussionViewKey = 'warshipcommunity:discussion:viewlimit:'.$discussion_id;
         // Redis 命令 SISMEMBER 检查 Set 集合中有没有该键，Set 集合类型中值都是唯一
         $existsInRedisSet = Redis::command('SISMEMBER', [$ipDiscussionViewKey, $ip]);
         // 如果集合中不存在这个键，那么新建一个键并设置过期时间
@@ -78,11 +78,11 @@ class HotDiscussionListener
         if(Redis::command('HEXISTS', [$discussionViewCountKey, $discussion_id])){
             // 哈希类型指令 HINCRBY，就是给 $discussionViewCountKey[$discussion_id] 加上一个值，这里一次访问就是 1
             $hod_discussion = Redis::command('HINCRBY', [$discussionViewCountKey, $discussion_id, 1]);
-            // redis 中这个存储浏览量的值变化量达到 50 后，就去刷新一次 mysql 数据库
+            // redis 中这个存储浏览量的值变化量达到 30 后，就去刷新一次 mysql 数据库
             if( ($hod_discussion % self::refreshLimit) == 0 ){
                 $this->updateModelViewCount($discussion_id, $hod_discussion);
             }
-        }else{
+        } else {
             // 哈希类型指令 HSET，和数组类似,就像 $discussionViewCountKey[$discussion_id] = 1;
             Redis::command('HSET', [$discussionViewCountKey, $discussion_id, '1']);
         }

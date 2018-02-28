@@ -87,6 +87,8 @@ Route::get('/forum/getDiscussions','ForumController@getDiscussions'); // 获取�
 Route::get('/forum/getDiscussion/{id}','ForumController@getDiscussion'); // 获取讨论
 Route::get('/forum/getComments/{id}','ForumController@getComments'); // 获取评论列表
 
+Route::get('/forum/niceDiscussion/{id}','ForumController@niceDiscussion'); // 讨论推荐
+
 Route::get('/forum/create','ForumController@create'); // 讨论区创建页面
 Route::post('/forum/store','ForumController@store'); // 讨论区创建页面后台
 Route::get('/forum/show/{id}','ForumController@show'); // 讨论区显示页面
@@ -95,10 +97,10 @@ Route::post('/forum/show/comment','ForumController@comment'); // 讨论区评论
 Route::get('/forum/softdelete/{id}','ForumController@softdelete'); //讨论软删除
 
 /* TagController */
-Route::get('/tag/getTags/{type}/{id}','TagController@getTags');
-Route::get('/tag/getAllTags','TagController@getAllTags');
-Route::post('/tag/createTag','TagController@createTag');
-Route::post('/tag/changeTag','TagController@changeTag');
+Route::get('/tag/getTags/{type}/{id}','TagController@getTags'); // 获取指定对象的标签
+Route::get('/tag/getAllTags','TagController@getAllTags'); // 获取所有标签
+Route::post('/tag/createTag','TagController@createTag'); // 新建标签
+Route::post('/tag/changeTag','TagController@changeTag'); // 改变标签
 
 /* FollowController */
 Route::get('/follow/userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow'); // 用户关注讨论

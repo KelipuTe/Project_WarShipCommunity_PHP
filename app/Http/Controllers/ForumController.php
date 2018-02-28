@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\HotDiscussion;
+use App\Events\NiceDiscussion;
 use Auth;
 use Response;
 use Illuminate\Http\Request;
@@ -45,13 +46,22 @@ class ForumController extends Controller
     public function getDiscussion($discussion_id,Request $request){
         $discussion = Discussion::findOrFail($discussion_id);
         $ip = $request->ip(); // 获取 ip 地址
-        /*$hot_discussion = Redis::get('warshipcommunity:discussion:'.$discussion_id); // 获取 redis 数据库中的点击量
-        if($hot_discussion == null){
-            // 如果 redis 数据库中没有数据
-            $hot_discussion = $discussion->hot_discussion;
-        }*/
         event(new HotDiscussion($discussion,$ip)); // 触发访问 discussion 事件
         $hot_discussion = Redis::hget('warshipcommunity:discussion:viewcount',$discussion_id); // 获取 redis 数据库中的点击量
+        if($hot_discussion == null){
+            $hot_discussion = $discussion->hot_discussion;
+        }
+        $nice_discussion = Redis::hget('warshipcommunity:discussion:nicecount',$discussion_id); // 获取 redis 数据库中的推荐量
+        if($nice_discussion == null){
+            $nice_discussion = $discussion->nice_discussion;
+        }
+        // 确认用户是否推荐讨论
+        $isNice = false;
+        $existsInRedisSet = Redis::command('SISMEMBER', ['warshipcommunity:discussion:nicelimit:'.$discussion_id, Auth::user()->id]);
+        if($existsInRedisSet){
+            $isNice = true;
+        }
+        // 确认用户是否是否是讨论发起人
         $isUser = false;
         if(Auth::user()){
             if(Auth::user()->id == $discussion->user_id) {
@@ -62,6 +72,8 @@ class ForumController extends Controller
             'discussion' => $discussion,
             'ip' => $ip,
             'hot_discussion' => $hot_discussion,
+            'nice_discussion' => $nice_discussion,
+            'isNice' => $isNice,
             'isUser' => $isUser
         ]);
     }
@@ -76,6 +88,38 @@ class ForumController extends Controller
         $comments = $discussion->comments()->latest()->paginate(10);
         return Response::json([
             'comments' => $comments,
+        ]);
+    }
+
+    /**
+     * 用户推荐讨论
+     * @param $discussion_id
+     * @return mixed
+     */
+    public function niceDiscussion($discussion_id){
+        $discussion = Discussion::findOrFail($discussion_id);
+        $user_id = Auth::user()->id;
+        $userNiceDiscussionKey = 'warshipcommunity:discussion:nicelimit:'.$discussion_id; // 触发事件后从 redis 数据库中获取信息
+        $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否已经推荐
+        $status = -1;
+        $message = '请不要重复推荐';
+        if(!$existsInRedisSet){
+            event(new NiceDiscussion($discussion,$user_id)); // 触发推荐 discussion 事件
+            $userNiceDiscussionKey = 'warshipcommunity:discussion:nicelimit:'.$discussion_id; // 触发事件后从 redis 数据库中获取信息
+            $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否推荐成功
+            // 推荐成功
+            $status = 1;
+            $message = '推荐成功';
+            if(!$existsInRedisSet){
+                // 推荐失败
+                $status = 0;
+                $message = '推荐失败';
+            }
+        }
+
+        return Response::json([
+            'status' => $status,
+            'message' => $message
         ]);
     }
 

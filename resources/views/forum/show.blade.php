@@ -17,14 +17,19 @@
                     <div class="panel panel-danger">
                         <div class="panel-heading">
                             <h2> @{{ discussion.title }}
-                                <button class="btn btn-danger btn-sm pull-right" role="button" v-if="isUser" @click="softDelete()">爆破</button>
+                                <button class="btn btn-danger pull-right" role="button" v-if="isUser" @click="softDelete()">爆破</button>
                             </h2>
                         </div>
                         <div class="panel-body" v-html="discussion.body"></div>
                         <div class="panel-footer">
                             <span> 浏览量 </span><span v-text="hot_discussion"></span>
-                            <span class="fa fa-thumbs-o-up"> 赞一个 </span>
-                            <span class="fa fa-thumbs-up"> 赞一个 </span>
+                            @if(Auth::check())
+                                <button class="btn btn-xs pull-right" :class="vbtnclass" role="button" @click="niceDiscussion()">
+                                    <span class="fa" :class="vfaclass"></span>
+                                    <span v-text="nice_discussion"></span>
+                                    <span> 这篇讨论对我有用 </span>
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -36,10 +41,20 @@
                         return {
                             discussion: '',
                             hot_discussion: '',
+                            nice_discussion:'',
+                            isNice: false,
                             isUser: false,
                             avatar: '',
                             username: ''
                         };
+                    },
+                    computed:{
+                        vfaclass:function () {
+                            return this.isNice ? 'fa-thumbs-up' : 'fa-thumbs-o-up';
+                        },
+                        vbtnclass:function () {
+                            return this.isNice ? 'btn-success' : 'btn-info';
+                        }
                     },
                     created:function () {
                         this.getDiscussion();
@@ -61,6 +76,8 @@
                                 success:function (data) {
                                     vm.discussion = data.discussion;
                                     vm.hot_discussion = data.hot_discussion;
+                                    vm.nice_discussion = data.nice_discussion;
+                                    vm.isNice = data.isNice;
                                     vm.isUser = data.isUser;
                                     vm.avatar = data.discussion.user_avatar[0].avatar;
                                     vm.username = data.discussion.username[0].username;
@@ -71,8 +88,34 @@
                                 }
                             });
                         },
-                        softDelete:function(){
+                        niceDiscussion:function () {
                             var vm = this;
+                            var href = location.href.split('/');
+                            if( location.href.indexOf('?') != -1 ){
+                                //判断是不是翻页后的地址，携带 ?page=number
+                                href = location.href.split('?');
+                                href = href[0].split('/');
+                            }
+                            var discussion_id = href[href.length-1];
+                            $.ajax({
+                                type:'GET',
+                                url:'/forum/niceDiscussion/' + discussion_id,
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.status == 1){
+                                        vm.getDiscussion();
+                                    } else if(data.status == -1) {
+                                        makeAlertBox('info',data.message);
+                                    } else {
+                                        makeAlertBox('danger',data.message);
+                                    }
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        softDelete:function(){
                             var href = location.href.split('/');
                             if( location.href.indexOf('?') != -1 ){
                                 //判断是不是翻页后的地址，携带 ?page=number
@@ -194,7 +237,7 @@
                         });
                     </script>
                     {{--可关闭的警告框--}}
-                    <div class="master-alert">
+                    <div class="master-alert" style="z-index: 999">
                         <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
                     </div>
                 @else
