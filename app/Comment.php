@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Auth;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * 讨论评论类
@@ -21,7 +23,7 @@ class Comment extends Model
      * 声明向模型中添加的数据
      * @var array
      */
-    protected $appends = ['username','user_avatar'];
+    protected $appends = ['username','user_avatar','cache_nice_comment','is_nice'];
 
     /**
      * 获得 username 用户名
@@ -37,6 +39,35 @@ class Comment extends Model
      */
     public function getUserAvatarAttribute(){
         return $this->user()->get(['avatar']);
+    }
+
+    /**
+     * 获得缓存的点赞数
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getCacheNiceCommentAttribute(){
+        $comment_id = $this->attributes['id'];
+        $cache_nice_comment = Redis::hget('warshipcommunity:comment:nicecount',$comment_id); // 获取 redis 数据库中的推荐量
+        if($cache_nice_comment == null){
+            $cache_nice_comment = $this->attributes['nice_comment'];
+        }
+        return $cache_nice_comment;
+    }
+
+    /**
+     * 判断用户是否已经点赞
+     * @return bool
+     */
+    public function getIsNiceAttribute(){
+        $comment_id = $this->attributes['id'];
+        $is_nice = false;
+        if(Auth::check()) {
+            $existsInRedisSet = Redis::command('SISMEMBER', ['warshipcommunity:comment:nicelimit:' . $comment_id, Auth::user()->id]);
+            if ($existsInRedisSet) {
+                $is_nice = true;
+            }
+        }
+        return $is_nice;
     }
 
     /**

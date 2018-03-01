@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\HotDiscussion;
+use App\Events\NiceComment;
 use App\Events\NiceDiscussion;
 use Auth;
 use Response;
@@ -57,9 +58,11 @@ class ForumController extends Controller
         }
         // 确认用户是否推荐讨论
         $isNice = false;
-        $existsInRedisSet = Redis::command('SISMEMBER', ['warshipcommunity:discussion:nicelimit:'.$discussion_id, Auth::user()->id]);
-        if($existsInRedisSet){
-            $isNice = true;
+        if(Auth::check()) {
+            $existsInRedisSet = Redis::command('SISMEMBER', ['warshipcommunity:discussion:nicelimit:' . $discussion_id, Auth::user()->id]);
+            if ($existsInRedisSet) {
+                $isNice = true;
+            }
         }
         // 确认用户是否是否是讨论发起人
         $isUser = false;
@@ -70,7 +73,6 @@ class ForumController extends Controller
         }
         return Response::json([
             'discussion' => $discussion,
-            'ip' => $ip,
             'hot_discussion' => $hot_discussion,
             'nice_discussion' => $nice_discussion,
             'isNice' => $isNice,
@@ -99,13 +101,12 @@ class ForumController extends Controller
     public function niceDiscussion($discussion_id){
         $discussion = Discussion::findOrFail($discussion_id);
         $user_id = Auth::user()->id;
-        $userNiceDiscussionKey = 'warshipcommunity:discussion:nicelimit:'.$discussion_id; // 触发事件后从 redis 数据库中获取信息
+        $userNiceDiscussionKey = 'warshipcommunity:discussion:nicelimit:'.$discussion_id; // 从 redis 数据库中获取信息
         $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否已经推荐
         $status = -1;
         $message = '请不要重复推荐';
         if(!$existsInRedisSet){
             event(new NiceDiscussion($discussion,$user_id)); // 触发推荐 discussion 事件
-            $userNiceDiscussionKey = 'warshipcommunity:discussion:nicelimit:'.$discussion_id; // 触发事件后从 redis 数据库中获取信息
             $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否推荐成功
             // 推荐成功
             $status = 1;
@@ -116,10 +117,42 @@ class ForumController extends Controller
                 $message = '推荐失败';
             }
         }
-
         return Response::json([
             'status' => $status,
             'message' => $message
+        ]);
+    }
+
+    /**
+     * 评论点赞
+     * @param $comment_id
+     * @return
+     */
+    public function niceComment($comment_id){
+        $comment = Comment::findOrFail($comment_id);
+        $user_id = Auth::user()->id;
+
+        $userNiceCommentKey = 'warshipcommunity:comment:nicelimit:'.$comment_id; // 从 redis 数据库中获取信息
+        $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceCommentKey, $user_id]); // 确认是否已经推荐
+        $status = -1;
+        $message = '请不要重复点赞';
+        if(!$existsInRedisSet){
+            event(new NiceComment($comment,$user_id)); // 触发 comment 点赞 事件
+            $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceCommentKey, $user_id]); // 确认是否推荐成功
+            // 推荐成功
+            $status = 1;
+            $message = '点赞成功';
+            if(!$existsInRedisSet){
+                // 推荐失败
+                $status = 0;
+                $message = '点赞失败';
+            }
+        }
+        return Response::json([
+            'status' => $status,
+            'message' => $message,
+            'comment_id' => $comment_id,
+            'cache_nice_comment' => Redis::hget('warshipcommunity:comment:nicecount',$comment_id)
         ]);
     }
 

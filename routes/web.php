@@ -88,6 +88,7 @@ Route::get('/forum/getDiscussion/{id}','ForumController@getDiscussion'); // 获�
 Route::get('/forum/getComments/{id}','ForumController@getComments'); // 获取评论列表
 
 Route::get('/forum/niceDiscussion/{id}','ForumController@niceDiscussion'); // 讨论推荐
+Route::get('/forum/niceComment/{id}','ForumController@niceComment'); // 回复点赞
 
 Route::get('/forum/create','ForumController@create'); // 讨论区创建页面
 Route::post('/forum/store','ForumController@store'); // 讨论区创建页面后台

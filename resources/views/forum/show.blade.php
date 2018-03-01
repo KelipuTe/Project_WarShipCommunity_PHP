@@ -17,19 +17,22 @@
                     <div class="panel panel-danger">
                         <div class="panel-heading">
                             <h2> @{{ discussion.title }}
-                                <button class="btn btn-danger pull-right" role="button" v-if="isUser" @click="softDelete()">爆破</button>
+                                <button class="btn btn-danger pull-right" role="button" v-if="isUser" @click="softDelete()"> 爆破 </button>
                             </h2>
                         </div>
                         <div class="panel-body" v-html="discussion.body"></div>
                         <div class="panel-footer">
-                            <span> 浏览量 </span><span v-text="hot_discussion"></span>
+                            <div class="clearfix">
+                            <span> 浏览量 </span>
+                            <span v-text="hot_discussion"></span>
                             @if(Auth::check())
-                                <button class="btn btn-xs pull-right" :class="vbtnclass" role="button" @click="niceDiscussion()">
+                                <button class="btn btn-sm pull-right" :class="vbtnclass" role="button" @click="niceDiscussion()">
                                     <span class="fa" :class="vfaclass"></span>
                                     <span v-text="nice_discussion"></span>
                                     <span> 这篇讨论对我有用 </span>
                                 </button>
                             @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,6 +171,17 @@
                                 </div>
                             </div>
                             <div class="panel-body" v-html="comment.body"></div>
+                            <div class="panel-footer">
+                                @if(Auth::check())
+                                    <div class="clearfix">
+                                        <button :id="['nice-comment-btn-'+comment.id]" class="btn btn-sm pull-right" :class="vbtnclass(comment.is_nice)" role="button" @click="niceComment(comment.id)">
+                                            <span :id="['nice-comment-fa-'+comment.id]" class="fa" :class="vfaclass(comment.is_nice)"></span>
+                                            <span :id="['nice-comment-text-'+comment.id]" v-text="comment.cache_nice_comment"></span>
+                                            <span> 点赞 </span>
+                                        </button>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -211,6 +225,33 @@
                                     console.log("出现错误：" +jqXHR.status);
                                 }
                             });
+                        },
+                        niceComment:function (comment_id) {
+                            $.ajax({
+                                type:'GET',
+                                url:'/forum/niceComment/' + comment_id,
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.status == 1){
+                                        $('#nice-comment-btn-'+data.comment_id).removeClass('btn-info').addClass('btn-success');
+                                        $('#nice-comment-fa-'+data.comment_id).removeClass('fa-thumbs-o-up').addClass('fa-thumbs-up');
+                                        $('#nice-comment-text-'+data.comment_id).text(data.cache_nice_comment);
+                                    } else if(data.status == -1) {
+                                        makeAlertBox('info',data.message);
+                                    } else {
+                                        makeAlertBox('danger',data.message);
+                                    }
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        vfaclass:function (is_nice) {
+                            return is_nice ? 'fa-thumbs-up' : 'fa-thumbs-o-up';
+                        },
+                        vbtnclass:function (is_nice) {
+                            return is_nice ? 'btn-success' : 'btn-info';
                         }
                     }
                 });
@@ -227,7 +268,7 @@
                         <script id="ue-container" type="text/plain"></script>
                     </div>
                     <div class="form-group">
-                        <button id="submit" class="btn btn-success form-control">提交</button>
+                        <button id="submit" class="btn btn-success form-control"> 提交 </button>
                     </div>
                     {{--实例化编辑器--}}
                     <script type="text/javascript">
@@ -236,12 +277,8 @@
                             ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');/* 设置CSRFtoken */
                         });
                     </script>
-                    {{--可关闭的警告框--}}
-                    <div class="master-alert" style="z-index: 999">
-                        <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
-                    </div>
                 @else
-                    <a href="/user/login" class="form-control btn btn-success">登录参与讨论</a>
+                    <a href="/user/login" class="form-control btn btn-success"> 登录参与讨论 </a>
                 @endif
             </div>
         </div>
@@ -444,7 +481,7 @@
                             <h2>@{{ countFollowedUser }}</h2>
                             <span>已关注</span>
                         </div>
-                        <div class="panel-body">
+                        <div class="panel-body text-center">
                             {{--用户关注讨论按钮--}}
                             @if(Auth::check())
                                 <button class="btn" :class="vbtnclass" @click="userDiscussionFollow()">
@@ -453,7 +490,7 @@
                                 </button>
                             @else
                                 <a href="/user/login" class="btn btn-danger">
-                                    <span class="fa fa-star-o"></span>关注该讨论
+                                    <span class="fa fa-star-o"></span> 关注该讨论
                                 </a>
                             @endif
                         </div>
@@ -537,60 +574,59 @@
                 <about-user></about-user>
             </div>
             <template id="template-about-user">
-                <div>
-                    <div class="panel panel-info">
-                        <div class="panel-heading text-center">
-                            <h3>关于作者</h3>
+                <div class="panel panel-info">
+                    <div class="panel-heading text-center">
+                        <div class="media">
+                            <div class="media-left">
+                                <img src="" :src="userAvatar" class="media-object img-circle img-avatar-small" :alt="username">
+                            </div>
+                            <div class="media-body">
+                                <h3 class="media-heading" style="margin: 10px 0">
+                                    <a href="#" :href="['/user/center/info/'+user_id]"> @{{ username }} </a>
+                                </h3>
+                            </div>
                         </div>
-                        <div class="panel-body">
-                            <div class="media">
-                                <div class="media-left">
-                                    <img src="" :src="userAvatar" class="img-avatar-small" :alt="username">
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">
-                                        <a href="#" :href="['/user/center/info/'+user_id]">@{{ username }}</a>
-                                    </h4>
-                                </div>
+                    </div>
+                    <div class="panel-body text-center">
+                        {{--用户等级--}}
+                        <div id="liveness">
+                            <span v-text="vliveness"></span>
+                            <span v-text="vlevel"></span>
+                        </div>
+                        <div class="forum-user-statics">
+                            <div class="forum-user-statics-item text-center">
+                                <div> 讨 论 </div>
+                                <div> @{{ countUserDiscussions }} </div>
                             </div>
-                            {{--用户等级--}}
-                            <div id="liveness">
-                                <span v-text="vliveness"></span>
-                                <span v-text="vlevel"></span>
+                            <div class="forum-user-statics-item text-center">
+                                <div> 回 复 </div>
+                                <div> @{{ countUserComments }} </div>
                             </div>
-                            <div class="forum-user-statics">
-                                <div class="forum-user-statics-item text-center">
-                                    <div>讨 论</div>
-                                    <div>@{{ countUserDiscussions }}</div>
-                                </div>
-                                <div class="forum-user-statics-item text-center">
-                                    <div>回 复</div>
-                                    <div>@{{ countUserComments }}</div>
-                                </div>
-                                <div class="forum-user-statics-item text-center">
-                                    <div>关 注</div>
-                                    <div>@{{ countUserFollowers }}</div>
-                                </div>
+                            <div class="forum-user-statics-item text-center">
+                                <div> 关 注 </div>
+                                <div> @{{ countUserFollowers }} </div>
                             </div>
-                            <div id="user-user">
-                                @if(Auth::check())
-                                    {{--用户关注用户按钮--}}
-                                    <button class="btn" :class="vbtnclass" @click="userUserFollow()">
-                                        <span class="fa " :class="vbtnglyphicon"></span>
-                                        <span v-text="vbtntext"></span>
-                                    </button>
-                                    <button class="btn btn-primary">
-                                        <span class="fa fa-envelope"></span>
-                                        <span>发私信</span>
-                                    </button>
-                                @else
-                                    <div class="forum-user-statics-item">
-                                        <a href="/user/login" class="btn btn-danger">
-                                            <span class="fa fa-star-o"></span>关注 TA
-                                        </a>
-                                    </div>
-                                @endif
-                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer text-center">
+                        <div id="user-user">
+                            @if(Auth::check())
+                                {{--用户关注用户按钮--}}
+                                <button class="btn" :class="vbtnclass" @click="userUserFollow()">
+                                    <span class="fa " :class="vbtnglyphicon"></span>
+                                    <span v-text="vbtntext"></span>
+                                </button>
+                                <button class="btn btn-primary">
+                                    <span class="fa fa-envelope"></span>
+                                    <span> 发私信 </span>
+                                </button>
+                            @else
+                                <div class="forum-user-statics-item">
+                                    <a href="/user/login" class="btn btn-danger">
+                                        <span class="fa fa-star-o"></span> 关注 TA
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

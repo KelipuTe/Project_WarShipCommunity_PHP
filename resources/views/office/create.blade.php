@@ -19,10 +19,6 @@
                 <button id="submit" class="btn btn-success form-control">提交</button>
             </div>
         </div>
-        {{--可关闭的警告框--}}
-        <div class="master-alert">
-            <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
-        </div>
     </div>
     <script>
         $(document).ready(function () {

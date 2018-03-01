@@ -120,6 +120,10 @@
     <div class="row master-middle">
         @yield('content')
     </div>
+    {{--可关闭的警告框--}}
+    <div class="master-alert" style="z-index: 999">
+        <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
+    </div>
 </div>
 {{--页面底部--}}
 <footer id="footer" class="footer master-footer">

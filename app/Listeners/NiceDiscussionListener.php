@@ -13,7 +13,7 @@ class NiceDiscussionListener
     /**
      * 讨论浏览数量增加多少次后，刷新数据库
      */
-    const refreshLimit = 10;
+    const refreshLimit = 30;
 
     /**
      * Create the event listener.
@@ -36,7 +36,7 @@ class NiceDiscussionListener
         $user_id = $event->user_id;
         if($this->userNiceDiscussion($discussion->id,$user_id)){
             // 一个 user 只能推荐一篇讨论一次
-            $this->updateCacheNiceCount($discussion->id);
+            $this->updateCacheNiceDiscussionCount($discussion->id);
         }
     }
 
@@ -53,15 +53,15 @@ class NiceDiscussionListener
         return false;
     }
 
-    public function updateCacheNiceCount($discussion_id){
+    public function updateCacheNiceDiscussionCount($discussion_id){
         $discussionNiceCountKey = 'warshipcommunity:discussion:nicecount';
         // 这里以 redis 哈希类型存储键，就和数组类似，$discussionNiceCountKey 就类似数组名
         if(Redis::command('HEXISTS', [$discussionNiceCountKey, $discussion_id])){
             // 哈希类型指令 HINCRBY，就是给 $discussionNiceCountKey[$discussion_id] 加上一个值，这里就是 1
-            $hod_discussion = Redis::command('HINCRBY', [$discussionNiceCountKey, $discussion_id, 1]);
+            $nice_discussion = Redis::command('HINCRBY', [$discussionNiceCountKey, $discussion_id, 1]);
             // redis 中这个存储浏览量的值变化量达到 30 后，就去刷新一次 mysql 数据库
-            if( ($hod_discussion % self::refreshLimit) == 0 ){
-                $this->updateModelNiceCount($discussion_id, $hod_discussion);
+            if( ($nice_discussion % self::refreshLimit) == 0 ){
+                $this->updateModelNiceDiscussionCount($discussion_id, $nice_discussion);
             }
         } else {
             // 哈希类型指令 HSET，和数组类似,就像 $discussionNiceCountKey[$discussion_id] = 1;
@@ -69,8 +69,8 @@ class NiceDiscussionListener
         }
     }
 
-    public function updateModelNiceCount($discussion_id,$nice_discussion){
-        // 当访问量变化量达到 50 时,在进行一次 mysql 更新
+    public function updateModelNiceDiscussionCount($discussion_id,$nice_discussion){
+        // 当访问量变化量达到 30 时,在进行一次 mysql 更新
         $discussion = Discussion::find($discussion_id);
         $discussion->nice_discussion = $nice_discussion;
         $discussion->save();

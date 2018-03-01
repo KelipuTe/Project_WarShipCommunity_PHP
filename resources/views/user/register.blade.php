@@ -32,10 +32,6 @@
         <div class="col-md-3 text-center">
             <h1 id="right_OvO" class="user-login-eye-size">0</h1>
         </div>
-        {{--可关闭的警告框--}}
-        <div class="master-alert">
-            <div id="master-alert-container" class="col-md-4 col-md-offset-4"></div>
-        </div>
     </div>
     <script>
         $(document).ready(function () {

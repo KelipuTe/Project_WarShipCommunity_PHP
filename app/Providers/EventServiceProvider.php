@@ -28,6 +28,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NiceDiscussion' => [
             'App\Listeners\NiceDiscussionListener',
         ],
+        'App\Events\NiceComment' => [
+            'App\Listeners\NiceCommentListener',
+        ],
     ];
 
     /**
