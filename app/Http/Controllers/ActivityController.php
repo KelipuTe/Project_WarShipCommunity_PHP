@@ -14,7 +14,7 @@ use App\Events\PublicChatUserSignIn;
 use App\Sign;
 
 /**
- * 这个控制器负责活动区
+ * 活动区模块控制器
  * Class ActivityController
  * @package App\Http\Controllers
  */

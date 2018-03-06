@@ -10,7 +10,7 @@ use Auth;
 use Illuminate\Http\Request;
 
 /**
- * 这个控制器负责航天局
+ * 航天局模块控制器
  * Class SpaceAdministrationController
  * @package App\Http\Controllers
  */

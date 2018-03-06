@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
- * 这个控制器负责对用户账户的修改
+ * 用户账户控制器
  * Class AccountController
  * @package App\Http\Controllers
  */

@@ -16,7 +16,7 @@ use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 
 /**
- * 这个控制器负责处理和用户相关的事件
+ * 用户模块控制器
  * Class UserController
  * @package App\Http\Controllers
  */
@@ -49,10 +49,7 @@ class UserController extends Controller
         } else {
             $message = '很抱歉，服务器正忙，请稍后再试';
         }
-        return Response::json([
-            'status' => $status,
-            'message' => $message
-        ]);
+        return Response::json(['status' => $status, 'message' => $message]);
     }
 
     /**
@@ -75,21 +72,15 @@ class UserController extends Controller
         ];
         if(Auth::attempt($data)){
             if(Auth::user()->email_confirm == 1) {
-                $status = 1; // 状态 1 ：账号已激活，登陆成功
-                $message = "欢迎回来！！！";
+                $status = 1; $message = "欢迎回来！！！"; // 状态 1 ：账号已激活，登陆成功
             } else {
                 Auth::logout(); // 用户登出
-                $status = -1; // 状态 -1 ： 账号未激活，登陆失败
-                $message = "账号未激活！！！";
+                $status = -1; $message = "账号未激活！！！"; // 状态 -1 ： 账号未激活，登陆失败
             }
         } else {
-            $status = 0; // 状态 0 ： 密码错误或用户不存在，登陆失败
-            $message = "密码错误或用户不存在！！！";
+            $status = 0; $message = "密码错误或用户不存在！！！"; // 状态 0 ： 密码错误或用户不存在，登陆失败
         }
-        return Response::json([
-            'status' => $status,
-            'message' => $message
-        ]);
+        return Response::json(['status' => $status, 'message' => $message]);
     }
 
     /**
@@ -131,10 +122,7 @@ class UserController extends Controller
         } else {
             $message = '很抱歉，服务器正忙，请稍后再试';
         }
-        return Response::json([
-            'status' => $status,
-            'message' => $message
-        ]);
+        return Response::json(['status' => $status, 'message' => $message]);
     }
 
     /**

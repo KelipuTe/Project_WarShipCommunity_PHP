@@ -9,21 +9,23 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
 /**
- * 这个类记录用户关注用户的站内信信息
- * Class UserUserFollowNotification
+ * 这个类记录用户发送私信的站内信信息
+ * Class PersonalLetterNotification
  * @package App\Notifications
  */
-class UserUserFollowNotification extends Notification
+class PersonalLetterNotification extends Notification
 {
     use Queueable;
 
+    protected $personalLetter_id;
+
     /**
      * Create a new notification instance.
-     *
+     * @param $personalLetter_id
      */
-    public function __construct()
+    public function __construct($personalLetter_id)
     {
-        //
+        $this->personalLetter_id = $personalLetter_id;
     }
 
     /**
@@ -35,24 +37,13 @@ class UserUserFollowNotification extends Notification
     public function via($notifiable)
     {
         return ['database'];
-        /*
-         * database 表示使用数据库站内信通知方式
-         * mail 表示使用邮件通知方式
-         */
-        //return ['database','mail'];
     }
 
-    /**
-     * notification 需要执行的函数
-     * toDatabase() 的函数名是根据 via() 函数中的 database 起的名字
-     * @param $notifiable
-     * @return array
-     */
     public function toDatabase($notifiable){
-        // 写入数据库中的数据
         return [
-            'follower_id' => Auth::user()->id, // 发起关注的用户 id
-            'follower' => Auth::user()->username // 发起关注的用户 username
+            'from_user_id' => Auth::user()->id, // 发起私信的用户 id
+            'from_user_username' => Auth::user()->username, // 发起私信的用户 username
+            'personalLetter_id' => $this->personalLetter_id // 私信对应的 id
         ];
     }
 

@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\HotDiscussion;
-use App\Events\NiceComment;
-use App\Events\NiceDiscussion;
-use Auth;
-use Response;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-
 use App\Comment;
 use App\Discussion;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\ForumStoreRequest;
 
+use App\Events\HotDiscussion;
+use App\Events\NiceComment;
+use App\Events\NiceDiscussion;
+
+use Illuminate\Http\Request;
+use Auth;
+use Response;
+use Illuminate\Support\Facades\Redis;
+
 /**
- * 这个控制器负责讨论区
+ * 讨论区模块控制器
  * Class OfficeController
  * @package App\Http\Controllers
  */
@@ -32,10 +33,8 @@ class ForumController extends Controller
      * @return mixed
      */
     public function getDiscussions(){
-        $discussions = Discussion::latest()->published()->paginate(10);
-        return Response::json([
-            'discussions' => $discussions,
-        ]);
+        $discussions = Discussion::latest()->blacklist()->published()->paginate(10);
+        return Response::json(['discussions' => $discussions,]);
     }
 
     /**
@@ -66,7 +65,7 @@ class ForumController extends Controller
         }
         // 确认用户是否是否是讨论发起人
         $isUser = false;
-        if(Auth::user()){
+        if(Auth::check()){
             if(Auth::user()->id == $discussion->user_id) {
                 $isUser = true;
             }
@@ -87,10 +86,8 @@ class ForumController extends Controller
      */
     public function getComments($discussion_id){
         $discussion = Discussion::findOrFail($discussion_id);
-        $comments = $discussion->comments()->latest()->paginate(10);
-        return Response::json([
-            'comments' => $comments,
-        ]);
+        $comments = $discussion->comments()->blacklist()->latest()->paginate(10);
+        return Response::json(['comments' => $comments,]);
     }
 
     /**
@@ -103,24 +100,16 @@ class ForumController extends Controller
         $user_id = Auth::user()->id;
         $userNiceDiscussionKey = 'warshipcommunity:discussion:nicelimit:'.$discussion_id; // 从 redis 数据库中获取信息
         $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否已经推荐
-        $status = -1;
-        $message = '请不要重复推荐';
+        $status = -1; $message = '请不要重复推荐';
         if(!$existsInRedisSet){
             event(new NiceDiscussion($discussion,$user_id)); // 触发推荐 discussion 事件
             $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否推荐成功
-            // 推荐成功
-            $status = 1;
-            $message = '推荐成功';
+            $status = 1; $message = '推荐成功';
             if(!$existsInRedisSet){
-                // 推荐失败
-                $status = 0;
-                $message = '推荐失败';
+                $status = 0; $message = '推荐失败';
             }
         }
-        return Response::json([
-            'status' => $status,
-            'message' => $message
-        ]);
+        return Response::json(['status' => $status, 'message' => $message]);
     }
 
     /**
@@ -131,26 +120,19 @@ class ForumController extends Controller
     public function niceComment($comment_id){
         $comment = Comment::findOrFail($comment_id);
         $user_id = Auth::user()->id;
-
         $userNiceCommentKey = 'warshipcommunity:comment:nicelimit:'.$comment_id; // 从 redis 数据库中获取信息
         $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceCommentKey, $user_id]); // 确认是否已经推荐
-        $status = -1;
-        $message = '请不要重复点赞';
+        $status = -1; $message = '请不要重复点赞';
         if(!$existsInRedisSet){
             event(new NiceComment($comment,$user_id)); // 触发 comment 点赞 事件
             $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceCommentKey, $user_id]); // 确认是否推荐成功
-            // 推荐成功
-            $status = 1;
-            $message = '点赞成功';
+            $status = 1; $message = '点赞成功';
             if(!$existsInRedisSet){
-                // 推荐失败
-                $status = 0;
-                $message = '点赞失败';
+                $status = 0; $message = '点赞失败';
             }
         }
         return Response::json([
-            'status' => $status,
-            'message' => $message,
+            'status' => $status, 'message' => $message,
             'comment_id' => $comment_id,
             'cache_nice_comment' => Redis::hget('warshipcommunity:comment:nicecount',$comment_id)
         ]);
@@ -178,15 +160,12 @@ class ForumController extends Controller
         if($discussion != null){
             $accountController = new AccountController();
             $accountController->forumStore(Auth::user()->id); // 创建讨论，增加活跃值
-            $status = 1;
-            $message = "讨论创建成功！！！";
+            $status = 1; $message = "讨论创建成功！！！";
         } else {
-            $status = 0;
-            $message = "讨论创建失败！！！";
+            $status = 0; $message = "讨论创建失败！！！";
         }
         return Response::json([
-            'status' => $status,
-            'message' => $message,
+            'status' => $status, 'message' => $message,
             'discussion_id' => $discussion->id
         ]);
     }
@@ -208,21 +187,16 @@ class ForumController extends Controller
      */
     public function comment(CommentRequest $request){
         $comment = Comment::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
-        $status = 0;
-        $message = "评论创建失败！！！";
+        $status = 0; $message = "评论创建失败！！！";
         if($comment != null){
             $discussion = Discussion::findOrFail($request->get('discussion_id'));
             $discussion->update(['last_user_id'=>Auth::user()->id]);
             $accountController = new AccountController();
             $accountController->officeWelcomer(Auth::user()->id); // 讨论评论提供者，增加活跃值
             $accountController->officeWelcome($discussion->user->id); // 讨论被评论，增加活跃值
-            $status = 1;
-            $message = "评论创建成功！！！";
+            $status = 1; $message = "评论创建成功！！！";
         }
-        return Response::json([
-            'status' => $status,
-            'message' => $message
-        ]);
+        return Response::json(['status' => $status, 'message' => $message]);
     }
 
     /**
@@ -237,9 +211,6 @@ class ForumController extends Controller
         if($status) {
             $message = "爆破成功";
         }
-        return Response::json([
-            'status' => $status,
-            'message' => $message
-        ]);
+        return Response::json(['status' => $status, 'message' => $message]);
     }
 }

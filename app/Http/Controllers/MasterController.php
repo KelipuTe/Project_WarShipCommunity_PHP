@@ -11,7 +11,7 @@ use App\Discussion;
 use App\Introduction;
 
 /**
- * 这个控制器负责各个主要页面的跳转
+ * 主模块控制器
  * Class MasterController
  * @package App\Http\Controllers
  */

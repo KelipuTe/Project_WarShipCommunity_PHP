@@ -18,6 +18,8 @@ class CreateMessagesTable extends Migration
             $table->text('body'); // 对简介的留言内容
             $table->integer('user_id')->unsigned();
             $table->integer('introduction_id')->unsigned();
+            $table->boolean('blacklist')->default(false); // 黑名单
+            $table->softDeletes(); // 软删除
             $table->timestamps();
         });
     }

@@ -71,6 +71,14 @@ class Comment extends Model
     }
 
     /**
+     * 筛选在黑名单内的讨论
+     * @param $query
+     */
+    public function scopeBlacklist($query){
+        $query -> where('blacklist','!=',true);
+    }
+
+    /**
      * 通过 comment 找到 user
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

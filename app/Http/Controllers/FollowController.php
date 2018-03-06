@@ -11,7 +11,7 @@ use App\Discussion;
 use App\Notifications\UserUserFollowNotification;
 
 /**
- * 这个控制器负责各种关注事件的处理
+ * 关注事件控制器
  * Class FollowController
  * @package App\Http\Controllers
  */

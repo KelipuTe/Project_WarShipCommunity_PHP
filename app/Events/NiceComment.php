@@ -11,11 +11,25 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * 评论被点赞事件触发器
+ * Class NiceComment
+ * @package App\Events
+ */
 class NiceComment
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * 触发点赞事件的评论
+     * @var Comment
+     */
     public $comment;
+
+    /**
+     * 点赞的用户 id
+     * @var
+     */
     public $user_id;
 
     /**

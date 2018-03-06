@@ -11,7 +11,7 @@ use App\Warship;
 use Illuminate\Http\Request;
 
 /**
- * 这个控制器负责舰船信息管理中心
+ * 舰船信息管理中心模块控制器
  * Class WarshipController
  * @package App\Http\Controllers
  */
@@ -36,7 +36,7 @@ class WarshipController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request){
-        $warship = Warship::create(array_merge($request->all()));
+        Warship::create(array_merge($request->all()));
         return redirect()->action('MasterController@warship');
     }
 

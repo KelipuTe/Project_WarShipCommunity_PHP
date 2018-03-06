@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->integer('email_confirm')->default(0); // email 验证状态
             $table->string('password'); // 密码
             $table->string('avatar'); // 头像
-            $table->string('power')->default(0); // 权限
+            $table->integer('power')->default(0); // 权限
             $table->rememberToken();
             $table->timestamps();
         });

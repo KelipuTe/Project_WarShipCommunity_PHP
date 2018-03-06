@@ -8,6 +8,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Redis;
 
+/**
+ * 评论被点赞事件监听器
+ * Class NiceCommentListener
+ * @package App\Listeners
+ */
 class NiceCommentListener
 {
     /**

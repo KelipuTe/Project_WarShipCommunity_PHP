@@ -60,7 +60,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
                             <li><a href="/user/center">个人中心</a></li>
-                            <li><a href="#">消息中心</a></li>
+                            <li><a href="/notification/center">消息中心</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/user/logout">退出登录</a></li>
                         </ul>

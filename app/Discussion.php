@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Discussion extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes; // 使用软删除
 
     protected $table = 'discussions';
 
@@ -77,6 +77,7 @@ class Discussion extends Model
     }
 
     /**
+     * 筛选已发表的讨论
      * 查询语句 queryScope
      * scope 关键字 + Name
      * Name 是方法名
@@ -84,6 +85,14 @@ class Discussion extends Model
      */
     public function scopePublished($query){
         $query -> where('published_at','<=',Carbon::now());
+    }
+
+    /**
+     * 筛选在黑名单内的讨论
+     * @param $query
+     */
+    public function scopeBlacklist($query){
+        $query -> where('blacklist','!=',true);
     }
 
     /**

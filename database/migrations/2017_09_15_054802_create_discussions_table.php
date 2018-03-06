@@ -22,6 +22,7 @@ class CreateDiscussionsTable extends Migration
             $table->integer('user_id')->unsigned(); // 发表的用户
             $table->integer('last_user_id')->unsigned(); // 最后更新的用户
             $table->timestamp('published_at'); // 发表时间
+            $table->boolean('blacklist')->default(false); // 黑名单
             $table->softDeletes(); // 软删除
             $table->timestamps();
         });

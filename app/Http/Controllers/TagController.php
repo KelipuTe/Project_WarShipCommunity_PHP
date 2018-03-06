@@ -8,9 +8,19 @@ use Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * 标签控制器
+ * Class TagController
+ * @package App\Http\Controllers
+ */
 class TagController extends Controller
 {
-
+    /**
+     * 根据 类型 和 id 获取对应的标签
+     * @param $type
+     * @param $target_id
+     * @return mixed
+     */
     public function getTags($type,$target_id){
         $tags = DB::table('tag_target')->leftjoin('tags','tag_target.tag_id','=','tags.id')
             ->where([
@@ -22,6 +32,10 @@ class TagController extends Controller
         ]);
     }
 
+    /**
+     * 获取所有的标签
+     * @return mixed
+     */
     public function getAllTags(){
         $allTags = Tag::all();
         return Response::json([
@@ -29,6 +43,11 @@ class TagController extends Controller
         ]);
     }
 
+    /**
+     * 新建标签
+     * @param Request $request
+     * @return mixed
+     */
     public function createTag(Request $request){
         $tag = Tag::create(array_merge($request->all()));
         $status = 0;
@@ -43,6 +62,11 @@ class TagController extends Controller
         ]);
     }
 
+    /**
+     * 为目标更改标签
+     * @param Request $request
+     * @return mixed
+     */
     public function changeTag(Request $request){
         $tag_id = $request->get('tag_id');
         $type = $request->get('type');

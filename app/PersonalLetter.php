@@ -11,9 +11,35 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PersonalLetter extends Model
 {
-    protected $table = 'personal_letter';
+    protected $table = 'personal_letters';
 
-    protected $fillable = ['from_user_id','to_user_id','title','body'];
+    protected $fillable = ['from_user_id','to_user_id','body'];
+
+    /**
+     * 声明向模型中添加的数据
+     * @var array
+     */
+    protected $appends = ['from_user_username','to_user_username'];
+
+    /**
+     * 获得 from_user_username 用户名
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getFromUserUsernameAttribute(){
+        $user = User::findOrFail($this->attributes['from_user_id']);
+        $user_username = $user->username;
+        return $user_username;
+    }
+
+    /**
+     * 获得 to_user_username 用户名
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getToUserUsernameAttribute(){
+        $user = User::findOrFail($this->attributes['to_user_id']);
+        $user_username = $user->username;
+        return $user_username;
+    }
 
     /**
      * 通过 personalLetter 找到发送私信的 user

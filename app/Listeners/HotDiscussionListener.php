@@ -8,6 +8,11 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Redis;
 
+/**
+ * 讨论被访问事件监听器
+ * Class HotDiscussionListener
+ * @package App\Listeners
+ */
 class HotDiscussionListener
 {
     /**

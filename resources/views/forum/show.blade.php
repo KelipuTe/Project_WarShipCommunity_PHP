@@ -13,26 +13,29 @@
                 <discussion></discussion>
             </div>
             <template id="template-discussion">
-                <div>
-                    <div class="panel panel-danger">
-                        <div class="panel-heading">
-                            <h2> @{{ discussion.title }}
-                                <button class="btn btn-danger pull-right" role="button" v-if="isUser" @click="softDelete()"> 爆破 </button>
-                            </h2>
-                        </div>
-                        <div class="panel-body" v-html="discussion.body"></div>
-                        <div class="panel-footer">
-                            <div class="clearfix">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h2> @{{ discussion.title }}
+                            <div class="pull-right">
+                                <button class="btn btn-danger" role="button" @click="blacklist(discussion.id)">
+                                    <span class="fa fa-hand-stop-o fa-lg"></span> 举报 </button>
+                                <button class="btn btn-danger" role="button" v-if="isUser" @click="softDelete(discussion.id)">
+                                    <span class="fa fa-trash-o fa-lg"></span> 爆破 </button>
+                            </div>
+                        </h2>
+                    </div>
+                    <div class="panel-body" v-html="discussion.body"></div>
+                    <div class="panel-footer">
+                        <div class="clearfix">
                             <span> 浏览量 </span>
                             <span v-text="hot_discussion"></span>
                             @if(Auth::check())
-                                <button class="btn btn-sm pull-right" :class="vbtnclass" role="button" @click="niceDiscussion()">
-                                    <span class="fa" :class="vfaclass"></span>
+                                <button class="btn btn-sm pull-right" :class="vbtnclass" role="button" @click="niceDiscussion(discussion.id)">
+                                    <span class="fa fa-lg" :class="vfaclass"></span>
                                     <span v-text="nice_discussion"></span>
                                     <span> 这篇讨论对我有用 </span>
                                 </button>
                             @endif
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -44,11 +47,9 @@
                         return {
                             discussion: '',
                             hot_discussion: '',
-                            nice_discussion:'',
+                            nice_discussion: '',
                             isNice: false,
-                            isUser: false,
-                            avatar: '',
-                            username: ''
+                            isUser: false
                         };
                     },
                     computed:{
@@ -82,8 +83,6 @@
                                     vm.nice_discussion = data.nice_discussion;
                                     vm.isNice = data.isNice;
                                     vm.isUser = data.isUser;
-                                    vm.avatar = data.discussion.user_avatar[0].avatar;
-                                    vm.username = data.discussion.username[0].username;
                                     $('#discussion-title').text(data.discussion.title);
                                 },
                                 error:function(jqXHR){
@@ -91,15 +90,8 @@
                                 }
                             });
                         },
-                        niceDiscussion:function () {
+                        niceDiscussion:function (discussion_id) {
                             var vm = this;
-                            var href = location.href.split('/');
-                            if( location.href.indexOf('?') != -1 ){
-                                //判断是不是翻页后的地址，携带 ?page=number
-                                href = location.href.split('?');
-                                href = href[0].split('/');
-                            }
-                            var discussion_id = href[href.length-1];
                             $.ajax({
                                 type:'GET',
                                 url:'/forum/niceDiscussion/' + discussion_id,
@@ -118,14 +110,7 @@
                                 }
                             });
                         },
-                        softDelete:function(){
-                            var href = location.href.split('/');
-                            if( location.href.indexOf('?') != -1 ){
-                                //判断是不是翻页后的地址，携带 ?page=number
-                                href = location.href.split('?');
-                                href = href[0].split('/');
-                            }
-                            var discussion_id = href[href.length-1];
+                        softDelete:function(discussion_id){
                             $.ajax({
                                 type:'GET',
                                 url:'/forum/softdelete/' + discussion_id,
@@ -134,6 +119,28 @@
                                     if(data.status == true){
                                         alert(data.message);
                                         window.location.href = "/forum";
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        blacklist:function(discussion_id){
+                            $.ajax({
+                                type:'post',
+                                url:'/office/blacklist/report',
+                                data:{
+                                    'type': 'discussion',
+                                    'target': discussion_id,
+                                    'explain': 'null'
+                                },
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.status == 1){
+                                        alert(data.message);
                                     } else {
                                         alert(data.message);
                                     }
@@ -166,7 +173,13 @@
                                         <img class="media-object img-circle img-avatar-small" src="" :src="comment.user_avatar[0].avatar">
                                     </div>
                                     <div class="media-body">
-                                        <h4 class="media-heading forum-comment-line"> @{{comment.username[0].username}} </h4>
+                                        <h4 class="media-heading forum-comment-line">
+                                            @{{comment.username[0].username}}
+                                            <div class="pull-right">
+                                                <button class="btn btn-danger" role="button" @click="blacklist(comment.id)">
+                                                    <span class="fa fa-hand-stop-o fa-lg"></span> 举报 </button>
+                                            </div>
+                                        </h4>
                                     </div>
                                 </div>
                             </div>
@@ -175,7 +188,7 @@
                                 @if(Auth::check())
                                     <div class="clearfix">
                                         <button :id="['nice-comment-btn-'+comment.id]" class="btn btn-sm pull-right" :class="vbtnclass(comment.is_nice)" role="button" @click="niceComment(comment.id)">
-                                            <span :id="['nice-comment-fa-'+comment.id]" class="fa" :class="vfaclass(comment.is_nice)"></span>
+                                            <span :id="['nice-comment-fa-'+comment.id]" class="fa fa-lg" :class="vfaclass(comment.is_nice)"></span>
                                             <span :id="['nice-comment-text-'+comment.id]" v-text="comment.cache_nice_comment"></span>
                                             <span> 点赞 </span>
                                         </button>
@@ -247,6 +260,28 @@
                                 }
                             });
                         },
+                        blacklist:function(comment_id){
+                            $.ajax({
+                                type:'post',
+                                url:'/office/blacklist/report',
+                                data:{
+                                    'type': 'comment',
+                                    'target': comment_id,
+                                    'explain': 'null'
+                                },
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.status == 1){
+                                        alert(data.message);
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
                         vfaclass:function (is_nice) {
                             return is_nice ? 'fa-thumbs-up' : 'fa-thumbs-o-up';
                         },
@@ -296,14 +331,14 @@
                         </div>
                         <div class="panel-body">
                             <button v-for="tag in tags" class="btn btn-warning btn-xs" style="margin: 5px 5px">
-                                <span class="fa fa-tag"></span> @{{ tag.body }}
+                                <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}
                             </button>
                         </div>
                         @if(Auth::check() && Auth::user()->id == $discussion->user_id)
                             <div class="panel-footer text-center">
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" @click="getAllTags" data-toggle="modal" data-target="#tagsModal">
-                                    <span class="fa fa-tags"></span> 添加标签
+                                    <span class="fa fa-tags fa-lg"></span> 添加标签
                                 </button>
                                 <!-- Modal -->
                                 <div class="modal fade" id="tagsModal" tabindex="-1" role="dialog" aria-labelledby="tagsModalLabel">
@@ -312,19 +347,19 @@
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                 <h4 class="modal-title" id="tagsModalLabel">
-                                                    <span class="fa fa-tags"></span> 所有标签
+                                                    <span class="fa fa-tags fa-lg"></span> 所有标签
                                                 </h4>
                                             </div>
                                             <div class="modal-body">
                                                 <button v-for="tag in allTags" class="btn" :class="changeClass(tag)" style="margin: 5px 10px" @click="changeTag(tag)">
-                                                    <span class="fa fa-tag"></span> @{{ tag.body }}
+                                                    <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}
                                                 </button>
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="form-group">
                                                     <label for="tags-body"><input type="text" id="tags-body" /></label>
                                                     <button id="tags-submit" type="button" class="btn btn-primary" @click="createTags">
-                                                        <span class="fa fa-tags"></span> 新增标签
+                                                        <span class="fa fa-tags fa-lg"></span> 新增标签
                                                     </button>
                                                 </div>
                                             </div>
@@ -395,9 +430,7 @@
                             $.ajax({
                                 type: 'post',
                                 url: '/tag/createTag',
-                                data: {
-                                    'body': $('#tags-body').val()
-                                },
+                                data: {'body': $('#tags-body').val()},
                                 dataType: 'json',
                                 success: function (data) {
                                     $('#tags-submit').empty();
@@ -485,12 +518,12 @@
                             {{--用户关注讨论按钮--}}
                             @if(Auth::check())
                                 <button class="btn" :class="vbtnclass" @click="userDiscussionFollow()">
-                                    <span class="fa" :class="vbtnglyphicon"></span>
+                                    <span class="fa fa-lg" :class="vbtnglyphicon"></span>
                                     <span v-text="vbtntext"></span>
                                 </button>
                             @else
                                 <a href="/user/login" class="btn btn-danger">
-                                    <span class="fa fa-star-o"></span> 关注该讨论
+                                    <span class="fa fa-star-o fa-lg"></span> 关注该讨论
                                 </a>
                             @endif
                         </div>
@@ -613,17 +646,40 @@
                             @if(Auth::check())
                                 {{--用户关注用户按钮--}}
                                 <button class="btn" :class="vbtnclass" @click="userUserFollow()">
-                                    <span class="fa " :class="vbtnglyphicon"></span>
+                                    <span class="fa fa-lg" :class="vbtnglyphicon"></span>
                                     <span v-text="vbtntext"></span>
                                 </button>
-                                <button class="btn btn-primary">
-                                    <span class="fa fa-envelope"></span>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal">
+                                    <span class="fa fa-paper-plane-o fa-lg"></span>
                                     <span> 发私信 </span>
                                 </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="tagsModalLabel"> 发送私信 </h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="message-body">内容：</label>
+                                                <textarea name="message-body" class="form-control" id="message-body" rows="5" style="resize: none"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="form-group">
+                                                    <button id="message-submit" type="button" class="btn btn-primary" @click="sendMessage">
+                                                        <span class="fa fa-paper-plane-o fa-lg"></span> 发送
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @else
                                 <div class="forum-user-statics-item">
                                     <a href="/user/login" class="btn btn-danger">
-                                        <span class="fa fa-star-o"></span> 关注 TA
+                                        <span class="fa fa-star-o fa-lg"></span> 关注 TA
                                     </a>
                                 </div>
                             @endif
@@ -726,6 +782,25 @@
                                 success:function (data) {
                                     vm.userUser = data.userUser;
                                     vm.countUserFollowers = data.countUserFollowers;
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        sendMessage:function(){
+                            var vm = this;
+                            $.ajax({
+                                type:'post',
+                                url:'/notification/messageStore',
+                                data:{
+                                    'to_user_id':vm.user_id,
+                                    'body':$('#message-body').val()
+                                },
+                                dataType:'json',
+                                success:function (data) {
+                                    alert(data.message);
+                                    $('#messageModal').modal('toggle');
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);

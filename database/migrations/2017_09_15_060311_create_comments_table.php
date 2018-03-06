@@ -19,6 +19,8 @@ class CreateCommentsTable extends Migration
             $table->integer('nice_comment')->default(0); // 论坛精华回复
             $table->integer('user_id')->unsigned();
             $table->integer('discussion_id')->unsigned();
+            $table->boolean('blacklist')->default(false); // 黑名单
+            $table->softDeletes(); // 软删除
             $table->timestamps();
         });
     }

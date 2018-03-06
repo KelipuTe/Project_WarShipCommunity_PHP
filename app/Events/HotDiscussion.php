@@ -11,11 +11,25 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * 讨论被访问事件触发器
+ * Class HotDiscussion
+ * @package App\Events
+ */
 class HotDiscussion
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * 触发访问事件的讨论
+     * @var Discussion
+     */
     public $discussion;
+
+    /**
+     * 访问者的 ip 地址
+     * @var
+     */
     public $ip;
 
     /**

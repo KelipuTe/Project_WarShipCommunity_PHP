@@ -21,7 +21,7 @@
                 @foreach($warships as $warship)
                     <tr class="info">
                         <th scope="row" class="text-center"><div class="warship-table-margin">{{$warship->id}}</div></th>
-                        <td ><div class="warship-table-margin">{{$warship->classes}}</div></td>
+                        <td><div class="warship-table-margin">{{$warship->classes}}</div></td>
                         <td><div class="warship-table-margin">{{$warship->name}}</div></td>
                         <td><div class="warship-table-margin">{{$warship->no}}</div></td>
                         <td><div class="warship-table-margin">{{$warship->type}}</div></td>

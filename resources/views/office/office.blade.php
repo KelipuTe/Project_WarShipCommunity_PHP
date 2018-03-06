@@ -95,7 +95,28 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="violations">
-
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                                <div class="caption">
+                                    <h3 class="text-center">
+                                        <a href="/office/blacklist/notice" class="btn btn-primary"> 公告牌 </a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                                <div class="caption">
+                                    <h3 class="text-center">
+                                        <a href="/office/blacklist/archives" class="btn btn-primary"> 档案室 </a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="office">
                     <div class="row">

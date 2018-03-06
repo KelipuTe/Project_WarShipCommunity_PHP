@@ -11,11 +11,25 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * 讨论被点赞事件触发器
+ * Class NiceDiscussion
+ * @package App\Events
+ */
 class NiceDiscussion
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * 触发点赞事件的讨论
+     * @var Discussion
+     */
     public $discussion;
+
+    /**
+     * 点赞的用户 id
+     * @var
+     */
     public $user_id;
 
     /**

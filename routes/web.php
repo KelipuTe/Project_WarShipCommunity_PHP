@@ -21,6 +21,7 @@
  * UserController
  * NotificationController
  * OfficeController
+ * BlacklistController
  * WarshipController
  * ForumController
  * TagController
@@ -60,8 +61,13 @@ Route::post('/user/center/avatar','UserController@avatar'); // 上传头像
 Route::post('/user/center/avatarCrop','UserController@avatarCrop'); // 裁剪上传头像
 
 /* NotificationController */
-Route::get('/notification/showAll','NotificationController@showAll'); // 显示用户所有消息通知
-Route::get('/notification/showUnread','NotificationController@showUnread'); // 显示用户未读消息通知
+Route::get('/notification/center','NotificationController@showAll'); // 显示用户所有消息通知
+Route::get('/notification/unread','NotificationController@showUnread'); // 显示用户未读消息通知
+Route::get('/notification/fromPersonalLetter','NotificationController@showFromPersonalLetter'); // 显示用户发送的私信
+Route::get('/notification/getFromPersonalLetter','NotificationController@getFromPersonalLetter'); // 获得用户发送的私信
+Route::get('/notification/toPersonalLetter','NotificationController@showToPersonalLetter'); // 显示向该用户发送的私信
+Route::get('/notification/getToPersonalLetter','NotificationController@getToPersonalLetter'); // 获得向该用户发送的私信
+Route::post('/notification/messageStore','NotificationController@messageStore'); // 保存用户私信并发出站内信通知
 
 /* OfficeController 办公区 */
 Route::get('/office/getIntroductions','OfficeController@getIntroductions'); // 获取新人报道列表
@@ -72,6 +78,15 @@ Route::get('/office/create','OfficeController@create'); // 新人报道创建页
 Route::post('/office/store','OfficeController@store'); // 新人报道创建页面后台
 Route::get('/office/show/{id}','OfficeController@show'); // 新人报道显示页面
 Route::post('/office/show/welcome','OfficeController@welcome'); // 新人报道显示页面迎新后台
+
+/* BlacklistController */
+Route::get('/office/blacklist/archives','BlacklistController@archives'); // 举报档案页面
+Route::get('/office/blacklist/notice','BlacklistController@notice'); // 举报处理公示页面
+Route::post('/office/blacklist/report','BlacklistController@report'); // 用户举报
+Route::get('/office/blacklist/getBlacklists','BlacklistController@getBlacklists'); // 获得举报列表
+Route::get('/office/blacklist/getDoneBlacklists','BlacklistController@getDoneBlacklists'); // 获得举报列表
+Route::post('/office/blacklist/locking','BlacklistController@locking'); // 获得举报列表
+Route::post('/office/blacklist/agree','BlacklistController@agree'); // 获得举报列表
 
 /* WarshipController 办公区舰船管理 */
 Route::get('/office/warship/create','WarshipController@create'); // 舰船管理创建页面
