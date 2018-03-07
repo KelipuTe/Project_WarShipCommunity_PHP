@@ -1,6 +1,7 @@
-@extends('master.master')
-@section('breadCrumb')
-    {{--增加面包屑导航条目--}}
-    @parent
-    <li><a href="/factory">冷月制造厂</a></li>
+@extends('factory.app')
+@section('content')
+    <div class="text-center">
+        <button class="btn btn-primary" id="btn-build">重工制造</button>
+        <button class="btn btn-primary" id="btn-shoot">击落卫星</button>
+    </div>
 @stop

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\SpaceAdministration;
+use App\Satellite;
 use App\ThirdPartyLibrary\Markdown\Markdown;
 use EndaEditor;
 use Auth;
@@ -59,8 +59,8 @@ class SpaceAdministrationController extends Controller
         $data = [
             'user_id' => Auth::user()->id
         ];
-        $spaceAdministration = SpaceAdministration::create(array_merge($request->all(),$data));
-        return redirect()->action('SpaceAdministrationController@show',['id'=>$spaceAdministration->id]);
+        $satellite = Satellite::create(array_merge($request->all(),$data));
+        return redirect()->action('SpaceAdministrationController@show',['id'=>$satellite->id]);
     }
 
     /**
@@ -69,8 +69,8 @@ class SpaceAdministrationController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id){
-        $spaceAdministration = SpaceAdministration::findOrFail($id);
-        $html = $this->markdown->markdown($spaceAdministration->body); // 调用 Markdown 格式处理类将 Markdown 格式的文本转换为 html 格式的文本
-        return view('spaceAdministration/show',compact('spaceAdministration','html'));
+        $satellite = Satellite::findOrFail($id);
+        $html = $this->markdown->markdown($satellite->body); // 调用 Markdown 格式处理类将 Markdown 格式的文本转换为 html 格式的文本
+        return view('spaceAdministration/show',compact('satellite','html'));
     }
 }

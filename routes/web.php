@@ -29,6 +29,7 @@
  * ActivityController
  * AccountController
  * SpaceAdministrationController
+ * FactoryController
  */
 
 /* MasterController */
@@ -140,3 +141,7 @@ Route::get('/spaceAdministration/create','SpaceAdministrationController@create')
 Route::post('/spaceAdministration/upload','SpaceAdministrationController@upload'); // 航天局发射新的卫星上传图片后台
 Route::post('/spaceAdministration/store','SpaceAdministrationController@store'); // 航天局发射新的卫星后台
 Route::get('/spaceAdministration/show/{id}','SpaceAdministrationController@show'); // 航天局卫星显示页面
+
+/* FactoryController */
+
+Route::get('factory/show/{id}','FactoryController@show'); //

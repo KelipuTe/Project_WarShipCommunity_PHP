@@ -2,7 +2,7 @@
 @section('breadCrumb')
     {{--增加面包屑导航条目--}}
     @parent
-    <li><a href="" id="spaceAdministration-id" name="{{$spaceAdministration->id}}">{{$spaceAdministration->title}}</a></li>
+    <li><a href="" id="spaceAdministration-id" name="{{$satellite->id}}">{{$satellite->title}}</a></li>
 @stop
 @section('content')
     <div class="row">
@@ -10,8 +10,8 @@
             {{--卫星主体内容--}}
             <div class="panel panel-danger">
                 <div class="panel-heading">
-                    <h2>{{$spaceAdministration->title}}
-                        @if(Auth::check() && Auth::user()->id == $spaceAdministration->user_id)
+                    <h2>{{$satellite->title}}
+                        @if(Auth::check() && Auth::user()->id == $satellite->user_id)
                             <a class="btn btn-danger btn-sm pull-right" href="" role="button">爆破</a>
                         @endif
                     </h2>

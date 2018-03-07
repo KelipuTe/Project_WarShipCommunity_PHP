@@ -8,11 +8,11 @@
                     <div class="lunbo">
                         {{--卫星条目轮播区域--}}
                         <dl id="lunbo-area" class="lunbo-dl">
-                            @foreach($spaceAdministrations as $spaceAdministration)
+                            @foreach($satellites as $satellite)
                                 <dt class="lunbo-dt">
-                                    <span>{{$spaceAdministration->id}} 号卫星</span>
-                                    <a href="/spaceAdministration/show/{{$spaceAdministration->id}}"> {{$spaceAdministration->title}} </a>
-                                    <span>发射于 {{$spaceAdministration->created_at}}</span>
+                                    <span>{{$satellite->id}} 号卫星</span>
+                                    <a href="/spaceAdministration/show/{{$satellite->id}}"> {{$satellite->title}} </a>
+                                    <span>发射于 {{$satellite->created_at}}</span>
                                 </dt>
                             @endforeach
                         </dl>

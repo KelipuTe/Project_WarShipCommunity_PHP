@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSpaceAdministrationsTable extends Migration
+class CreateSatellitesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSpaceAdministrationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('space_administrations', function (Blueprint $table) {
+        Schema::create('satellites', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title'); // 卫星标题
             $table->text('body'); // 卫星内容
@@ -31,6 +31,6 @@ class CreateSpaceAdministrationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('space_administrations');
+        Schema::dropIfExists('satellites');
     }
 }

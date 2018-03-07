@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\SpaceAdministration;
+use App\Satellite;
 use App\Warship;
 use Auth;
 use Illuminate\Support\Facades\Redis;
@@ -78,9 +78,9 @@ class MasterController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function spaceAdministration(){
-        $spaceAdministrations = SpaceAdministration::latest()->notDestroyed()->get();
-        $count = count($spaceAdministrations);
-        return view('spaceAdministration/spaceAdministration',compact('spaceAdministrations','count'));
+        $satellites = Satellite::latest()->notDestroyed()->get();
+        $count = count($satellites);
+        return view('spaceAdministration/spaceAdministration',compact('satellites','count'));
     }
 
     /**

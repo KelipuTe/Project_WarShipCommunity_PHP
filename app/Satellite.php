@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * 卫星类
- * Class SpaceAdministration
+ * Class Satellite
  * @package App
  */
-class SpaceAdministration extends Model
+class Satellite extends Model
 {
-    protected $table = 'space_administrations';
+    protected $table = 'satellites';
 
     protected $fillable = ['title','body','user_id'];
 
