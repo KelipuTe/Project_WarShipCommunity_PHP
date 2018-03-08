@@ -143,5 +143,8 @@ Route::post('/spaceAdministration/store','SpaceAdministrationController@store');
 Route::get('/spaceAdministration/show/{id}','SpaceAdministrationController@show'); // 航天局卫星显示页面
 
 /* FactoryController */
-
+Route::get('factory/create','FactoryController@create'); //
 Route::get('factory/show/{id}','FactoryController@show'); //
+Route::get('factory/getFactories','FactoryController@getFactories'); //
+Route::get('factory/getFactory','FactoryController@getFactory'); //
+Route::post('factory/editView','FactoryController@editView'); //

@@ -73,18 +73,17 @@
             </div>
             <script>
                 $(document).ready(function() {
-                    if($('#name').val() == "" || $('#name').val() == null){console.log(1);
+                    if($('#name').val() == "" || $('#name').val() == null){
                         $('#warship-submit').attr('disabled',true);
                         $('#picture').attr('disabled',true);
                         $('#image').attr('disabled',true);
                     }
                     $('#name').blur(function () {
-
-                        if($('#name').val() != "" && $('#name').val() != null){console.log(2);
+                        if($('#name').val() != "" && $('#name').val() != null){
                             $('#warship-submit').attr('disabled',false);
                             $('#picture').attr('disabled',false);
                             $('#image').attr('disabled',false);
-                        } else {console.log(3);
+                        } else {
                             $('#warship-submit').attr('disabled',true);
                             $('#picture').attr('disabled',true);
                             $('#image').attr('disabled',true);

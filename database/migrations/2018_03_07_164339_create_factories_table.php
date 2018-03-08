@@ -15,6 +15,7 @@ class CreateFactoriesTable extends Migration
     {
         Schema::create('factories', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('title')->nullable(); // 标题
             $table->string('preview')->nullable(); // 预览图
             $table->string('view_front')->nullable(); // 前视图
             $table->string('view_back')->nullable(); // 后视图

@@ -34,7 +34,7 @@ class ForumController extends Controller
      */
     public function getDiscussions(){
         $discussions = Discussion::latest()->blacklist()->published()->paginate(10);
-        return Response::json(['discussions' => $discussions,]);
+        return Response::json(['discussions' => $discussions]);
     }
 
     /**
@@ -87,7 +87,7 @@ class ForumController extends Controller
     public function getComments($discussion_id){
         $discussion = Discussion::findOrFail($discussion_id);
         $comments = $discussion->comments()->blacklist()->latest()->paginate(10);
-        return Response::json(['comments' => $comments,]);
+        return Response::json(['comments' => $comments]);
     }
 
     /**
