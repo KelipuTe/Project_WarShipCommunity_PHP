@@ -143,8 +143,9 @@ Route::post('/spaceAdministration/store','SpaceAdministrationController@store');
 Route::get('/spaceAdministration/show/{id}','SpaceAdministrationController@show'); // 航天局卫星显示页面
 
 /* FactoryController */
-Route::get('factory/create','FactoryController@create'); //
-Route::get('factory/show/{id}','FactoryController@show'); //
-Route::get('factory/getFactories','FactoryController@getFactories'); //
-Route::get('factory/getFactory','FactoryController@getFactory'); //
-Route::post('factory/editView','FactoryController@editView'); //
+Route::get('factory/create','FactoryController@create'); // 创建工厂单位
+Route::get('factory/show/{id}','FactoryController@show'); // 显示工厂单位
+Route::get('factory/getFactories','FactoryController@getFactories'); // 获得所有工厂单位
+Route::get('factory/getFactory','FactoryController@getFactory'); // 获得工厂单位
+Route::post('factory/editView','FactoryController@editView'); // 修改工厂单位视图
+Route::post('factory/filePost','FactoryController@filePost'); // 修改工厂单位原文件

@@ -3,19 +3,28 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1" role="main">
             <div class="jumbotron">
-                <div class="container">
-                    <h2>侦测到在轨卫星 {{$count}} 个 </h2>
-                    <div class="lunbo">
-                        {{--卫星条目轮播区域--}}
-                        <dl id="lunbo-area" class="lunbo-dl">
-                            @foreach($satellites as $satellite)
-                                <dt class="lunbo-dt">
-                                    <span>{{$satellite->id}} 号卫星</span>
-                                    <a href="/spaceAdministration/show/{{$satellite->id}}"> {{$satellite->title}} </a>
-                                    <span>发射于 {{$satellite->created_at}}</span>
-                                </dt>
-                            @endforeach
-                        </dl>
+                <div class="container row">
+                    <div class="col-md-10">
+                        <h2>侦测到在轨卫星 {{$count}} 个 </h2>
+                        <div class="lunbo">
+                            {{--卫星条目轮播区域--}}
+                            <dl id="lunbo-area" class="lunbo-dl">
+                                @foreach($satellites as $satellite)
+                                    <dt class="lunbo-dt">
+                                        <span>{{$satellite->id}} 号卫星</span>
+                                        <a href="/spaceAdministration/show/{{$satellite->id}}"> {{$satellite->title}} </a>
+                                        <span>发射于 {{$satellite->created_at}}</span>
+                                    </dt>
+                                @endforeach
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        @if(Auth::check())
+                            <a class="btn btn-danger btn-lg text-center" href="/spaceAdministration/create" style="height: 113px;width: 113px" role="button">
+                                <span class="fa fa-rocket fa-lg" style="font-size: 80px;margin-top: 20px"></span>
+                            </a>
+                        @endif
                     </div>
                 </div>
                 <script>
@@ -55,16 +64,6 @@
                     });
                 </script>
             </div>
-            {{--判断用户是否登录--}}
-            @if(Auth::check())
-                <div class="jumbotron">
-                    <div class="container">
-                        <h2>Welcome！
-                            <a class="btn btn-danger btn-lg pull-right" href="/spaceAdministration/create" role="button">发射新的卫星</a>
-                        </h2>
-                    </div>
-                </div>
-            @endif
         </div>
     </div>
 @stop

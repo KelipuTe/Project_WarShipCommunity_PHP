@@ -9,13 +9,13 @@
                     </h2>
                 </div>
             </div>
-            <div class="jumbotron activity-jumbotron">
+            {{--<div class="jumbotron activity-jumbotron">
                 <div class="container">
                     <h2>投票
                         <a class="btn btn-danger btn-lg pull-right" href="/activity/vote" role="button">参加</a>
                     </h2>
                 </div>
-            </div>
+            </div>--}}
             <div class="jumbotron activity-jumbotron">
                 <div class="container">
                     <h2>公共聊天室

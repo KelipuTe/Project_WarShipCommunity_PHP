@@ -31,7 +31,14 @@ class FactoryController extends Controller
 
     public  function getFactory(){
         $factory = Factory::findOrFail(request('factory_id'));
-        return Response::json(['factory' => $factory]);
+        $isUser = false;
+        if($factory->user_id == Auth::user()->id){
+            $isUser = true;
+        }
+        return Response::json([
+            'isUser' => $isUser,
+            'factory' => $factory
+        ]);
     }
 
     public function editView(Request $request){
@@ -52,9 +59,10 @@ class FactoryController extends Controller
         $destinationPath = 'uploads/factory/'.$factory_id.'/'; // 保存上传头像的文件夹，在 public/uploads/factory/id 目录下
         $filename = time().'_'.$file->getClientOriginalName(); // 头像文件重命名
         $file->move($destinationPath, $filename); // 将上传的图片移到 uploads/factory/id 文件夹下
-        Image::make($destinationPath.$filename)->fit(400)->save(); // 裁剪图像 400 * 400
+        //Image::make($destinationPath.$filename)->fit(400)->save(); // 裁剪图像 400 * 400
         $factory = Factory::findOrFail($factory_id); //
         switch($direction){
+            case 'preview':$factory->preview = asset($destinationPath.$filename);break;
             case 'front':$factory->view_front = asset($destinationPath.$filename);break;
             case 'back':$factory->view_back = asset($destinationPath.$filename);break;
             case 'left':$factory->view_left = asset($destinationPath.$filename);break;
@@ -68,6 +76,21 @@ class FactoryController extends Controller
             'success' => true,
             'direction' => $direction,
             'view' => asset($destinationPath.$filename)
+        ]);
+    }
+
+    public function filePost(Request $request){
+        $factory_id = $request->get('file-post-factory-id');
+        $file = $request->file('file-post-file'); // 拿到上传文件
+        $destinationPath = 'uploads/factory/'.$factory_id.'/';
+        $filename = time().'_'.$file->getClientOriginalName(); // 头像文件重命名
+        $file->move($destinationPath, $filename);
+        $factory = Factory::findOrFail($factory_id); //
+        $factory->file = asset($destinationPath.$filename);
+        $factory->save(); // 保存
+        return Response::json([
+            'success' => true,
+            'fileURL' => asset($destinationPath.$filename)
         ]);
     }
 }
