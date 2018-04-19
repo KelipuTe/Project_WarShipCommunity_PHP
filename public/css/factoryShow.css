@@ -1,0 +1,445 @@
+div{
+    box-sizing: border-box;
+}
+h3{
+    margin-top: 25px;
+}
+.model-body{
+    background: #000000;
+}
+.model-stage{
+    width: 1200px; height: 800px;
+    min-width: 1200px; min-height: 800px;
+    position: relative;
+    margin: 15px auto 0;
+}
+.model-main{
+    height: 800px;
+    min-height: 800px;
+    position: relative;
+    float: left;
+}
+/* 左侧 */
+.main-left{
+    width: 400px;
+    min-width: 400px;
+    overflow: hidden;
+}
+/* 中间 */
+.main-center{
+    width: 500px;
+    min-width: 500px;
+}
+/* 右侧 */
+.main-right{
+    width: 300px;
+    min-width: 300px;
+}
+/* 左侧上方 */
+.left-top{
+    width: 80px; height: 180px;
+    position: absolute; left: -85px; /*left -85->0*/
+    border: 5px solid #5588aa; border-bottom-right-radius:80px;
+    filter: blur(2px);
+    transition: all 1s 0s ease-out;
+}
+.left-top-over{
+    z-index: 2;
+    width: 80px; height: 180px;
+    position: absolute; left: -85px; /*left -85->0*/
+    padding-top: 10px;
+    transition: all 1s 0s ease-out;
+}
+.btn-left-top{
+    width: 40px; height: 40px;
+    position: relative;
+    margin: 10px 20px;
+    background-color: transparent;
+    border: 2px solid #286090;
+    font-size: 24px;
+}
+/* 左侧下方 */
+.left-bottom{
+    width: 80px; height: 180px;
+    position: absolute; left: -85px; bottom: 0; /*left -85->0*/
+    border: 5px solid #5588aa; border-top-right-radius:80px;
+    filter: blur(2px);
+    transition: all 1s 0s ease-out;
+}
+.left-bottom-over{
+    width: 80px; height: 180px;
+    position: absolute; left: -85px; bottom: 0; /*left -85->0*/
+    padding-top: 50px;
+    transition: all 1s 0s ease-out;
+}
+/* 左侧下方按钮 */
+.btn-left-bottom{
+    width: 40px; height: 40px;
+    position: relative;
+    margin: 10px 20px;
+    background-color: transparent;
+    border: 2px solid #286090;
+    font-size: 24px;
+}
+.btn-left-bottom-edit{
+    width: 40px; height: 40px;
+    position: relative;
+    margin: 10px 20px;
+    background-color: transparent;
+    border: 2px solid #f0ad4e;
+    font-size: 24px;
+}
+/* 左侧上方右侧容器 */
+.left-top-right{
+    width: 250px; height: 150px;
+    position: absolute; left: 125px; top: -155px; /*-155->25*/
+    border: 5px solid #5588aa; border-radius:25px;
+    background: radial-gradient(200px 100px ellipse, transparent 60%, #5588aa 100%);
+    filter: blur(2px);
+    transition: all 2s 0s ease-out;
+}
+.left-top-right-over{
+    width: 250px; height: 150px;
+    position: absolute; left: 125px; top: -155px; /*-155->25*/
+    padding: 25px 25px;
+    color: #ffcc22;
+    transition: all 2s 0s ease-out;
+ }
+/* 左侧下方右侧容器 */
+.left-bottom-right{
+    width: 250px; height: 150px;
+    position: absolute; left: 125px; bottom: -155px; /*bottom -155->25*/
+    border: 5px solid #5588aa; border-radius:25px;
+    background: radial-gradient(200px 100px ellipse, transparent 60%, #5588aa 100%);
+    filter: blur(2px);
+    transition: all 2s 0s ease-out;
+}
+.left-bottom-right-over{
+    width: 250px; height: 150px;
+    position: absolute; left: 125px; bottom: -155px; /*bottom -155->25*/
+    padding: 25px 25px;
+    color: #ffcc22;
+    transition: all 2s 0s ease-out;
+}
+/* 左侧中间 */
+.left-center{
+    width: 350px; height: 300px;
+    position: absolute; left: -355px; top: 250px; /*left -355->25*/
+    border: 5px solid #5588aa; border-radius:5px;
+    background: radial-gradient(250px 200px ellipse, transparent 75%, #5588aa 100%);
+    filter: blur(2px);
+    transition: all 2s 0s ease-out;
+}
+.left-center-over{
+    width: 350px; height: 300px;
+    position: absolute; left: -355px; top: 250px; /*left -355->25*/
+    padding: 25px 50px;
+    color: #ffcc22;
+    transition: all 2s 0s ease-out;
+}
+/* 左侧中间头部 */
+.left-center-top{
+    width: 350px; height: 50px;
+    position: absolute; left: 25px; top: 340px; /*top 340->200*/
+    background: linear-gradient(135deg, transparent 15px, #116655 0) no-repeat top left;
+    filter: blur(2px);
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+}
+.left-center-top-over{
+    width: 350px; height: 50px;
+    position: absolute; left: 25px; top: 340px; /*top 340->200*/
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+}
+.left-center-top-text{
+    margin-top: 15px;
+    color: #ffcc22;
+}
+/* 左侧中间底部 */
+.left-center-bottom{
+    width: 350px; height: 50px;
+    position: absolute; left: 25px; top: 390px; /*top 390->550*/
+    background: linear-gradient(45deg, transparent 15px, #116655 0) no-repeat bottom left;
+    filter: blur(2px);
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+}
+/* 中间上方 */
+.center-top{
+    width: 480px; height: 150px;
+    position: relative;
+    margin-left: 10px;
+    padding-top: 20px;
+    background:
+            linear-gradient(135deg,#58a 0,transparent 20px) top left,
+            linear-gradient(-135deg,#58a 0,transparent 20px) top right,
+            linear-gradient(-45deg,#58a 0,transparent 20px) bottom right,
+            linear-gradient(45deg,#58a 0,transparent 20px) bottom left;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+    color: #66ccff;
+    opacity: 0;
+    transition: all 2s 0s ease-out;
+}
+/* 中间上方文字容器 */
+.center-top-box{
+    height: 50px; width: 480px;
+    position: relative;
+    margin-bottom: 15px;
+}
+/* 中间顶部左侧圆形文字 */
+.center-left-text-circle{
+    height: 50px; width: 50px;
+    position: absolute; left: 190px; /*left 190->180*/
+    border: 1px solid #5588aa; border-radius: 50%;
+    font-size: 36px;
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+
+}
+/* 中间顶部右侧圆形文字 */
+.center-right-text-circle{
+    height: 50px; width: 50px;
+    position: absolute; left: 240px; /*left 240->250*/
+    border: 1px solid #5588aa; border-radius: 50%;
+    font-size: 36px;
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+}
+/* 中间顶部左侧文字方块 */
+.center-left-text-box{
+    height: 50px; width: 80px;
+    position: absolute; left: 160px; /*left 160->90*/
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+}
+/* 中间顶部右侧文字方块 */
+.center-right-text-box{
+    height: 50px; width: 80px;
+    position: absolute; left: 240px; /*left 250->310*/
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+}
+/* 中间顶部左侧数据方块 */
+.center-left-data-box{
+    height: 50px; width: 80px;
+    position: absolute; left: 160px; /*left 170->0*/
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+}
+/* 中间顶部右侧数据方块 */
+.center-right-data-box{
+    height: 50px; width: 80px;
+    position: absolute; left: 240px; /*left 240->400*/
+    opacity: 0;
+    transition: all 0.5s 0s ease-out;
+}
+/* 中间中部 */
+.center-center{
+    width: 450px; height: 450px;
+    position: absolute; top: 175px; left: 25px;
+    border: 0 solid #22FF44; border-radius: 50px;
+    background: radial-gradient(400px 350px ellipse, transparent 70%, #22FF44 100%);
+    filter: blur(2px);
+}
+.center-center-stage{
+    width: 450px; height: 450px;
+    position: absolute; top: 175px; left: 25px;
+    perspective: 800px;
+}
+/* 中间雷达文字层次容器 */
+.center-center-over{
+    z-index: 2;
+    width: 500px; height: 500px;
+    position: absolute; top: 150px;
+    background: #000000;
+    opacity: 1;
+    transition: all 1s 0s ease-out;
+}
+/* 雷达文字 */
+.radar-base{
+    width:300px; height: 100px;
+    position: absolute; left: 100px; top: 200px;
+    font-size: 64px;
+    color: #ffcc22;
+    opacity: 0;
+}
+@keyframes radar-text {
+    0% {  opacity: 0;  }
+    50% {  opacity: 1;  }
+    100% {  opacity: 0;  }
+}
+/* 雷达 */
+.radar {
+    background:
+            -webkit-radial-gradient(center, rgba(32, 255, 77, 0.3) 0%, rgba(32, 255, 77, 0) 75%),
+            -webkit-repeating-radial-gradient(rgba(32, 255, 77, 0) 5.8%, rgba(32, 255, 77, 0) 18%, #20ff4d 18.6%, rgba(32, 255, 77, 0) 18.9%),
+            -webkit-linear-gradient(90deg, rgba(32, 255, 77, 0) 49.5%, #20ff4d 50%, #20ff4d 50%, rgba(32, 255, 77, 0) 50.2%),
+            -webkit-linear-gradient(0deg, rgba(32, 255, 77, 0) 49.5%, #20ff4d 50%, #20ff4d 50%, rgba(32, 255, 77, 0) 50.2%);
+    background:
+            radial-gradient(center, rgba(32, 255, 77, 0.3) 0%, rgba(32, 255, 77, 0) 75%),
+            repeating-radial-gradient(rgba(32, 255, 77, 0) 5.8%, rgba(32, 255, 77, 0) 18%, #20ff4d 18.6%, rgba(32, 255, 77, 0) 18.9%),
+            linear-gradient(90deg, rgba(32, 255, 77, 0) 49.5%, #20ff4d 50%, #20ff4d 50%, rgba(32, 255, 77, 0) 50.2%),
+            linear-gradient(0deg, rgba(32, 255, 77, 0) 49.5%, #20ff4d 50%, #20ff4d 50%, rgba(32, 255, 77, 0) 50.2%);
+    width:400px; height: 400px;
+    max-width: 75vh; max-height: 75vh;
+    position: relative;
+    margin: 50px 50px;
+    border: 0.2rem solid #20ff4d; border-radius: 50%;
+    overflow: hidden;
+}
+.radar:after {
+    content: '';
+    display: block;
+    background-image: linear-gradient(44deg, rgba(0, 255, 51, 0) 50%, #00ff33 100%);
+    width: 50%; height: 50%;
+    position: absolute; top: 0; left: 0;
+    border-radius: 100% 0 0 0;
+    transform-origin: bottom right;
+    animation: radar-beam 2s infinite;
+    animation-timing-function: linear;
+}
+@keyframes radar-beam {
+    0% {  transform: rotate(0deg);  }
+    100% {  transform: rotate(360deg);  }
+}
+/* 立方体容器 */
+.model-container{
+    width: 300px; height: 300px;
+    position: absolute; left: 75px; top: 75px;
+    transform-style: preserve-3d;
+    transition: all 3s 0s ease-out;
+    overflow:visible;
+}
+/* 立方体不同方向 */
+.model-side{
+    width: 300px; height: 300px;
+    position: absolute;
+    overflow:visible;
+}
+.model-front{
+    z-index:2;
+    transform:translateZ(150px);
+    overflow:visible;
+}
+.model-back{
+    z-index:1;
+    transform:translateZ(-150px) rotateY(180deg);
+    overflow:visible;
+}
+.model-left{
+    left: -300px;
+    transform-origin: right;
+    transform:translateZ(150px) rotateY(-90deg);
+    overflow:visible;
+}
+.model-right{
+    left: 300px;
+    transform-origin: left;
+    transform:translateZ(150px) rotateY(90deg);
+    overflow:visible;
+}
+.model-top{
+    top: -300px;
+    transform-origin: bottom;
+    transform:translateZ(150px) rotateX(90deg);
+    overflow:visible;
+}
+.model-bottom{
+    top: 300px;
+    transform-origin: top;
+    transform:translateZ(150px) rotateX(-90deg);
+    overflow:visible;
+}
+/* 立方体旋转 */
+.model-container-show-front{ transform: rotateY(0deg); }
+.model-container-show-back{ transform: rotateY(180deg); }
+.model-container-show-left{ transform: rotateY(90deg); }
+.model-container-show-right{ transform: rotateY(-90deg); }
+.model-container-show-top{ transform: rotateX(-90deg); }
+.model-container-show-bottom{ transform: rotateX(90deg); }
+/* 中间下方 */
+.center-bottom{
+    width: 500px; height: 150px;
+    position: absolute; top: 650px;
+    padding-top: 30px;
+    background:
+            linear-gradient(135deg,#58a 0,transparent 20px) top left,
+            linear-gradient(-135deg,#58a 0,transparent 20px) top right,
+            linear-gradient(-45deg,#58a 0,transparent 20px) bottom right,
+            linear-gradient(45deg,#58a 0,transparent 20px) bottom left;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+    color: #ffcc22;
+    opacity: 0;
+    transition: all 2s 0s ease-out;
+}
+/* 右侧上方 */
+.right-top{
+    width: 300px; height: 150px;
+    padding-top: 50px;
+    opacity: 0;
+    transition: all 2s 0s ease-out;
+}
+/* 右侧中间 */
+.right-center{
+    width: 300px; height: 350px;
+    overflow: hidden;
+}
+/* 右侧中间内部 */
+.right-center-north{
+    width: 300px; height: 75px;
+    position: relative; top: -100px;
+    margin: 10px 0;
+    transition: all 1s 0s ease-out;
+}
+.right-center-center{
+    width: 300px; height: 150px;
+    position: relative; left: 300px;
+    margin: 15px 0;
+    transition: all 1s 0s ease-out;
+}
+.right-center-south{
+    width: 300px; height: 75px;
+    position: relative; bottom: -100px;
+    margin: 10px 0;
+    transition: all 1s 0s ease-out;
+}
+/* 右侧中间按钮 */
+.btn-right-center-north{
+    width: 80px; height: 75px;
+    margin: 0 5px;
+}
+.btn-right-center-center{
+    width: 150px; height: 150px;
+}
+.btn-right-center-south{
+    width: 80px; height: 75px;
+    margin: 0 5px;
+}
+/* 右侧下方 */
+.right-bottom{
+    width: 300px; height: 300px;
+    transform-style: preserve-3d;
+    perspective: 800px;
+    overflow: hidden;
+}
+/*.right-bottom-circle{
+    width: 250px; height: 250px;
+    position: absolute; left: 25px; top: 25px;
+    border-radius: 100%;
+    transition: all 3s 0s ease-out;
+    transform: translateZ(-10000px);
+    opacity: 0;
+}*/
+/* 模态框表单浏览按钮 */
+.picture{
+    z-index: 5;
+    width: 568px; height: 36px;
+    position: absolute;
+    opacity: 0;
+}
+.picture-button{
+    z-index: 4;
+}

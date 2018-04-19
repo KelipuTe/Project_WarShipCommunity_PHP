@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccountsTable extends Migration
+class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('liveness')->default(0); // 用户活跃度
-            $table->integer('bonus_points')->default(0); // 用户账户积分
-            $table->double('balance')->default(0); // 用户账户余额
+            $table->string('name')->unique(); // admin
+            $table->string('label')->nullable(); // what is admin
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreateAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('roles');
     }
 }

@@ -15,6 +15,12 @@ class Satellite extends Model
 
     protected $fillable = ['title','body','user_id'];
 
+    protected $appends = ['username'];
+
+    public function getUsernameAttribute(){
+        return $this->user()->get(['username']);
+    }
+
     /**
      * 可以将 published_at 变量转换为 Carbon 类型
      * @var array

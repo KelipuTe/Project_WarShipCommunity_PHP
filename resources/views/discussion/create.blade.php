@@ -1,4 +1,4 @@
-@extends('forum.app')
+@extends('discussion.app')
 @section('breadCrumb')
     {{--增加面包屑导航条目--}}
     @parent
@@ -37,7 +37,7 @@
                         $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
                         $.ajax({
                             type: 'post',
-                            url: '/forum/store',
+                            url: '/discussion/store',
                             data: {
                                 'title': $('#title').val(),
                                 'published_at': $('#published_at').val(),
@@ -48,7 +48,7 @@
                                 $('#submit').empty();
                                 $('#submit').text('提交');
                                 if(data.status == 1){
-                                    window.location.href = "/forum/show/"+ data.discussion_id;
+                                    window.location.href = "/discussion/show/"+ data.discussion_id;
                                 } else if(data.status == 0){
                                     makeAlertBox('danger',data.message);
                                 } else {
@@ -69,7 +69,7 @@
                     });
                 });
             </script>
-            {{--<form action="/forum/store" method="post">
+            {{--<form action="/discussion/store" method="post">
                 Laravel框架为了防止跨域请求攻击（CSRF）而为用户生成的随机令牌，
                 post请求如果没有验证token，就出现报错信息，
                 在form表单中添加一个隐藏域，携带token参数即可

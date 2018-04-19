@@ -47,12 +47,12 @@
     </div>
     <script>
         /* 监听 127.0.0.1:3000 端口 */
-        /*var socket = io('127.0.0.1:3000');
+        var socket = io('127.0.0.1:3000');
         socket.on('public-channel:publicChat',function (data) {
             $('#publicChatRoom').append($('<dt>').text(data.username));
             $('#publicChatRoom').append($('<dt>').text(data.time));
             $('#publicChatRoom').append($('<dt>').text(data.chatMessage));
-        });*/
+        });
 
         /* 监听 172.17.93.1:3000 端口 */
         var socket = io('172.17.93.1:3000');

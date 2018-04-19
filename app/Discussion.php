@@ -84,7 +84,15 @@ class Discussion extends Model
      * @param $query
      */
     public function scopePublished($query){
-        $query -> where('published_at','<=',Carbon::now());
+        $query->where('published_at','<=',Carbon::now());
+    }
+
+    public function scopeHotDiscussion($query){
+        $query->orderBy('hot_discussion','desc');
+    }
+
+    public function scopeNiceDiscussion($query){
+        $query->orderBy('nice_discussion','desc');
     }
 
     /**
@@ -92,7 +100,7 @@ class Discussion extends Model
      * @param $query
      */
     public function scopeBlacklist($query){
-        $query -> where('blacklist','!=',true);
+        $query->where('blacklist','!=',true);
     }
 
     /**

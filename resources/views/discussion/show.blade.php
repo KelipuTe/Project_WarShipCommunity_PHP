@@ -1,4 +1,4 @@
-@extends('forum.app')
+@extends('discussion.app')
 @section('breadCrumb')
     {{--增加面包屑导航条目--}}
     @parent
@@ -75,7 +75,7 @@
                             var discussion_id = href[href.length-1];
                             $.ajax({
                                 type:'GET',
-                                url:'/forum/getDiscussion/' + discussion_id,
+                                url:'/discussion/getDiscussion/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
                                     vm.discussion = data.discussion;
@@ -94,7 +94,7 @@
                             var vm = this;
                             $.ajax({
                                 type:'GET',
-                                url:'/forum/niceDiscussion/' + discussion_id,
+                                url:'/discussion/niceDiscussion/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == 1){
@@ -113,12 +113,12 @@
                         softDelete:function(discussion_id){
                             $.ajax({
                                 type:'GET',
-                                url:'/forum/softdelete/' + discussion_id,
+                                url:'/discussion/softdelete/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == true){
                                         alert(data.message);
-                                        window.location.href = "/forum";
+                                        window.location.href = "/discussion";
                                     } else {
                                         alert(data.message);
                                     }
@@ -220,11 +220,11 @@
                                 href = href[0].split('/');
                             }
                             var discussion_id = href[href.length-1];
-                            var url = '/forum/getComments/' + discussion_id;
+                            var url = '/discussion/getComments/' + discussion_id;
                             if( location.href.indexOf('?') != -1 ){
                                 //判断是不是翻页后的地址，携带 ?page=number
                                 var href = location.href.split('=');
-                                url = '/forum/getComments/'+id+'?page='+ href[href.length-1];
+                                url = '/discussion/getComments/' + discussion_id + '?page='+ href[href.length-1];
                             }
                             $.ajax({
                                 type:'GET',
@@ -232,7 +232,7 @@
                                 dataType:'json',
                                 success:function (data) {
                                     vm.comments = data.comments.data;
-                                    pageList(data.comments,'http://localhost/forum/show/'+discussion_id); // 构造分页按钮列表
+                                    pageList(data.comments,'http://localhost/discussion/show/'+discussion_id); // 构造分页按钮列表
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -242,7 +242,7 @@
                         niceComment:function (comment_id) {
                             $.ajax({
                                 type:'GET',
-                                url:'/forum/niceComment/' + comment_id,
+                                url:'/discussion/niceComment/' + comment_id,
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == 1){
@@ -828,7 +828,7 @@
                         var id = href[href.length-1];
                         $.ajax({
                             type: 'post',
-                            url: '/forum/show/comment',
+                            url: '/discussion/show/comment',
                             data: {
                                 'discussion_id': id,
                                 'body': UE.getEditor('ue-container').getContent()

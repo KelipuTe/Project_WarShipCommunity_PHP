@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="api-token" content="{{ Auth::check() ? 'Bearer '.Auth::user()->api_token : 'Bearer ' }}">
     <title>WarShipCommunity</title>
     {{--引入需要用到的文件--}}
     <link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css">
@@ -88,7 +89,7 @@
         <div class="col-md-6">
             <dl class="dt-row-by-3 text-center">
                 <dt><a href="/office" class="btn btn-info"><span class="fa fa-book fa-lg"></span> 办公区 </a></dt>
-                <dt><a href="/forum" class="btn btn-info"><span class="fa fa-commenting-o fa-lg"></span> 讨论区 </a></dt>
+                <dt><a href="/discussion" class="btn btn-info"><span class="fa fa-commenting-o fa-lg"></span> 讨论区 </a></dt>
                 <dt><a href="/activity" class="btn btn-info"><span class="fa fa-calendar fa-lg"></span> 活动区 </a></dt>
                 <dt><a href="/spaceAdministration" class="btn btn-info"><span class="fa fa-rocket fa-lg"></span> 冷月航天局 </a></dt>
                 <dt><a href="/factory" class="btn btn-info"><span class="fa fa-cog fa-lg"></span> 冷月制造厂 </a></dt>
@@ -140,6 +141,7 @@
         <span> Powered by <a href="https://d.laravel-china.org/docs/5.5"> Laravel 5.5 </a></span>
     </div>
 </footer>
+<script type="text/javascript" rel="script" src="/js/app.js"></script>
 <script>
     $(document).ready(function () {
         /* 添加 CSRF 保护 */

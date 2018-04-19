@@ -20,10 +20,10 @@
                             <a href="#"><span class="fa fa-lg"></span> 站内通知 </a>
                         </li>
                         <li role="presentation" class="list-li">
-                            <a href="/notification/fromPersonalLetter"><span class="fa fa-edit fa-lg"></span> 我发出的私信 </a>
+                            <a href="/notification/fromPersonalLetter"><span class="fa fa-edit fa-lg"></span> 发出私信 </a>
                         </li>
                         <li role="presentation" class="list-li">
-                            <a href="/notification/toPersonalLetter"><span class="fa fa-paper-plane-o fa-lg"></span> 发给我的私信 </a>
+                            <a href="/notification/toPersonalLetter"><span class="fa fa-paper-plane-o fa-lg"></span> 收到私信 </a>
                         </li>
                     </ul>
                 </div>

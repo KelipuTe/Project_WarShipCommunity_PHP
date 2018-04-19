@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Response;
 use App\Satellite;
 use App\ThirdPartyLibrary\Markdown\Markdown;
 use EndaEditor;
@@ -72,5 +73,12 @@ class SpaceAdministrationController extends Controller
         $satellite = Satellite::findOrFail($id);
         $html = $this->markdown->markdown($satellite->body); // 调用 Markdown 格式处理类将 Markdown 格式的文本转换为 html 格式的文本
         return view('spaceAdministration/show',compact('satellite','html'));
+    }
+
+    public function getSatellites(){
+        $satellites = Satellite::latest()->notDestroyed()->get();
+        return Response::json([
+            'satellites' => $satellites
+        ]);
     }
 }

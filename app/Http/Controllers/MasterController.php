@@ -61,8 +61,8 @@ class MasterController extends Controller
      * 讨论区
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function forum(){
-        return view('forum/forum');
+    public function discussion(){
+        return view('discussion/discussion');
     }
 
     /**

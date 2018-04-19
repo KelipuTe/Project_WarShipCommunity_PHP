@@ -1,15 +1,19 @@
-/* forum.blade.php 中顶部巨幕 */
+/* 限制图片最大宽高 */
+img{
+    max-width: 500px;
+    max-height: 500px;
+}
+
+/* discussion.blade.php 中右侧巨幕 */
 .forum-jumbotron{
-    /*background-color: #61ea49;*/
     background-color: rgba(97,234,73,0.8);
 }
 
-/* forum.blade.php 中讨论标题间距 */
+/* discussion.blade.php 中讨论标题间距 */
 .forum-line{
     margin-top: 15px;
     margin-bottom: 15px;
     padding: 5px 10px;
-    /*background-color: #8df97b;*/
     background-color: rgba(141,249,123,0.8);
     border-radius: 45px 15px;
 }

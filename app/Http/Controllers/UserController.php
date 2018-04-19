@@ -38,16 +38,16 @@ class UserController extends Controller
     public function create(UserRegisterRequest $request){
         $data = [
             'email_confirm_code'=>str_random(48), // 生成48位邮箱验证码
+            'api_token'=>str_random(48), // 生成48位 api_token
             'avatar'=>'/image/avatar/default_avatar.jpg' // 生成默认头像
         ];
         $status = $this->sendEmailConfirm($request->get("email"),$data['email_confirm_code']); // 发送账号激活邮件;
+        $message = '很抱歉，服务器正忙，请稍后再试';
         if($status) {
             $user = User::create(array_merge($request->all(), $data)); // 创建新用户
             Account::create(['user_id' => $user->id]); // 为新用户创建对应账户
             Auth::logout(); // 用户登出
             $message = '账号注册成功，已发送一封激活邮件到您的邮箱，在登陆之前您需要激活您的账号';
-        } else {
-            $message = '很抱歉，服务器正忙，请稍后再试';
         }
         return Response::json(['status' => $status, 'message' => $message]);
     }
@@ -70,6 +70,7 @@ class UserController extends Controller
             'email'=>$request->get('email'),
             'password'=>$request->get('password')
         ];
+        $status = 0; $message = "密码错误或用户不存在！！！"; // 状态 0 ： 密码错误或用户不存在，登陆失败
         if(Auth::attempt($data)){
             if(Auth::user()->email_confirm == 1) {
                 $status = 1; $message = "欢迎回来！！！"; // 状态 1 ：账号已激活，登陆成功
@@ -77,8 +78,6 @@ class UserController extends Controller
                 Auth::logout(); // 用户登出
                 $status = -1; $message = "账号未激活！！！"; // 状态 -1 ： 账号未激活，登陆失败
             }
-        } else {
-            $status = 0; $message = "密码错误或用户不存在！！！"; // 状态 0 ： 密码错误或用户不存在，登陆失败
         }
         return Response::json(['status' => $status, 'message' => $message]);
     }
@@ -117,10 +116,9 @@ class UserController extends Controller
         $user = User::all()->where('email','=',$email)->first();
         $email_confirm_code = $user->email_confirm_code;
         $status = $this->sendEmailConfirm($email,$email_confirm_code); // 发送账号激活邮件;
+        $message = '很抱歉，服务器正忙，请稍后再试';
         if($status) {
             $message = '已发送一封激活邮件到您的邮箱，在登陆之前您需要激活您的账号';
-        } else {
-            $message = '很抱歉，服务器正忙，请稍后再试';
         }
         return Response::json(['status' => $status, 'message' => $message]);
     }

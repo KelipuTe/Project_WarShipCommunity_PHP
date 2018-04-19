@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'email','email_confirm_code','email_confirm', 'password','avatar','blacklist'
+        'username', 'email','email_confirm_code','email_confirm', 'password','avatar','blacklist','api_token'
     ];
 
     /**
@@ -149,5 +149,29 @@ class User extends Authenticatable
      */
     public function signs(){
         return $this->hasMany(Sign::class,'user_id');
+    }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class,'role_user');
+        // 使用 $this->roles()->save($role) 可以为 user 添加 role
+        // 使用 $this->roles()->detach($role) 可以为 user 移除 role
+        // 使用 $this->roles()->attach($role) 可以为 user 添加 role
+    }
+
+    public function hasRole($role){
+        if(is_string($role)){
+            // contains() 判断字符串内是否存在
+            return $this->roles->contains('name',$role);
+        }
+        // intersect() 用于比较两个 Collection 是否相同
+        return !! $role->intersect($this->roles)->count();
+    }
+
+    public function isAdmin(){
+        return $this->hasRole('admin');
+    }
+
+    public function ownsDiscussion($discussion){
+        return $this->id == $discussion->id;
     }
 }

@@ -11,7 +11,7 @@
                     <div class="col-md-4" style="padding: 0 20px">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <span> 发给 @{{ personalLetter.to_user_username }} 的私信 </span>
+                                <span> 发给 @{{ personalLetter.to_user_username }} </span>
                             </div>
                             <div class="panel-body" data-toggle="modal" data-target="#showModal" @click="showModal(personalLetter.id)">
                                 <p style="height:100px;overflow:hidden;word-wrap:break-word;text-overflow:ellipsis;" :id="['personalLetter-'+personalLetter.id]">

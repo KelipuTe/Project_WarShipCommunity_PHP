@@ -1,9 +1,9 @@
 @extends('spaceAdministration.app')
 @section('content')
     <div class="row">
-        <div class="col-md-10 col-md-offset-1" role="main">
+        <div class="col-md-12" role="main">
             <div class="jumbotron">
-                <div class="container row">
+                <div class="row">
                     <div class="col-md-10">
                         <h2>侦测到在轨卫星 {{$count}} 个 </h2>
                         <div class="lunbo">

@@ -70,7 +70,7 @@ class OfficeController extends Controller
      * @return mixed
      */
     public function getIntroductions(){
-        $introductions = Introduction::latest()->paginate(10);
+        $introductions = Introduction::latest()->paginate(5);
         return Response::json(['introductions' => $introductions]);
     }
 

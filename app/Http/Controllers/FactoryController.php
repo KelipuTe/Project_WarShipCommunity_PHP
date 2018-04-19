@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Satellite;
 use Auth;
+use Carbon\Carbon;
 use Response;
 use Validator;
 use Intervention\Image\Facades\Image;
@@ -12,55 +14,102 @@ use Illuminate\Http\Request;
 class FactoryController extends Controller
 {
     public function create(){
-        $data = [
-            'title' => request('title'),
-            'user_id' => Auth::user()->id
-        ];
-        $factory = Factory::create($data);
-        return Response::json(['factory_id' => $factory->id]);
+        if(request('title') != null && request('title')!= "") {
+            $data = [
+                'title' => request('title'),
+                'user_id' => Auth::user()->id
+            ];
+            $factory = Factory::create($data);
+            return Response::json(['factory_id' => $factory->id]);
+        } else if(request('satellite_id') != null && request('satellite_id') != ""){
+            $satellite = Satellite::findOrFail(request('satellite_id'));
+            $data = [
+                'title' => $satellite->title,
+                'user_id' => Auth::user()->id,
+                'satellite' => true,
+                'satellite_id' => request('satellite_id')
+            ];
+            $factory = Factory::create($data);
+            $satellite->ontrack = false;
+            $satellite->destroyed_at = Carbon::now();
+            $satellite->save();
+            return Response::json(['factory_id' => $factory->id]);
+        }
+        return Response::json(['factory_id' => 0]);
+    }
+
+    public function getFactories(){
+        $factories = Factory::latest()->paginate(5);
+        return Response::json(['factories' => $factories]);
+    }
+
+    public  function getFactory(){
+        $factory = Factory::find(request('factory_id'));
+        $owner = false;
+        if(Auth::check()) {
+            if ($factory->user_id == Auth::user()->id) {
+                $owner = true;
+            }
+        }
+        return Response::json([
+            'factory' => $factory,
+            'owner' => $owner,
+        ]);
     }
 
     public function show(){
         return view('factory/show');
     }
 
-    public function getFactories(){
-        $factories = Factory::latest()->paginate(10);
-        return Response::json(['factories' => $factories]);
-    }
-
-    public  function getFactory(){
-        $factory = Factory::findOrFail(request('factory_id'));
-        $isUser = false;
-        if($factory->user_id == Auth::user()->id){
-            $isUser = true;
-        }
-        return Response::json([
-            'isUser' => $isUser,
-            'factory' => $factory
-        ]);
-    }
-
-    public function editView(Request $request){
-        $factory_id = $request->get('factory-id');
-        $direction = $request->get('view-direction');
-        $file = $request->file('view-file'); // 拿到上传的图片
-        /* ********** 验证 ********** */
-        $input = array('image' => $file);
-        $rules = array('image' => 'image'); // 验证规则，图片格式
-        $validator = Validator::make($input, $rules); // 检查规则是否通过
+    public function infoEdit(Request $request){
+        $rules = [
+            'factory-id' => 'required',
+            'factory-introduction' => 'required',
+            'factory-point' => 'required',
+            'factory-plane' => 'required',
+            'factory-type' => 'required',
+            'factory-size' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules); // 检查规则是否通过
         if ($validator->fails()){
             return Response::json([
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
             ]);
         }
-        /* ********** 验证 ********** */
-        $destinationPath = 'uploads/factory/'.$factory_id.'/'; // 保存上传头像的文件夹，在 public/uploads/factory/id 目录下
+        $factory = Factory::find($request->input('factory-id'));
+        $factory->introduction = $request->input('factory-introduction');
+        $factory->point = $request->input('factory-point');
+        $factory->plane = $request->input('factory-plane');
+        $factory->type = $request->input('factory-type');
+        $factory->size = $request->input('factory-size');
+        $factory->save();
+        return Response::json([
+            'success' => true,
+        ]);
+    }
+
+    public function viewEdit(Request $request){
+        $rules = [
+            'factory-id' => 'required',
+            'view-direction' => 'required',
+            'view-file' => 'required|image',
+        ];
+        $validator = Validator::make($request->all(), $rules); // 检查规则是否通过
+        if ($validator->fails()){
+            return Response::json([
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+            ]);
+        }
+        $id = $request->input('factory-id');
+        $direction = $request->input('view-direction');
+        $file = $request->file('view-file'); // 拿到上传的图片
+        $destinationPath = 'uploads/factory/model'.$id.'/'; // 保存上传头像的文件夹，在 public/uploads/factory/model+id 目录下
         $filename = time().'_'.$file->getClientOriginalName(); // 头像文件重命名
         $file->move($destinationPath, $filename); // 将上传的图片移到 uploads/factory/id 文件夹下
         //Image::make($destinationPath.$filename)->fit(400)->save(); // 裁剪图像 400 * 400
-        $factory = Factory::findOrFail($factory_id); //
+        $factory = Factory::find($id); //
         switch($direction){
             case 'preview':$factory->preview = asset($destinationPath.$filename);break;
             case 'front':$factory->view_front = asset($destinationPath.$filename);break;
@@ -75,17 +124,17 @@ class FactoryController extends Controller
         return Response::json([
             'success' => true,
             'direction' => $direction,
-            'view' => asset($destinationPath.$filename)
+            'viewURL' => asset($destinationPath.$filename)
         ]);
     }
 
-    public function filePost(Request $request){
-        $factory_id = $request->get('file-post-factory-id');
-        $file = $request->file('file-post-file'); // 拿到上传文件
-        $destinationPath = 'uploads/factory/'.$factory_id.'/';
-        $filename = time().'_'.$file->getClientOriginalName(); // 头像文件重命名
+    public function fileEdit(Request $request){
+        $id = $request->input('factory-id');
+        $file = $request->file('model-file'); // 拿到上传文件
+        $destinationPath = 'uploads/factory/'.$id.'/';
+        $filename = time().'_'.$file->getClientOriginalName(); // 文件重命名
         $file->move($destinationPath, $filename);
-        $factory = Factory::findOrFail($factory_id); //
+        $factory = Factory::find($id); //
         $factory->file = asset($destinationPath.$filename);
         $factory->save(); // 保存
         return Response::json([

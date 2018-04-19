@@ -12,12 +12,6 @@
     min-width: 970px;
 }
 
-/* 限制图片最大宽高 */
-img{
-    max-width: 500px;
-    max-height: 500px;
-}
-
 /* 不同部分图片的大小 */
 .img-welcome{
     width: 200px;

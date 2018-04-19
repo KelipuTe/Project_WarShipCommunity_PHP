@@ -1,3 +1,9 @@
+/* 限制图片最大宽高 */
+img{
+    max-width: 500px;
+    max-height: 500px;
+}
+
 /* spaceAdministration.blade.php 中画布载体样式 */
 .canvas-container{
     min-width: 800px;

@@ -11,7 +11,7 @@
                     <div class="col-md-4" style="padding: 0 20px">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <span> @{{ personalLetter.from_user_username }} 发来的私信 </span>
+                                <span> 来自 @{{ personalLetter.from_user_username }}  </span>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#messageModal"
                                         @click="getTarget(personalLetter.from_user_id,personalLetter.from_user_username)" >

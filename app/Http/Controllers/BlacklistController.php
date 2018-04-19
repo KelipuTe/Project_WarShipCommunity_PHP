@@ -17,6 +17,14 @@ use Illuminate\Http\Request;
 class BlacklistController extends Controller
 {
     /**
+     * BlacklistController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('admin')->except(['notice','report','getDoneBlacklists']);
+    }
+
+    /**
      * 黑名单公告牌
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -70,11 +78,11 @@ class BlacklistController extends Controller
         $blacklist = Blacklist::findOrFail($request->get('blacklist_id'));
         switch ($blacklist->type){
             case 'discussion':
-                $url = '/forum/show/'.$blacklist->target;
+                $url = '/discussion/show/'.$blacklist->target;
                 break;
             case 'comment':
                 $comment = Comment::findOrFail($blacklist->target);
-                $url = '/forum/show/'.$comment->discussion_id;
+                $url = '/discussion/show/'.$comment->discussion_id;
                 break;
         }
         return Response::json(['url' => $url]);
