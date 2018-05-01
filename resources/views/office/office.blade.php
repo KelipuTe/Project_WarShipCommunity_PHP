@@ -125,6 +125,16 @@
                                 <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
                                 <div class="caption">
                                     <h3 class="text-center">
+                                        <a href="/office/permission" class="btn btn-primary">权限管理中心</a>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="thumbnail">
+                                <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                                <div class="caption">
+                                    <h3 class="text-center">
                                         <a href="/office/warship" class="btn btn-primary">舰船信息管理中心</a>
                                     </h3>
                                 </div>

@@ -97,7 +97,9 @@ class User extends Authenticatable
          * self::class 就是 User::class
          * 注意一下参数里的两个 key
          */
-        return $this->belongsToMany(self::class,'user_user','follower_id','followed_id')->withTimestamps();
+        return $this->belongsToMany(self::class,'user_user',
+            'follower_id','followed_id')
+            ->withTimestamps();
     }
 
     /**
@@ -107,7 +109,9 @@ class User extends Authenticatable
      */
     public function userUserFollower(){
         /* 注意一下参数里的两个 key */
-        return $this->belongsToMany(self::class,'user_user','followed_id','follower_id')->withTimestamps();
+        return $this->belongsToMany(self::class,'user_user',
+            'followed_id','follower_id')
+            ->withTimestamps();
     }
 
     /**
