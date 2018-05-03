@@ -23,9 +23,7 @@
                 Vue.component('factory-list',{
                     template:"#template-factory-list",
                     data:function () {
-                        return {
-                            factories:''
-                        };
+                        return { factories:'' };
                     },
                     created:function () {
                         this.getFactories();
@@ -54,9 +52,7 @@
                         }
                     }
                 });
-                new Vue({
-                    el:"#factory-list"
-                });
+                new Vue({ el:"#factory-list" });
             </script>
         </div>
         @if(Auth::check())

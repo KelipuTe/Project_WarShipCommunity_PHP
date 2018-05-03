@@ -27,20 +27,20 @@
                     MAX_X = totalNum / MAX_Y + 1;
                     $("#slipping-container-master").css('width',totalWidth);
                     for(x = 1;x <= MAX_X ;++x){
-                        /* 在修改过显示规格后，需要手动调整横向载体容器高度和显示图片的高度宽度 */
+                        // 在修改过显示规格后，需要手动调整横向载体容器高度和显示图片的高度宽度
                         $("#slipping-container-master").append('<div id="slipping-container-'+x+'"></div>'); // 添加横向载体容器元素
                         $("#slipping-container-" + x).css('width',totalWidth);
                         $("#slipping-container-" + x).css('height','250px'); // 在修改过显示规格后，需要手动设置横向载体容器元素高度
                         $("#slipping-container-" + x).hide(); // 隐藏横向元素，在添加纵向元素时保持隐藏
                         for(y = 1;y <= MAX_Y;++y){
-                            /* 通过坐标计算循环数，检查是否小于最大对象数 */
+                            // 通过坐标计算循环数，检查是否小于最大对象数
                             if(( (x - 1) * MAX_Y + (y - 1) ) < totalNum) {
                                 $("#slipping-container-" + x).append("<div class='slipping-show slipping-show-" + x + y + "'></div>"); // 添加观察窗口元素
                                 $(".slipping-show-" + x + y).append("<div class='slipping-main slipping-main-" + x + y + "'></div>"); // 添加载体元素
-                                /* 添加图片，在修改过显示规格后，需要手动调整图片的高度宽度 */
+                                // 添加图片，在修改过显示规格后，需要手动调整图片的高度宽度
                                 //$(".slipping-main-"+x+y).append("<div class='slipping-box thumbnail'><img src='/uploads/warship/Lexington.png' style='width:150px;height:240px'></div>");
                                 $(".slipping-main-"+ x + y).append("<div class='slipping-box thumbnail'>" +
-                                    "<a href='/office/warship/" + data[ (x - 1) * MAX_Y + (y - 1) ].no + "'>" +
+                                    "<a href='/office/warship/" + data[ (x - 1) * MAX_Y + (y - 1) ].name + "'>" +
                                         "<img src='" + data[ (x - 1) * MAX_Y + (y - 1) ].pictureUrl + "' style='width:150px;height:240px'>" +
                                     "</a></div>");
                                 $(".slipping-main-" + x + y).append("<div class='slipping-box'></div>"); // 添加空白
@@ -61,7 +61,7 @@
         function slippingContainerShow(x){
             $("#slipping-container-" + x).show();
             for (y = 1; y <= MAX_Y; ++y) {
-                /* 通过坐标计算循环数，检查是否小于最大对象数 */
+                // 通过坐标计算循环数，检查是否小于最大对象数
                 if(( (x - 1) * MAX_Y + (y - 1) ) < totalNum) {
                     setTimeout("left(" + x + "," + y + ")", y * 200); // 第 y 列纵向元素，显示的时间推迟 y * 0.2 秒
                 }
@@ -70,7 +70,7 @@
 
         /* 查看左边的部分，实际上元素向右移 */
         function left(x,y){
-            /* 选取横纵坐标匹配的元素，将其按照当前位置向右移动一个子元素宽度 */
+            // 选取横纵坐标匹配的元素，将其按照当前位置向右移动一个子元素宽度
             $(".slipping-main-" + x + y).animate({left:$(".slipping-main-" + x + y).position().left + mainWidth,opacity:1},500,function(){});
         }
 

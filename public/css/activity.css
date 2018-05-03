@@ -7,3 +7,7 @@
 .activity-sign-jumbotron{
     background-color: #D9534F;
 }
+
+tr {
+    height: 70px;
+}

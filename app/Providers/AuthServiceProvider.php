@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
 
         /*
          * 使用数据库进行权限管理
-         * 这里使用循环声明权限
+         * 这里使用循环声明所有的权限
          */
         foreach($this->getPermissions() as $permission){
             // function () use () {}，use() 用于连接外部变量
@@ -40,6 +40,10 @@ class AuthServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * 获得所有的权限
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     private function getPermissions(){
         return Permission::with('roles')->get();
     }

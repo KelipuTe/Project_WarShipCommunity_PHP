@@ -27,11 +27,14 @@ Route::prefix('activity')->group(function() {
     Route::get('sign','ActivityController@sign'); // 活动区每日签到页面
     Route::get('showSign','ActivityController@showSign'); // 活动区显示每日签到日历
     Route::get('signIn/{nowDay}','ActivityController@signIn'); // 每日签到或者补签
+
 });
 
 // AccountController
 Route::prefix('account')->group(function() {
     Route::get('getLivenessAndLevel/{id}','AccountController@getLivenessAndLevel'); // 获得用户活跃值和等级
+    Route::get('getTools','AccountController@getTools');
+    Route::post('exchangeTool','AccountController@exchangeTool');
 });
 
 // BlacklistController
@@ -75,10 +78,19 @@ Route::prefix('factory')->group(function() {
     Route::post('fileEdit','FactoryController@fileEdit'); // 修改模型文件
 });
 
+// FollowController
+Route::prefix('follow')->group(function() {
+    Route::get('userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow'); // 用户关注讨论
+    Route::get('hasUserDiscussionFollow/{discussion}','FollowController@hasUserDiscussionFollow'); // 检查用户是否关注讨论
+    Route::get('userUserFollow/{discussion}','FollowController@userUserFollow'); // 用户关注用户
+    Route::get('hasUserUserFollow/{discussion}','FollowController@hasUserUserFollow'); // 检查用户是否关注用户
+});
+
 // MasterController
 Route::get('/','MasterController@welcome'); // 主页
 Route::get('/welcome','MasterController@welcome'); // 主页
 Route::get('/about','MasterController@about'); // 关于
+Route::get('error/{status}','MasterController@error');
 Route::get('/office','MasterController@office'); // 办公区
 Route::get('/office/warship','MasterController@warship'); // 办公区舰船信息管理中心页面
 Route::get('/discussion','MasterController@discussion'); // 讨论区
@@ -100,14 +112,14 @@ Route::prefix('notification')->group(function() {
 
 // OfficeController 办公区
 Route::prefix('office')->group(function() {
-    Route::get('/office/getIntroductions','OfficeController@getIntroductions'); // 获取新人报道列表
-    Route::get('/office/getIntroduction/{id}','OfficeController@getIntroduction'); // 获取新人报道
-    Route::get('/office/getMessages/{id}','OfficeController@getMessages'); // 获取新人报道回复列表
+    Route::get('getIntroductions','OfficeController@getIntroductions'); // 获取新人报道列表
+    Route::get('getIntroduction/{id}','OfficeController@getIntroduction'); // 获取新人报道
+    Route::get('getMessages/{id}','OfficeController@getMessages'); // 获取新人报道回复列表
 
-    Route::get('/office/create','OfficeController@create'); // 新人报道创建页面
-    Route::post('/office/store','OfficeController@store'); // 新人报道创建页面后台
-    Route::get('/office/show/{id}','OfficeController@show'); // 新人报道显示页面
-    Route::post('/office/show/welcome','OfficeController@welcome'); // 新人报道显示页面迎新后台
+    Route::get('create','OfficeController@create'); // 新人报道创建页面
+    Route::post('store','OfficeController@store'); // 新人报道创建页面后台
+    Route::get('show/{id}','OfficeController@show'); // 新人报道显示页面
+    Route::post('show/welcome','OfficeController@welcome'); // 新人报道显示页面迎新后台
 });
 
 // PermissionController
@@ -121,7 +133,6 @@ Route::prefix('office/permission')->group(function (){
     Route::post('togglePermission','PermissionController@togglePermission');
     Route::post('giveRoleToUser','PermissionController@giveRoleToUser');
     Route::post('removeRoleFromUser','PermissionController@removeRoleFromUser');
-
 });
 
 // SpaceAdministrationController
@@ -159,6 +170,7 @@ Route::prefix('user/center')->group(function() {
     Route::get('avatarEdit', 'UserController@avatarEdit'); // 我的头像修改页面
     Route::post('avatar', 'UserController@avatar'); // 上传头像
     Route::post('avatarCrop', 'UserController@avatarCrop'); // 裁剪上传头像
+    Route::get('account', 'UserController@account'); //
 });
 
 // WarshipController
@@ -169,5 +181,5 @@ Route::prefix('office/warship')->group(function() {
     Route::get('{id}/edit','WarshipController@edit'); // 舰船管理修改页面
     Route::patch('{id}/update','WarshipController@update'); // 舰船管理修改页面后台
     Route::get('getWarship','WarshipController@getWarship'); // 获得所有舰船数据
-    Route::get('{no}','WarshipController@gotoOne'); // 获得所有舰船数据
+    Route::get('{name}','WarshipController@gotoOne'); // 获得所有舰船数据
 });

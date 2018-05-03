@@ -1,4 +1,4 @@
-@extends('user.center.master')
+@extends('user.center.app')
 @section('head')
     @parent
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery.form/4.2.2/jquery.form.js"></script>

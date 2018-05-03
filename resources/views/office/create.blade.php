@@ -1,28 +1,25 @@
-@extends('office.master')
+@extends('office.app')
 @section('breadCrumb')
-    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="">新人报道</a></li>
 @stop
 @section('content')
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2" role="main">
-            <div class="form-group">
-                <label for="title">新人报道标题：</label>
-                <input name="title" type="text" class="form-control" id="title" />
-            </div>
-            <div class="form-group">
-                <label for="body">新人报道内容：</label>
-                <textarea name="body" class="form-control" id="body" rows="10" style="resize: none"></textarea>
-            </div>
-            <div class="form-group">
-                <button id="submit" class="btn btn-success form-control">提交</button>
-            </div>
+    <div class="col-md-8 col-md-offset-2">
+        <div class="form-group">
+            <label for="title">新人报道标题：</label>
+            <input type="text" name="title" id="title" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="body">新人报道内容：</label>
+            <textarea name="body" id="body" class="form-control" rows="10" style="resize: none"></textarea>
+        </div>
+        <div class="form-group">
+            <button id="submit" class="btn btn-success form-control">提交</button>
         </div>
     </div>
     <script>
         $(document).ready(function () {
-            /* 提交按钮 */
+            // 提交按钮
             $('#submit').on('click', function () {
                 $('#submit').text('');
                 $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
@@ -30,8 +27,7 @@
                     type: 'post',
                     url: '/office/store',
                     data: {
-                        'title': $('#title').val(),
-                        'body': $('#body').val()
+                        'title': $('#title').val(), 'body': $('#body').val()
                     },
                     dataType: 'json',
                     success: function (data) {

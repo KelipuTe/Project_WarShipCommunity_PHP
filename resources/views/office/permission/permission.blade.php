@@ -8,38 +8,40 @@
             <div class="col-md-4" v-for="role in roles">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="#" :href="['/office/permission/role/'+role.id]"> @{{ role.label }} </a>
+                        <a href="#" :href="['/office/permission/role/'+role.id]">角色：@{{ role.label }}</a>
                     </div>
                     <div class="panel-body">
-                        <ul>
-                            <li v-for="permission in role.permissions">@{{ permission.name }} : @{{ permission.label }}</li>
-                        </ul>
+                        <dl>
+                            <dt v-for="permission in role.permissions">
+                                @{{ permission.label }}
+                            </dt>
+                        </dl>
                     </div>
                 </div>
             </div>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addRoleModal">
-                新建角色
-            </button>
-            <!-- Modal -->
-            <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="addRoleModalLabel"> 新建角色 </h4>
-                        </div>
-                        <div class="modal-body">
-                            <label for="role-name">角色名称：</label>
-                            <input name="role-name" class="form-control" v-model="roleName" />
-                            <label for="role-label">角色标签：</label>
-                            <input name="role-label" class="form-control" v-model="roleLabel" />
-                        </div>
-                        <div class="modal-footer">
-                            <div class="form-group">
-                                <button id="build-submit" type="button" class="btn btn-primary" @click="addRole">
-                                    <span class="fa fa-cog fa-lg"></span> 创建
-                                </button>
+            <div class="col-md-12">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary col-md-8 col-md-offset-2"
+                        data-toggle="modal" data-target="#addRoleModal">新建角色</button>
+                <!-- Modal -->
+                <div class="modal fade" id="addRoleModal" tabindex="-1" role="dialog" aria-labelledby="addRoleModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="addRoleModalLabel">新建角色</h4>
+                            </div>
+                            <div class="modal-body">
+                                <label for="role-name">角色名称：</label>
+                                <input type="text" id="role-name" class="form-control" v-model="roleName" />
+                                <label for="role-label">角色标签：</label>
+                                <input type="text" id="role-label" class="form-control" v-model="roleLabel" />
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" @click="addRole">新建角色</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -53,8 +55,7 @@
             data:function () {
                 return {
                     roles: '',
-                    roleName:'',
-                    roleLabel:''
+                    roleName: '', roleLabel: ''
                 };
             },
             created:function () {
@@ -64,7 +65,7 @@
                 init:function(){
                     var vm = this;
                     $.ajax({
-                        type:'GET',
+                        type:'get',
                         url:'/office/permission/getRoles',
                         dataType:'json',
                         success:function (data) {
@@ -81,8 +82,7 @@
                         type:'post',
                         url:'/office/permission/addRole',
                         data:{
-                            'name':vm.roleName,
-                            'label':vm.roleLabel
+                            'name':vm.roleName, 'label':vm.roleLabel
                         },
                         dataType:'json',
                         success:function (data) {
@@ -96,8 +96,6 @@
                 }
             }
         });
-        new Vue({
-            el:"#roles"
-        });
+        new Vue({ el:"#roles" });
     </script>
 @stop

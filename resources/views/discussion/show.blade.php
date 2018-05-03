@@ -17,9 +17,9 @@
                     <div class="panel-heading">
                         <h2> @{{ discussion.title }}
                             <div class="pull-right">
-                                <button class="btn btn-danger" role="button" @click="blacklist(discussion.id)">
+                                <button class="btn btn-danger" @click="blacklist(discussion.id)">
                                     <span class="fa fa-hand-stop-o fa-lg"></span> 举报 </button>
-                                <button class="btn btn-danger" role="button" v-if="isUser" @click="softDelete(discussion.id)">
+                                <button class="btn btn-danger" v-if="isUser" @click="softDelete(discussion.id)">
                                     <span class="fa fa-trash-o fa-lg"></span> 爆破 </button>
                             </div>
                         </h2>
@@ -30,7 +30,7 @@
                             <span> 浏览量 </span>
                             <span v-text="hot_discussion"></span>
                             @if(Auth::check())
-                                <button class="btn btn-sm pull-right" :class="vbtnclass" role="button" @click="niceDiscussion(discussion.id)">
+                                <button class="btn btn-sm pull-right" :class="vbtnclass" @click="niceDiscussion(discussion.id)">
                                     <span class="fa fa-lg" :class="vfaclass"></span>
                                     <span v-text="nice_discussion"></span>
                                     <span> 这篇讨论对我有用 </span>
@@ -45,11 +45,8 @@
                     template:"#template-discussion",
                     data:function () {
                         return {
-                            discussion: '',
-                            hot_discussion: '',
-                            nice_discussion: '',
-                            isNice: false,
-                            isUser: false
+                            discussion: '', hot_discussion: '', nice_discussion: '',
+                            isNice: false, isUser: false
                         };
                     },
                     computed:{
@@ -152,9 +149,7 @@
                         }
                     }
                 });
-                new Vue({
-                    el:"#discussion"
-                });
+                new Vue({ el:"#discussion" });
             </script>
             {{--评论部分--}}
             <div id="comment-list">
@@ -309,7 +304,7 @@
                     <script type="text/javascript">
                         var ue = UE.getEditor('ue-container');
                         ue.ready(function() {
-                            ue.execCommand('serverparam', '_token', '{{ csrf_token() }}');/* 设置CSRFtoken */
+                            ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); /* 设置CSRFtoken */
                         });
                     </script>
                 @else

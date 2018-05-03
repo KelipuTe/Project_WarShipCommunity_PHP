@@ -1,6 +1,6 @@
-@extends('user.notification.master')
+@extends('user.notification.app')
 @section('notification')
-    <div class="panel-heading"> 未读消息 </div>
+    <div class="panel-heading">未读消息</div>
     <div class="panel-body">
         @foreach($notifications as $notification)
             {{--按照消息通知的类别区分不同的消息通知，并载入不同的模板--}}

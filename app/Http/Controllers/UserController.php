@@ -238,4 +238,8 @@ class UserController extends Controller
         $user->save(); // 保存头像路径
         return redirect('/user/center/avatarEdit');
     }
+
+    public function account(){
+        return view('user/center/account');
+    }
 }

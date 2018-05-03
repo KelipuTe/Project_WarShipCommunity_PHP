@@ -57,6 +57,18 @@ class MasterController extends Controller
         return view('office/warship/warship',compact('warships'));
     }
 
+    public function error($status){
+        switch($status){
+            case '401':
+                $message = "没有足够的权限"; break;
+            case '404':
+                $message = "页面不存在"; break;
+            default:
+                $message = "页面不存在";
+        }
+        return view('master.error',compact('message',$message));
+    }
+
     /**
      * 讨论区
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

@@ -18,6 +18,6 @@ class MustBeAnAdmin
         if($request->user() && $request->user()->isAdmin()) {
             return $next($request);
         }
-        return redirect('/welcome');
+        return redirect('/error/401');
     }
 }

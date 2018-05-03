@@ -19,11 +19,11 @@ class WarshipController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth')->except('show');
+        $this->middleware('admin')->except('gotoOne');
     }
 
     /**
-     * 办公区舰船管理创建页面
+     * 创建页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create(){
@@ -31,7 +31,7 @@ class WarshipController extends Controller
     }
 
     /**
-     * 办公区舰船管理创建页面后台
+     * 创建页面后台
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -81,7 +81,7 @@ class WarshipController extends Controller
     }
 
     /**
-     * 办公区舰船管理修改页面
+     * 修改页面
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -91,7 +91,7 @@ class WarshipController extends Controller
     }
 
     /**
-     * 办公区舰船管理修改页面后台
+     * 修改页面后台
      * @param Request $request
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
@@ -105,10 +105,10 @@ class WarshipController extends Controller
 
     /**
      * 去到某个具体舰船的页面
-     * @param $no
+     * @param $name
      * @return mixed
      */
-    public function gotoOne($no){
-        return view('archives/warship/'.$no);
+    public function gotoOne($name){
+        return view('archives/warship/'.$name);
     }
 }

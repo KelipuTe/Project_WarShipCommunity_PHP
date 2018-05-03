@@ -1,29 +1,29 @@
-@extends('user.notification.master')
+@extends('user.notification.app')
 @section('notification')
     <div id="to-person-letter">
         <to-person-letter></to-person-letter>
     </div>
     <template id="template-to-person-letter">
         <div>
-            <div class="panel-heading"> 用户私信 </div>
+            <div class="panel-heading">用户私信</div>
             <div class="panel-body">
                 <div v-for="personalLetter in personalLetters">
                     <div class="col-md-4" style="padding: 0 20px">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
-                                <span> 来自 @{{ personalLetter.from_user_username }}  </span>
+                                <span>来自：@{{ personalLetter.from_user_username }}</span>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#messageModal"
-                                        @click="getTarget(personalLetter.from_user_id,personalLetter.from_user_username)" >
-                                    <span class="fa fa-paper-plane-o fa-lg"></span>
-                                    <span> 回复 </span>
-                                </button>
+                                        @click="getTarget(personalLetter.from_user_id,personalLetter.from_user_username)">
+                                    <span class="fa fa-paper-plane-o fa-lg"></span><span> 回复</span></button>
                             </div>
+                            <!-- Button trigger modal -->
                             <div class="panel-body" data-toggle="modal" data-target="#showModal" @click="showModal(personalLetter.id)">
                                 <p style="height:100px;overflow:hidden;word-wrap:break-word;text-overflow:ellipsis;" :id="['personalLetter-'+personalLetter.id]">
                                     @{{ personalLetter.body }}
                                 </p>
                             </div>
+                            <div class="panel-footer">@{{ personalLetter.created_at }}</div>
                         </div>
                     </div>
                 </div>

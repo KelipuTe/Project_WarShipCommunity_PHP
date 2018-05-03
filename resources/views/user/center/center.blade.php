@@ -1,4 +1,4 @@
-@extends('user.center.master')
+@extends('user.center.app')
 @section('center')
 
 @stop

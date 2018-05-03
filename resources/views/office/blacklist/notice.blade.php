@@ -1,4 +1,4 @@
-@extends('office.master')
+@extends('office.app')
 @section('content')
     <div class="col-md-10 col-md-offset-1" role="main">
         <div id="blacklist-list">

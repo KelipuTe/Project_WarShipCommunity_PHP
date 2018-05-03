@@ -20,12 +20,6 @@
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
             <a class="navbar-brand" href="/welcome">WarShipCommunity</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -35,24 +29,6 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if(Auth::check())
-                    {{--如果用户已经登录，则显示与账号有关的信息--}}
-                    {{--<li>
-                        <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">消 息
-                            @if(count(Auth::user()->unreadNotifications))
-                                <span class="badge">{{count(Auth::user()->unreadNotifications)}}</span>
-                            @endif
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-                            <li><a href="/notification/showAll">所有消息</a></li>
-                            <li><a href="/notification/showUnread">未读消息
-                                    @if(count(Auth::user()->unreadNotifications))
-                                        <span class="badge">{{count(Auth::user()->unreadNotifications)}}</span>
-                                    @endif
-                                </a>
-                            </li>
-                        </ul>
-                    </li>--}}
                     <li><img src="{{Auth::user()->avatar}}" class="img-circle img-avatar-small" alt="50x50"></li>
                     <li>
                         <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -84,16 +60,16 @@
     {{--页面顶部快捷导航--}}
     <div class="row master-top">
         <div class="col-md-2">
-            <a href="/welcome" class="btn btn-warning master-top-home"><span class="fa fa-home fa-lg"></span> 首页 </a>
+            <a href="/welcome" class="btn btn-warning master-top-home"><span class="fa fa-home fa-lg"></span>首页</a>
         </div>
         <div class="col-md-6">
             <dl class="dt-row-by-3 text-center">
-                <dt><a href="/office" class="btn btn-info"><span class="fa fa-book fa-lg"></span> 办公区 </a></dt>
-                <dt><a href="/discussion" class="btn btn-info"><span class="fa fa-commenting-o fa-lg"></span> 讨论区 </a></dt>
-                <dt><a href="/activity" class="btn btn-info"><span class="fa fa-calendar fa-lg"></span> 活动区 </a></dt>
-                <dt><a href="/spaceAdministration" class="btn btn-info"><span class="fa fa-rocket fa-lg"></span> 冷月航天局 </a></dt>
-                <dt><a href="/factory" class="btn btn-info"><span class="fa fa-cog fa-lg"></span> 冷月制造厂 </a></dt>
-                <dt><a href="/archives" class="btn btn-info"><span class="fa fa-archive fa-lg"></span> 冷月档案馆 </a></dt>
+                <dt><a href="/office" class="btn btn-info"><span class="fa fa-book fa-lg"></span> 办公区</a></dt>
+                <dt><a href="/discussion" class="btn btn-info"><span class="fa fa-commenting-o fa-lg"></span> 讨论区</a></dt>
+                <dt><a href="/activity" class="btn btn-info"><span class="fa fa-calendar fa-lg"></span> 活动区</a></dt>
+                <dt><a href="/spaceAdministration" class="btn btn-info"><span class="fa fa-rocket fa-lg"></span> 冷月航天局</a></dt>
+                <dt><a href="/factory" class="btn btn-info"><span class="fa fa-cog fa-lg"></span> 冷月制造厂</a></dt>
+                <dt><a href="/archives" class="btn btn-info"><span class="fa fa-archive fa-lg"></span> 冷月档案馆</a></dt>
             </dl>
         </div>
         <div class="col-md-4">
@@ -133,11 +109,8 @@
         <a href="/about" class="alert-link">关 于</a>
     </div>
     <div class="text-center">
-        <span class="fa fa-copyright fa-lg"></span>
-        <span> 2017 </span>
-        <span class="fa fa-heart fa-lg"></span>
-        <span> KelipuTe </span>
-        <span> | </span>
+        <span class="fa fa-copyright fa-lg"></span><span> 2017-2018 </span>
+        <span class="fa fa-heart fa-lg"></span><span> KelipuTe </span><span> | </span>
         <span> Powered by <a href="https://d.laravel-china.org/docs/5.5"> Laravel 5.5 </a></span>
     </div>
 </footer>
@@ -147,7 +120,8 @@
         /* 添加 CSRF 保护 */
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Authorization': $('meta[name="api-token"]').attr('content')
             }
         });
     });
@@ -166,17 +140,13 @@
         var title;
         switch (type) {
             case 'success' :
-                title = '成功！';
-                break;
+                title = '成功！'; break;
             case 'info' :
-                title = '信息！';
-                break;
+                title = '信息！'; break;
             case 'warning' :
-                title = '警告！';
-                break;
+                title = '警告！'; break;
             case 'danger' :
-                title = '错误！';
-                break;
+                title = '错误！'; break;
             default :
                 title = '错误！';
         }

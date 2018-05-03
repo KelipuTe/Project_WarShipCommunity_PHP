@@ -1,4 +1,7 @@
-@extends('user.master')
+@extends('master.master')
+@section('head')
+    <link type="text/css" rel="stylesheet" href="/css/user.css">
+@stop
 @section('breadCrumb')
     @parent
     <li><a href="/user/login">登录</a></li>

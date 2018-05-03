@@ -1,4 +1,4 @@
-@extends('user.master')
+@extends('master.master')
 @section('breadCrumb')
     @parent
     <li><a href="">邮箱验证码激活页面</a></li>

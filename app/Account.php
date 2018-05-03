@@ -13,7 +13,7 @@ class Account extends Model
 {
     protected $table = 'accounts';
 
-    protected $fillable=['user_id'];
+    protected $fillable=['user_id','bonus_points'];
 
     /**
      * 活跃值

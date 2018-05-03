@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Tool;
 use Response;
+use Auth;
 use App\Account;
 use App\Discussion;
 use Illuminate\Http\Request;
@@ -26,6 +28,7 @@ class AccountController extends Controller
      */
     public function officeStore($user_id){
         $this->update($user_id,Account::$livenessScore['officeStore']);
+        $this->addBonusPoints($user_id,Account::$livenessScore['officeStore']);
     }
 
     /**
@@ -42,6 +45,7 @@ class AccountController extends Controller
      */
     public function officeWelcomer($user_id){
         $this->update($user_id,Account::$livenessScore['officeWelcomer']);
+        $this->addBonusPoints($user_id,Account::$livenessScore['officeWelcomer']);
     }
 
     /**
@@ -50,6 +54,7 @@ class AccountController extends Controller
      */
     public function forumStore($user_id){
         $this->update($user_id,Account::$livenessScore['forumStore']);
+        $this->addBonusPoints($user_id,Account::$livenessScore['forumStore']);
     }
 
     /**
@@ -66,6 +71,7 @@ class AccountController extends Controller
      */
     public function forumCommitter($user_id){
         $this->update($user_id,Account::$livenessScore['forumCommitter']);
+        $this->addBonusPoints($user_id,Account::$livenessScore['forumCommitter']);
     }
 
     /**
@@ -75,6 +81,7 @@ class AccountController extends Controller
      */
     public function activitySign($user_id,$power = 1){
         $this->update($user_id,$power * Account::$livenessScore['activitySign']); // $power 表示签到活跃值倍率
+        $this->addBonusPoints($user_id,$power * Account::$livenessScore['activitySign']);
     }
 
     /**
@@ -86,6 +93,12 @@ class AccountController extends Controller
         $user = DB::table('accounts')->select('id')->where('user_id',$user_id)->first();
         $account = Account::findOrFail($user->id);
         $account->update(['liveness'=>$account->liveness += $num]);
+    }
+
+    public function addBonusPoints($user_id,$num){
+        $user = DB::table('accounts')->select('id')->where('user_id',$user_id)->first();
+        $account = Account::findOrFail($user->id);
+        $account->update(['bonus_points'=>$account->bonus_points += $num]);
     }
 
     /**
@@ -100,6 +113,54 @@ class AccountController extends Controller
         return Response::json([
             'liveness' => $liveness,
             'level' => $level
+        ]);
+    }
+
+    public function getTools(){
+        $tools = Tool::where('user_id','=',Auth::user()->id)->first();
+        if($tools == null || $tools == ''){
+            $setTop = [
+                'tool' => 'setTop',
+                'user_id' =>  Auth::user()->id
+            ];
+            Tool::create($setTop);
+            $reSign = [
+                'tool' => 'reSign',
+                'user_id' =>  Auth::user()->id
+            ];
+            Tool::create($reSign);
+        }
+        $tools = Tool::where('user_id','=',Auth::user()->id)->get();
+        return Response::json([
+            'account' => Account::where('user_id','=',Auth::user()->id)->first(),
+            'tools' => $tools
+        ]);
+    }
+
+    public function exchangeTool(Request $request){
+        $account = Account::where('user_id','=',Auth::user()->id)->first();
+        $tool = Tool::where('user_id','=',Auth::user()->id)->where('tool','=',$request->input('tool'))->first();
+        switch($tool->tool){
+            case 'setTop':
+                $bonus_points = 50; break;
+            case 'reSign':
+                $bonus_points = 30; break;
+            default:
+                $bonus_points = 0;
+        }
+        if($bonus_points != 0 && ($account->bonus_points - $bonus_points >= 0)){
+            $account->update(['bonus_points' => ($account->bonus_points - $bonus_points)]);
+            $tool->update(['number' => $tool->number + 1]);
+            $tools = Tool::where('user_id','=',Auth::user()->id)->get();
+            return Response::json([
+                'status' => 'success',
+                'account' => $account,
+                'tools' => $tools
+            ]);
+        }
+        return Response::json([
+            'status' => 'failed',
+            'message' => '积分不够'
         ]);
     }
 }

@@ -11231,11 +11231,8 @@ function sign() {
 
     data: function data() {
         return {
-            year: 0,
-            month: 0,
-            day: "0",
-            total: 0,
-            combo: 0
+            year: 0, month: 0, day: "",
+            total: 0, combo: 0
         };
     },
     created: function created() {
