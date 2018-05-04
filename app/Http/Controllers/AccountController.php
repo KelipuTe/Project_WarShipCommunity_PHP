@@ -120,12 +120,12 @@ class AccountController extends Controller
         $tools = Tool::where('user_id','=',Auth::user()->id)->first();
         if($tools == null || $tools == ''){
             $setTop = [
-                'tool' => 'setTop',
+                'name' => 'setTop',
                 'user_id' =>  Auth::user()->id
             ];
             Tool::create($setTop);
             $reSign = [
-                'tool' => 'reSign',
+                'name' => 'reSign',
                 'user_id' =>  Auth::user()->id
             ];
             Tool::create($reSign);
@@ -137,10 +137,19 @@ class AccountController extends Controller
         ]);
     }
 
+    public function useTool($name){
+        $tool = Tool::where('user_id','=',Auth::user()->id)->where('name','=',$name)->first();
+        if($tool->number > 0){
+            $tool->update(['number' => $tool->number - 1]);
+            return true;
+        }
+        return false;
+    }
+
     public function exchangeTool(Request $request){
         $account = Account::where('user_id','=',Auth::user()->id)->first();
-        $tool = Tool::where('user_id','=',Auth::user()->id)->where('tool','=',$request->input('tool'))->first();
-        switch($tool->tool){
+        $tool = Tool::where('user_id','=',Auth::user()->id)->where('name','=',$request->input('name'))->first();
+        switch($tool->name){
             case 'setTop':
                 $bonus_points = 50; break;
             case 'reSign':

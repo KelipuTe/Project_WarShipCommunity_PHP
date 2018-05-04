@@ -13,5 +13,5 @@ class Warship extends Model
 {
     protected $table = 'warships';
 
-    protected  $fillable = ['classes','name','no','type','country','pictureUrl'];
+    protected  $fillable = ['classes','name','no','type','country','pictureUrl','pageUrl'];
 }

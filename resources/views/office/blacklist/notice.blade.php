@@ -24,8 +24,8 @@
                         <th scope="row" class="text-center"> @{{ blacklist.id }} </th>
                         <td> @{{ blacklist.type }} </td>
                         <td> @{{ blacklist.target }} </td>
-                        <td> 举报理由 </td>
-                        <td> 处理决定 </td>
+                        <td> @{{ blacklist.explain }} </td>
+                        <td> 删除 </td>
                     </tr>
                     </tbody>
                 </table>

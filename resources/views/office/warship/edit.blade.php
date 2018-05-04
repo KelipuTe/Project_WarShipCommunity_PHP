@@ -48,6 +48,12 @@
             </div>
         </div>
         <div class="form-group warship-form-line">
+            {!! Form::label('pageUrl','pageUrl:',['class'=>'col-md-3 warship-form-label-line']) !!}
+            <div class="col-md-9">
+                {!! Form::text('pageUrl',null,['class'=>'form-control','id'=>'page-url']) !!}
+            </div>
+        </div>
+        <div class="form-group warship-form-line">
             {!! Form::submit('提交',['class'=>'form-control btn btn-primary','id'=>'warship-submit']) !!}
         </div>
         {!! Form::close() !!}

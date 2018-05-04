@@ -7,11 +7,34 @@
         </div>
         <template id="template-account">
             <div>
-                <div>积分：@{{ account.bonus_points }}</div>
-                <div v-for="tool in tools">
-                    <div v-if="tool.tool=='setTop'">置顶卡：@{{ tool.number }}</div>
-                    <div v-if="tool.tool=='reSign'">补签卡：@{{ tool.number }}</div>
-                    <button @click="exchangeTool(tool.tool)">使用积分兑换</button>
+                <div class="col-md-4 col-md-offset-1" v-for="tool in tools">
+                    <div class="thumbnail" v-if="tool.name=='setTop'">
+                        <img alt="200 * 200" src="/image/background/zhidingka.jpg" style="height: 200px; width: 200px; display: block;">
+                        <div class="caption">
+                            <h4 class="text-center">
+                                <span>置顶卡：@{{ tool.number }}</span>
+                            </h4>
+                            <h3 class="text-center">
+                                <button class="btn btn-success" @click="exchangeTool(tool.name)">使用积分兑换</button>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="thumbnail" v-if="tool.name=='reSign'">
+                        <img alt="200 * 200" src="/image/background/buqianka.jpg" style="height: 200px; width: 200px; display: block;">
+                        <div class="caption">
+                            <h4 class="text-center">
+                                <span>补签卡：@{{ tool.number }}</span>
+                            </h4>
+                            <h3 class="text-center">
+                                <button class="btn btn-success" @click="exchangeTool(tool.name)">使用积分兑换</button>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="form-control">积分：@{{ account.bonus_points }}</div>
+                    </div>
                 </div>
             </div>
         </template>
@@ -43,12 +66,12 @@
                             }
                         });
                     },
-                    exchangeTool:function(tool){
+                    exchangeTool:function(name){
                         var vm = this;
                         $.ajax({
                             type: 'post',
                             url: '/account/exchangeTool',
-                            data: { 'tool' : tool },
+                            data: { 'name' : name },
                             dataType:'json',
                             success:function (data) {
                                 if(data.status == 'success') {

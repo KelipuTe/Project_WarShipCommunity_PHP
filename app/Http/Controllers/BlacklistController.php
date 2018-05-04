@@ -46,7 +46,10 @@ class BlacklistController extends Controller
      * @return mixed
      */
     public function report(Request $request){
-        $data = ['user_id' => Auth::user()->id];
+        $data = [
+            'explain' => '违规',
+            'user_id' => Auth::user()->id
+        ];
         Blacklist::create(array_merge($request->all(),$data));
         return Response::json(['status' => 1, 'message' => '成功']);
     }

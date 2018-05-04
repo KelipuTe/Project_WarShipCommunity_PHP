@@ -176,6 +176,6 @@ class User extends Authenticatable
     }
 
     public function ownsDiscussion($discussion){
-        return $this->id == $discussion->id;
+        return $this->id == $discussion->user_id;
     }
 }

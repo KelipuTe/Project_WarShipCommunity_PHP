@@ -19,6 +19,8 @@
                             <div class="pull-right">
                                 <button class="btn btn-danger" @click="blacklist(discussion.id)">
                                     <span class="fa fa-hand-stop-o fa-lg"></span> 举报 </button>
+                                <button class="btn btn-danger" v-if="isUser" @click="setTop(discussion.id)">
+                                    <span class="fa fa-thumb-tack fa-lg"></span> 置顶 </button>
                                 <button class="btn btn-danger" v-if="isUser" @click="softDelete(discussion.id)">
                                     <span class="fa fa-trash-o fa-lg"></span> 爆破 </button>
                             </div>
@@ -140,6 +142,26 @@
                                         alert(data.message);
                                     } else {
                                         alert(data.message);
+                                    }
+                                },
+                                error:function(jqXHR){
+                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        setTop:function(discussion_id){
+                            $.ajax({
+                                type:'post',
+                                url:'/discussion/setTop',
+                                data:{
+                                    'target': discussion_id
+                                },
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.status == 'failed'){
+                                        alert(data.message);
+                                    } else {
+                                        alert('success');
                                     }
                                 },
                                 error:function(jqXHR){

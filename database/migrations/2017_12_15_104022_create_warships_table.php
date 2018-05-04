@@ -17,10 +17,11 @@ class CreateWarshipsTable extends Migration
             $table->increments('id');
             $table->string('classes'); // 舰船级别
             $table->string('name'); // 舰船名字
-            $table->string('no'); // 舰船弦号
+            $table->string('no')->nullable(); // 舰船弦号
             $table->string('type'); // 舰船类型
             $table->string('country'); // 舰船国籍
             $table->string('pictureUrl'); // 舰船图鉴
+            $table->string('pageUrl')->nullable(); // 舰船页面
             $table->timestamps();
         });
     }

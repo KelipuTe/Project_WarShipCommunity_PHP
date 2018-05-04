@@ -89,7 +89,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="thumbnail">
-                            <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                            <img alt="200 * 200" src="/image/background/gonggaopai.jpg" style="height: 200px; width: 200px; display: block;">
                             <div class="caption">
                                 <h3 class="text-center">
                                     <a href="/office/blacklist/notice" class="btn btn-primary"> 公告牌 </a>
@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="thumbnail">
-                            <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                            <img alt="200 * 200" src="/image/background/dangan.jpg" style="height: 200px; width: 200px; display: block;">
                             <div class="caption">
                                 <h3 class="text-center">
                                     <a href="/office/blacklist/archives" class="btn btn-primary"> 档案室 </a>
@@ -113,7 +113,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="thumbnail">
-                            <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                            <img alt="200 * 200" src="/image/background/quanxian.jpg" style="height: 200px; width: 200px; display: block;">
                             <div class="caption">
                                 <h3 class="text-center">
                                     <a href="/office/permission" class="btn btn-primary">权限管理中心</a>
@@ -123,7 +123,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="thumbnail">
-                            <img alt="200 * 200" src="/image/avatar/default_avatar.jpg" style="height: 200px; width: 200px; display: block;">
+                            <img alt="200 * 200" src="/image/background/zhanjian.jpg" style="height: 200px; width: 200px; display: block;">
                             <div class="caption">
                                 <h3 class="text-center">
                                     <a href="/office/warship" class="btn btn-primary">舰船信息管理中心</a>

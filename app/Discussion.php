@@ -18,7 +18,7 @@ class Discussion extends Model
     protected $table = 'discussions';
 
     protected $fillable = [
-        'title','body','user_id','last_user_id','published_at'
+        'title','body','user_id','last_user_id','published_at','set_top'
     ];
 
     /**
@@ -93,6 +93,10 @@ class Discussion extends Model
 
     public function scopeNiceDiscussion($query){
         $query->orderBy('nice_discussion','desc');
+    }
+
+    public function scopeSetTop($query){
+        $query->orderBy('set_top','desc');
     }
 
     /**

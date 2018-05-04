@@ -121,7 +121,17 @@ class ActivityController extends Controller
      * @return mixed
      */
     public function signIn($nowDay){
+
         $nowTime = Carbon::now();
+        if($nowTime->day != $nowDay){
+            $accountController = new AccountController();
+            if(!$accountController->useTool('reSign')){
+                return Response::json([
+                    'status' => 'failed',
+                    'message' => '道具库存为0'
+                ]);
+            }
+        }
         $sign = Sign::all()
             ->where('user_id',Auth::user()->id)
             ->where('year','=',$nowTime->year)

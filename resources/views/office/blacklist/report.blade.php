@@ -27,7 +27,7 @@
                         <th scope="row" class="text-center"> @{{ blacklist.id }} </th>
                         <td> @{{ blacklist.type }} </td>
                         <td> @{{ blacklist.target }} </td>
-                        <td> 举报理由 </td>
+                        <td> @{{ blacklist.explain }} </td>
                         <td> @{{ blacklist.user_id }} </td>
                         <td> @{{ blacklist.created_at }} </td>
                         <td><button class="btn btn-primary" role="button" @click="locking(blacklist.id)"> 查阅 </button></td>

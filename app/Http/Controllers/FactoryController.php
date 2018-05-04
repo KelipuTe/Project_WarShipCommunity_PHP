@@ -131,7 +131,7 @@ class FactoryController extends Controller
     public function fileEdit(Request $request){
         $id = $request->input('factory-id');
         $file = $request->file('model-file'); // 拿到上传文件
-        $destinationPath = 'uploads/factory/'.$id.'/';
+        $destinationPath = 'uploads/factory/model'.$id.'/';
         $filename = time().'_'.$file->getClientOriginalName(); // 文件重命名
         $file->move($destinationPath, $filename);
         $factory = Factory::find($id); //

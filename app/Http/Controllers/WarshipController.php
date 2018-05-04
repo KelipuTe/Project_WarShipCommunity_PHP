@@ -63,7 +63,8 @@ class WarshipController extends Controller
         $destinationPath = 'uploads/warship/'; // 保存上传立绘的文件夹，在 public/uploads/avatar 目录下
         $filename = time().'_'.$file->getClientOriginalName();
         $file->move($destinationPath, $filename);
-        Image::make($destinationPath.$filename)->fit(200,320)->save(); // 图片裁剪 200 * 320
+        Image::make($destinationPath.$filename)->fit(800,300)->save(); // 图片裁剪 800 * 300
+//        Image::make($destinationPath.$filename)->fit(200,320)->save(); // 图片裁剪 200 * 320
         return Response::json([
             'success'=>true,
             'picture_url'=>'/'.$destinationPath.$filename, // 返回图片所在路径
@@ -73,10 +74,26 @@ class WarshipController extends Controller
 
     /**
      * 获得所有的舰船信息
+     * @param Request $request
      * @return mixed
      */
-    public function getWarship(){
-        $warships = Warship::all();
+    public function getWarship(Request $request){
+        $name = '%'.$request->input('name').'%';
+        $type = '%'.$request->input('type').'%';
+        $country = '%'.$request->input('country').'%';
+        if($request->input('no') != ''){
+            $no = '%'.$request->input('no').'%';
+            $warships = Warship::where('name','like',$name)
+                ->where('no','like',$no)
+                ->where('type','like',$type)
+                ->where('country','like',$country)
+                ->get();
+            return Response::json($warships);
+        }
+        $warships = Warship::where('name','like',$name)
+            ->where('type','like',$type)
+            ->where('country','like',$country)
+            ->get();
         return Response::json($warships);
     }
 

@@ -11212,12 +11212,16 @@ function sign() {
         url: '/activity/signIn/' + day,
         dataType: 'json',
         success: function success(data) {
-            btn.removeClass("btn-primary");
-            btn.removeClass("btn-info");
-            btn.addClass("btn-success");
-            btn.text("已签到");
-            jQuery('#sign-total').text(data.total);
-            jQuery('#sign-combo').text(data.combo);
+            if (data.status == 'failed') {
+                alert(data.message);
+            } else {
+                btn.removeClass("btn-primary");
+                btn.removeClass("btn-info");
+                btn.addClass("btn-success");
+                btn.text("已签到");
+                jQuery('#sign-total').text(data.total);
+                jQuery('#sign-combo').text(data.combo);
+            }
         },
         error: function error(jqXHR) {
             console.log("出现错误：" + jqXHR.status);

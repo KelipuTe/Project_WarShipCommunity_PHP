@@ -16,9 +16,9 @@
                         <li role="presentation" class="list-li">
                             <a href="/notification/unread"><span class="fa fa-envelope-o fa-lg"></span> 未读消息</a>
                         </li>
-                        <li role="presentation" class="list-li">
-                            <a href="#"><span class="fa fa-flag-o fa-lg"></span> 站内通知</a>
-                        </li>
+                        {{--<li role="presentation" class="list-li">--}}
+                            {{--<a href="#"><span class="fa fa-flag-o fa-lg"></span> 站内通知</a>--}}
+                        {{--</li>--}}
                         <li role="presentation" class="list-li">
                             <a href="/notification/fromPersonalLetter"><span class="fa fa-edit fa-lg"></span> 发出私信</a>
                         </li>

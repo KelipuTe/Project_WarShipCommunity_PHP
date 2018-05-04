@@ -27,7 +27,6 @@ Route::prefix('activity')->group(function() {
     Route::get('sign','ActivityController@sign'); // 活动区每日签到页面
     Route::get('showSign','ActivityController@showSign'); // 活动区显示每日签到日历
     Route::get('signIn/{nowDay}','ActivityController@signIn'); // 每日签到或者补签
-
 });
 
 // AccountController
@@ -65,6 +64,7 @@ Route::prefix('discussion')->group(function() {
     Route::post('show/comment','DiscussionController@comment'); // 讨论区评论后台
 
     Route::get('softdelete/{id}','DiscussionController@softdelete'); //讨论软删除
+    Route::post('setTop','DiscussionController@setTop');
 });
 
 // FactoryController
@@ -87,8 +87,10 @@ Route::prefix('follow')->group(function() {
 });
 
 // MasterController
-Route::get('/','MasterController@welcome'); // 主页
-Route::get('/welcome','MasterController@welcome'); // 主页
+Route::get('/','MasterController@discussion'); // 主页
+Route::get('/welcome','MasterController@discussion'); // 主页
+//Route::get('/','MasterController@welcome'); // 主页
+//Route::get('/welcome','MasterController@welcome'); // 主页
 Route::get('/about','MasterController@about'); // 关于
 Route::get('error/{status}','MasterController@error');
 Route::get('/office','MasterController@office'); // 办公区

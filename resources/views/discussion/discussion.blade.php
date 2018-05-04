@@ -19,6 +19,7 @@
                             <div class="media-body">
                                 <h4 class="media-heading">
                                     <a href="#" :href="['/discussion/show/'+discussion.id]"> @{{ discussion.title }} </a>
+                                    <span class="label label-danger" v-if="discussion.set_top==true">置顶</span>
                                 </h4>
                                 @{{ discussion.username[0].username }}
                                 <div class="pull-right" style="margin-right: 20px">
@@ -65,9 +66,7 @@
                         }
                     }
                 });
-                new Vue({
-                    el:"#discussion-list"
-                });
+                new Vue({ el:"#discussion-list" });
             </script>
         </div>
         <div class="col-md-3">
@@ -150,9 +149,7 @@
                         }
                     }
                 });
-                new Vue({
-                    el:"#hot-nice-list"
-                });
+                new Vue({ el:"#hot-nice-list" });
             </script>
         </div>
     </div>

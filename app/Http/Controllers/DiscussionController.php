@@ -36,7 +36,7 @@ class DiscussionController extends Controller
      * @return mixed
      */
     public function getDiscussions(){
-        $discussions = Discussion::latest()->blacklist()->published()->paginate(10);
+        $discussions = Discussion::setTop()->latest()->blacklist()->published()->paginate(10);
         return Response::json(['discussions' => $discussions]);
     }
 
@@ -223,5 +223,18 @@ class DiscussionController extends Controller
     public function getNiceDiscussions(){
         $discussions = Discussion::niceDiscussion()->blacklist()->paginate(5);
         return Response::json(['discussions' => $discussions]);
+    }
+
+    public function setTop(Request $request){
+        $accountController = new AccountController();
+        if($accountController->useTool('setTop')){
+            $discussion = Discussion::find($request->input('target'));
+            $discussion->update(['set_top' => true]);
+            return Response::json(['status' => 'success']);
+        }
+        return Response::json([
+            'status' => 'failed',
+            'message' => '道具库存为0'
+        ]);
     }
 }

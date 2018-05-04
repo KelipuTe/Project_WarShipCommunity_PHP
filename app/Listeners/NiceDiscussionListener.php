@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 
+use App\Discussion;
 use App\Events\NiceDiscussion;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
