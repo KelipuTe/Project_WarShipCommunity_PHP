@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 37);
+/******/ 	return __webpack_require__(__webpack_require__.s = 35);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -93,7 +93,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -284,25 +284,25 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 37:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(38);
+module.exports = __webpack_require__(36);
 
 
 /***/ }),
 
-/***/ 38:
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
  * Created by KelipuTe on 2017/11/22.
  */
 
-window.Vue = __webpack_require__(4);
+window.Vue = __webpack_require__(37);
 
 /* 显示每日签到日历的 Vue.js 组件 */
-Vue.component('show-sign', __webpack_require__(39));
+Vue.component('show-sign', __webpack_require__(40));
 
 var activityShowSign = new Vue({
   el: '#showSign'
@@ -310,56 +310,7 @@ var activityShowSign = new Vue({
 
 /***/ }),
 
-/***/ 39:
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(40)
-/* script */
-var __vue_script__ = __webpack_require__(41)
-/* template */
-var __vue_template__ = __webpack_require__(42)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\ShowSign.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5722605e", Component.options)
-  } else {
-    hotAPI.reload("data-v-5722605e", Component.options)
-' + '  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ 4:
+/***/ 37:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11055,372 +11006,11 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(5).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(38).setImmediate))
 
 /***/ }),
 
-/***/ 40:
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-
-/***/ 41:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-function sign() {
-    var day = $(this).attr("name");
-    var btn = $(this);
-    $.ajax({
-        type: 'GET',
-        url: '/activity/signIn/' + day,
-        dataType: 'json',
-        success: function success(data) {
-            if (data.status == 'failed') {
-                alert(data.message);
-            } else {
-                btn.removeClass("btn-primary");
-                btn.removeClass("btn-info");
-                btn.addClass("btn-success");
-                btn.text("已签到");
-                jQuery('#sign-total').text(data.total);
-                jQuery('#sign-combo').text(data.combo);
-            }
-        },
-        error: function error(jqXHR) {
-            console.log("出现错误：" + jqXHR.status);
-        }
-    });
-}
-/* harmony default export */ __webpack_exports__["default"] = ({
-    mounted: function mounted() {
-        console.log('Component show-sign mounted.');
-    },
-
-    data: function data() {
-        return {
-            year: 0, month: 0, day: "",
-            total: 0, combo: 0
-        };
-    },
-    created: function created() {
-        this.showSign();
-    },
-    methods: {
-        showSign: function showSign() {
-            var vm = this;
-            jQuery.ajax({
-                type: 'GET',
-                url: '/activity/showSign',
-                dataType: 'json',
-                success: function success(data) {
-                    vm.year = data.year;
-                    vm.month = data.month;
-                    vm.day = data.day.split(',');
-                    vm.total = data.total;
-                    vm.combo = data.combo;
-                    var i;
-                    for (i = 1; i < 8; ++i) {
-                        jQuery('#th_weekday_' + i).text("星期" + vm.weekday(new Date(data.year, data.month - 1, i).getDay()));
-                    }
-                    vm.showDay(vm.day);
-                },
-                error: function error(jqXHR) {
-                    console.log("出现错误：" + jqXHR.status);
-                }
-            });
-        },
-        showDay: function showDay(day) {
-            var i_day = 1;
-            for (; i_day <= day.length; ++i_day) {
-                /* 按一排一周的格式输出日历 */
-                if (i_day % 7 === 1) {
-                    var i_week = Math.ceil(i_day / 7);
-                    var tr_id = "week" + i_week;
-                    jQuery('#table-day').append('<tr id=' + tr_id + '></tr>');
-                }
-                var td_id = "day" + i_day;
-                jQuery('#' + tr_id).append('<td id=' + td_id + '>' + i_day + '号<br></td>');
-                /* 添加按钮并绑定事件 */
-                var nowTime = new Date();
-                var td_text = "";
-                var td_btn_class = "";
-                var btn_id = "button" + i_day;
-                if (i_day < nowTime.getDate()) {
-                    td_text = day[i_day - 1] === '1' ? '已签到' : '补签到';
-                    td_btn_class = day[i_day - 1] === '1' ? 'btn btn-sm btn-success' : 'btn btn-sm btn-info';
-                    jQuery('#' + td_id).append('<button id=' + btn_id + ' name=' + i_day + ' class="' + td_btn_class + '">' + td_text + '</button>');
-                    if (!jQuery('#' + btn_id).hasClass('btn-success')) {
-                        jQuery('#' + btn_id).on('click', sign);
-                    }
-                } else if (i_day === nowTime.getDate()) {
-                    td_text = day[i_day - 1] === '1' ? '已签到' : '未签到';
-                    td_btn_class = day[i_day - 1] === '1' ? 'btn btn-sm btn-success' : 'btn btn-sm btn-primary';
-                    jQuery('#' + td_id).append('<button id=' + btn_id + ' name=' + i_day + ' class="' + td_btn_class + '">' + td_text + '</button>');
-                    if (!jQuery('#' + btn_id).hasClass('btn-success')) {
-                        jQuery('#' + btn_id).on('click', sign);
-                    }
-                }
-            }
-        },
-        weekday: function weekday(day) {
-            switch (day) {
-                case 0:
-                    return "天";
-                case 1:
-                    return "一";
-                case 2:
-                    return "二";
-                case 3:
-                    return "三";
-                case 4:
-                    return "四";
-                case 5:
-                    return "五";
-                case 6:
-                    return "六";
-            }
-        }
-    },
-    computed: {
-        vyear: function vyear() {
-            return this.year;
-        },
-        vmonth: function vmonth() {
-            return this.month;
-        },
-        vday: function vday() {
-            return this.day;
-        },
-        vtotal: function vtotal() {
-            return this.total;
-        },
-        vcombo: function vcombo() {
-            return this.combo;
-        }
-    }
-});
-
-/***/ }),
-
-/***/ 42:
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("div", { staticClass: "jumbotron activity-sign-jumbotron" }, [
-      _c("div", { staticClass: "container text-center" }, [
-        _c("h2", [
-          _c("span", { domProps: { textContent: _vm._s(_vm.vyear) } }),
-          _vm._v(" 年 "),
-          _c("span", { domProps: { textContent: _vm._s(_vm.vmonth) } }),
-          _vm._v(" 月")
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _vm._m(0, false, false),
-    _vm._v(" "),
-    _c("div", [
-      _vm._v("当月连续签到："),
-      _c("span", {
-        attrs: { id: "sign-combo" },
-        domProps: { textContent: _vm._s(_vm.vcombo) }
-      }),
-      _vm._v("天")
-    ]),
-    _vm._v(" "),
-    _c("div", [
-      _vm._v("用户累计签到："),
-      _c("span", {
-        attrs: { id: "sign-total" },
-        domProps: { textContent: _vm._s(_vm.vtotal) }
-      }),
-      _vm._v("天")
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("table", { staticClass: "table table-bordered text-center" }, [
-        _c("thead", [
-          _c("tr", [
-            _c("th", { attrs: { id: "th_weekday_1" } }, [_vm._v("星期一")]),
-            _vm._v(" "),
-            _c("th", { attrs: { id: "th_weekday_2" } }, [_vm._v("星期二")]),
-            _vm._v(" "),
-            _c("th", { attrs: { id: "th_weekday_3" } }, [_vm._v("星期三")]),
-            _vm._v(" "),
-            _c("th", { attrs: { id: "th_weekday_4" } }, [_vm._v("星期四")]),
-            _vm._v(" "),
-            _c("th", { attrs: { id: "th_weekday_5" } }, [_vm._v("星期五")]),
-            _vm._v(" "),
-            _c("th", { attrs: { id: "th_weekday_6" } }, [_vm._v("星期六")]),
-            _vm._v(" "),
-            _c("th", { attrs: { id: "th_weekday_7" } }, [_vm._v("星期天")])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("tbody", { attrs: { id: "table-day" } })
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5722605e", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 5:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -11473,14 +11063,14 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(6);
+__webpack_require__(39);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
 
-/***/ 6:
+/***/ 39:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -11670,7 +11260,417 @@ exports.clearImmediate = clearImmediate;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(3)))
+
+/***/ }),
+
+/***/ 40:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(41)
+/* script */
+var __vue_script__ = __webpack_require__(42)
+/* template */
+var __vue_template__ = __webpack_require__(43)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\ShowSign.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5722605e", Component.options)
+  } else {
+    hotAPI.reload("data-v-5722605e", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+
+/***/ 42:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+function sign() {
+    var day = $(this).attr("name");
+    var btn = $(this);
+    $.ajax({
+        type: 'GET',
+        url: '/activity/signIn/' + day,
+        dataType: 'json',
+        success: function success(data) {
+            if (data.status == 'failed') {
+                alert(data.message);
+            } else {
+                btn.removeClass("btn-primary");
+                btn.removeClass("btn-info");
+                btn.addClass("btn-success");
+                btn.text("已签到");
+                jQuery('#sign-total').text(data.total);
+                jQuery('#sign-combo').text(data.combo);
+            }
+        },
+        error: function error(jqXHR) {
+            console.log("出现错误：" + jqXHR.status);
+        }
+    });
+}
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        console.log('Component show-sign mounted.');
+    },
+
+    data: function data() {
+        return {
+            year: 0, month: 0, day: "",
+            total: 0, combo: 0
+        };
+    },
+    created: function created() {
+        this.showSign();
+    },
+    methods: {
+        showSign: function showSign() {
+            var vm = this;
+            jQuery.ajax({
+                type: 'GET',
+                url: '/activity/showSign',
+                dataType: 'json',
+                success: function success(data) {
+                    vm.year = data.year;
+                    vm.month = data.month;
+                    vm.day = data.day.split(',');
+                    vm.total = data.total;
+                    vm.combo = data.combo;
+                    var i;
+                    for (i = 1; i < 8; ++i) {
+                        jQuery('#th_weekday_' + i).text("星期" + vm.weekday(new Date(data.year, data.month - 1, i).getDay()));
+                    }
+                    vm.showDay(vm.day);
+                },
+                error: function error(jqXHR) {
+                    console.log("出现错误：" + jqXHR.status);
+                }
+            });
+        },
+        showDay: function showDay(day) {
+            var i_day = 1;
+            for (; i_day <= day.length; ++i_day) {
+                /* 按一排一周的格式输出日历 */
+                if (i_day % 7 === 1) {
+                    var i_week = Math.ceil(i_day / 7);
+                    var tr_id = "week" + i_week;
+                    jQuery('#table-day').append('<tr id=' + tr_id + '></tr>');
+                }
+                var td_id = "day" + i_day;
+                jQuery('#' + tr_id).append('<td id=' + td_id + '>' + i_day + '号<br></td>');
+                /* 添加按钮并绑定事件 */
+                var nowTime = new Date();
+                var td_text = "";
+                var td_btn_class = "";
+                var btn_id = "button" + i_day;
+                if (i_day < nowTime.getDate()) {
+                    td_text = day[i_day - 1] === '1' ? '已签到' : '补签到';
+                    td_btn_class = day[i_day - 1] === '1' ? 'btn btn-sm btn-success' : 'btn btn-sm btn-info';
+                    jQuery('#' + td_id).append('<button id=' + btn_id + ' name=' + i_day + ' class="' + td_btn_class + '">' + td_text + '</button>');
+                    if (!jQuery('#' + btn_id).hasClass('btn-success')) {
+                        jQuery('#' + btn_id).on('click', sign);
+                    }
+                } else if (i_day === nowTime.getDate()) {
+                    td_text = day[i_day - 1] === '1' ? '已签到' : '未签到';
+                    td_btn_class = day[i_day - 1] === '1' ? 'btn btn-sm btn-success' : 'btn btn-sm btn-primary';
+                    jQuery('#' + td_id).append('<button id=' + btn_id + ' name=' + i_day + ' class="' + td_btn_class + '">' + td_text + '</button>');
+                    if (!jQuery('#' + btn_id).hasClass('btn-success')) {
+                        jQuery('#' + btn_id).on('click', sign);
+                    }
+                }
+            }
+        },
+        weekday: function weekday(day) {
+            switch (day) {
+                case 0:
+                    return "天";
+                case 1:
+                    return "一";
+                case 2:
+                    return "二";
+                case 3:
+                    return "三";
+                case 4:
+                    return "四";
+                case 5:
+                    return "五";
+                case 6:
+                    return "六";
+            }
+        }
+    },
+    computed: {
+        vyear: function vyear() {
+            return this.year;
+        },
+        vmonth: function vmonth() {
+            return this.month;
+        },
+        vday: function vday() {
+            return this.day;
+        },
+        vtotal: function vtotal() {
+            return this.total;
+        },
+        vcombo: function vcombo() {
+            return this.combo;
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 43:
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "jumbotron activity-sign-jumbotron" }, [
+      _c("div", { staticClass: "container text-center" }, [
+        _c("h2", [
+          _c("span", { domProps: { textContent: _vm._s(_vm.vyear) } }),
+          _vm._v(" 年 "),
+          _c("span", { domProps: { textContent: _vm._s(_vm.vmonth) } }),
+          _vm._v(" 月")
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(0, false, false),
+    _vm._v(" "),
+    _c("div", [
+      _vm._v("当月连续签到："),
+      _c("span", {
+        attrs: { id: "sign-combo" },
+        domProps: { textContent: _vm._s(_vm.vcombo) }
+      }),
+      _vm._v("天")
+    ]),
+    _vm._v(" "),
+    _c("div", [
+      _vm._v("用户累计签到："),
+      _c("span", {
+        attrs: { id: "sign-total" },
+        domProps: { textContent: _vm._s(_vm.vtotal) }
+      }),
+      _vm._v("天")
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("table", { staticClass: "table table-bordered text-center" }, [
+        _c("thead", [
+          _c("tr", [
+            _c("th", { attrs: { id: "th_weekday_1" } }, [_vm._v("星期一")]),
+            _vm._v(" "),
+            _c("th", { attrs: { id: "th_weekday_2" } }, [_vm._v("星期二")]),
+            _vm._v(" "),
+            _c("th", { attrs: { id: "th_weekday_3" } }, [_vm._v("星期三")]),
+            _vm._v(" "),
+            _c("th", { attrs: { id: "th_weekday_4" } }, [_vm._v("星期四")]),
+            _vm._v(" "),
+            _c("th", { attrs: { id: "th_weekday_5" } }, [_vm._v("星期五")]),
+            _vm._v(" "),
+            _c("th", { attrs: { id: "th_weekday_6" } }, [_vm._v("星期六")]),
+            _vm._v(" "),
+            _c("th", { attrs: { id: "th_weekday_7" } }, [_vm._v("星期天")])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("tbody", { attrs: { id: "table-day" } })
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5722605e", module.exports)
+  }
+}
 
 /***/ })
 

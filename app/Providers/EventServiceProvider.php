@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         /*'App\Events\Event' => [
             'App\Listeners\EventListener',
         ],*/
+        'Illuminate\Notifications\Events\NotificationSent' => [
+            'App\Listeners\NotificationSentListener',
+        ],
         'App\Events\PublicChat' => [
             'App\Listeners\PublicChatListener',
         ],

@@ -64,7 +64,6 @@ class WarshipController extends Controller
         $filename = time().'_'.$file->getClientOriginalName();
         $file->move($destinationPath, $filename);
         Image::make($destinationPath.$filename)->fit(800,300)->save(); // 图片裁剪 800 * 300
-//        Image::make($destinationPath.$filename)->fit(200,320)->save(); // 图片裁剪 200 * 320
         return Response::json([
             'success'=>true,
             'picture_url'=>'/'.$destinationPath.$filename, // 返回图片所在路径

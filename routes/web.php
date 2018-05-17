@@ -16,8 +16,8 @@
 });*/
 
 Route::get('test',function(){
-    return 'admin';
-})->middleware('admin');
+    event(new \App\Events\BroadcastNotification(1));
+});
 
 // ActivityController
 Route::prefix('activity')->group(function() {

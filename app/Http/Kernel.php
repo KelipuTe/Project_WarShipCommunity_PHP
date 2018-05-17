@@ -47,7 +47,7 @@ class Kernel extends HttpKernel
      * The application's route middleware.
      *
      * These middleware may be assigned to groups or used individually.
-     *
+     * 新创建的 middleware 需要在这里声明
      * @var array
      */
     protected $routeMiddleware = [

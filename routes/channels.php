@@ -14,3 +14,11 @@
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+//Broadcast::channel('broadcast-notification', function ($user) {
+//    return $user->id == 1;
+//});
+
+Broadcast::channel('broadcast-notification-{user_id}', function ($user,$user_id) {
+    return $user->id == $user_id;
+});

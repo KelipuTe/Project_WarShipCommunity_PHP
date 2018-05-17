@@ -12,6 +12,8 @@
     <script type="text/javascript" rel="script" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
     <script type="text/javascript" rel="script" src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js"></script>
     <script type="text/javascript" rel="script" src="https://cdn.bootcss.com/vue/2.4.4/vue.js"></script>
+    <script src="http://{{Request::getHost()}}:6001/socket.io/socket.io.js"></script>
+    <script type="text/javascript" rel="script" src="/js/app.js"></script>
     @yield('head')
 </head>
 <body class="master-body">
@@ -74,10 +76,45 @@
         </div>
         <div class="col-md-4">
             @if(Auth::check())
-                <div class="master-top-user-login text-center">
+                <div id="broadcast-notification">
+                    <broadcast-notification></broadcast-notification>
+                </div>
+                <template id="template-broadcast-notification">
+                    <div class="master-top-user-login text-center">
+                        <p><strong>欢迎回来，{{Auth::user()->username}}</strong></p>
+                        <p><strong>您不在的这段时间，共收到 @{{countNotifications}} 条消息</strong></p>
+                    </div>
+                </template>
+                <script>
+                    Vue.component('broadcast-notification',{
+                        template:"#template-broadcast-notification",
+                        data:function () {
+                            return {
+                                notifications: [],
+                                countNotifications: 0,
+                                user_id: 1
+                            }
+                        },
+                        mounted:function () {
+                            window.Echo.private('broadcast-notification-1')
+                                .listen('BroadcastNotification',e =>{
+                                    this.notifications.push($.parseJSON(e.notification));
+                                    this.countNotifications = this.notifications.length;
+                                    console.log(this.notifications);
+                                    console.log(this.countNotifications);
+                                    console.log(this.notifications[0]['follower']);
+                                });
+                        },
+                        methods:{
+
+                        }
+                    });
+                    new Vue({ el:"#broadcast-notification" });
+                </script>
+                {{--<div class="master-top-user-login text-center">
                     <p><strong>欢迎回来，{{Auth::user()->username}}</strong></p>
                     <p><strong>您不在的这段时间，共收到 {{count(Auth::user()->unreadNotifications)}} 条消息</strong></p>
-                </div>
+                </div>--}}
             @else
                 <div class="master-top-user-logout text-center">
                     <p><strong>尊敬的用户，您尚未<a href="/user/login" class="">登录</a></strong></p>
@@ -114,7 +151,6 @@
         <span> Powered by <a href="https://d.laravel-china.org/docs/5.5"> Laravel 5.5 </a></span>
     </div>
 </footer>
-<script type="text/javascript" rel="script" src="/js/app.js"></script>
 <script>
     $(document).ready(function () {
         /* 添加 CSRF 保护 */

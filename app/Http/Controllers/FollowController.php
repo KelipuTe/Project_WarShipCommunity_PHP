@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BroadcastNotification;
 use Auth;
 use Response;
 use Illuminate\Http\Request;

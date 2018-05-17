@@ -11,7 +11,7 @@ class AuthServiceProvider extends ServiceProvider
 {
     /**
      * The policy mappings for the application.
-     *
+     * 在这个数组里声明权限类
      * @var array
      */
     protected $policies = [
