@@ -20,7 +20,15 @@ class OfficeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('show','getIntroductions','getIntroduction','getMessages');
+        $this->middleware('auth')->except('office','show','getIntroductions','getIntroduction','getMessages');
+    }
+
+    /**
+     * 办公区
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function office(){
+        return view('office/office');
     }
 
     /**

@@ -14,50 +14,116 @@
     <script type="text/javascript" rel="script" src="https://cdn.bootcss.com/vue/2.4.4/vue.js"></script>
     <script src="http://{{Request::getHost()}}:6001/socket.io/socket.io.js"></script>
     <script type="text/javascript" rel="script" src="/js/app.js"></script>
+    <script>
+        /*
+         * 别放在 $(document).ready(function () {}) 里面
+         * 别放在页面底部
+         * 这个语句需要在所有的 ajax 请求发起之前执行
+         */
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content'),
+                'Authorization':$('meta[name="api-token"]').attr('content')
+            }
+        })
+    </script>
     @yield('head')
 </head>
 <body class="master-body">
 {{--顶部导航条--}}
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/welcome">WarShipCommunity</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="/welcome">首 页</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                @if(Auth::check())
-                    <li><img src="{{Auth::user()->avatar}}" class="img-circle img-avatar-small" alt="50x50"></li>
+<div id="nav-top">
+    <nav-top></nav-top>
+</div>
+<template id="template-nav-top">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/welcome">WarShipCommunity</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/welcome">首 页</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" v-if="user!=false">
+                    <li><img src="" :src="user.avatar" class="img-circle img-avatar-small" alt="50x50"></li>
                     <li>
-                        <a href="" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            {{Auth::user()->username}}
-                            <span class="caret"></span>
+                        <a href="" id="userDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            @{{ user.username }}<span class="caret"></span>
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                        <ul class="dropdown-menu" aria-labelledby="userDropdownMenu">
                             <li><a href="/user/center">个人中心</a></li>
-                            <li><a href="/notification/center">消息中心</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/user/logout">退出登录</a></li>
                         </ul>
                     </li>
-                @else
+                    <li>
+                        <a href="" id="notificationsDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            消息 <span class="badge">@{{ countUnreadNotifications }}</span> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="notificationsDropdownMenu">
+                            <li><a href="/notification/center">消息中心</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" v-else="user!=false">
                     <li><a href="/user/login">登 录</a></li>
                     <li><a href="/user/register">注 册</a></li>
-                @endif
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</template>
+<script>
+    Vue.component('nav-top',{
+        template:"#template-nav-top",
+        data:function () {
+            return {
+                user: '',
+                unreadNotifications: '',
+                countUnreadNotifications: 0
+            }
+        },
+        created:function () {
+            this.init();
+        },
+        methods:{
+            init:function(){
+                var vm = this;
+                $.ajax({
+                    type:'get',
+                    url:'/master/getUser',
+                    dataType:'json',
+                    success:function (data) {
+                        if(data.user != false){
+                            vm.user = data.user;
+                            vm.unreadNotifications = data.unreadNotifications;
+                            vm.countUnreadNotifications = vm.unreadNotifications.length;
+                            window.Echo.private('broadcast-notification-' + vm.user.id)
+                                .listen('BroadcastNotification',e =>{
+                                    vm.unreadNotifications.push($.parseJSON(e.notification));
+                                    vm.countUnreadNotifications = vm.unreadNotifications.length;
+                                    console.log(vm.countUnreadNotifications);
+                                });
+                        }
+                    },
+                    error:function(jqXHR){
+                        console.log("出现错误：" +jqXHR.status);
+                    }
+                });
+            }
+        }
+    });
+    new Vue({ el:"#nav-top" });
+</script>
 {{--顶部巨幕--}}
 <div class="jumbotron master-top-jumbotron">
     <div class="container">
         <h2>Welcome to WarShipCommunity</h2>
     </div>
 </div>
+{{--页面中部--}}
 <div class="container container-size">
     {{--页面顶部快捷导航--}}
     <div class="row master-top">
@@ -74,53 +140,7 @@
                 <dt><a href="/archives" class="btn btn-info"><span class="fa fa-archive fa-lg"></span> 冷月档案馆</a></dt>
             </dl>
         </div>
-        <div class="col-md-4">
-            @if(Auth::check())
-                <div id="broadcast-notification">
-                    <broadcast-notification></broadcast-notification>
-                </div>
-                <template id="template-broadcast-notification">
-                    <div class="master-top-user-login text-center">
-                        <p><strong>欢迎回来，{{Auth::user()->username}}</strong></p>
-                        <p><strong>您不在的这段时间，共收到 @{{countNotifications}} 条消息</strong></p>
-                    </div>
-                </template>
-                <script>
-                    Vue.component('broadcast-notification',{
-                        template:"#template-broadcast-notification",
-                        data:function () {
-                            return {
-                                notifications: [],
-                                countNotifications: 0,
-                                user_id: 1
-                            }
-                        },
-                        mounted:function () {
-                            window.Echo.private('broadcast-notification-1')
-                                .listen('BroadcastNotification',e =>{
-                                    this.notifications.push($.parseJSON(e.notification));
-                                    this.countNotifications = this.notifications.length;
-                                    console.log(this.notifications);
-                                    console.log(this.countNotifications);
-                                    console.log(this.notifications[0]['follower']);
-                                });
-                        },
-                        methods:{
-
-                        }
-                    });
-                    new Vue({ el:"#broadcast-notification" });
-                </script>
-                {{--<div class="master-top-user-login text-center">
-                    <p><strong>欢迎回来，{{Auth::user()->username}}</strong></p>
-                    <p><strong>您不在的这段时间，共收到 {{count(Auth::user()->unreadNotifications)}} 条消息</strong></p>
-                </div>--}}
-            @else
-                <div class="master-top-user-logout text-center">
-                    <p><strong>尊敬的用户，您尚未<a href="/user/login" class="">登录</a></strong></p>
-                </div>
-            @endif
-        </div>
+        <div class="col-md-4"></div>
         {{--顶部路径导航条--}}
         <div class="col-md-12">
             <ol class="breadcrumb">
@@ -152,16 +172,6 @@
     </div>
 </footer>
 <script>
-    $(document).ready(function () {
-        /* 添加 CSRF 保护 */
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                'Authorization': $('meta[name="api-token"]').attr('content')
-            }
-        });
-    });
-
     /*
      * 生成警告框
      * type 警告框类型

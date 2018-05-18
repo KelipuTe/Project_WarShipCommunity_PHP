@@ -15,12 +15,18 @@
     return view('welcome');
 });*/
 
+Route::get('/welcome', function () {
+    return view('welcome');
+});
+
 Route::get('test',function(){
-    event(new \App\Events\BroadcastNotification(1));
+
 });
 
 // ActivityController
 Route::prefix('activity')->group(function() {
+    Route::get('/','ActivityController@activity'); // 活动区
+
     Route::get('publicChat','ActivityController@publicChat'); // 活动区公共聊天室
     Route::post('showPublicChat','ActivityController@showPublicChat'); // 活动区公共聊天室后台
     Route::get('publicChatLogout','ActivityController@publicChatLogout'); // 退出活动区公共聊天室
@@ -49,14 +55,14 @@ Route::prefix('office/blacklist')->group(function() {
 
 // DiscussionController
 Route::prefix('discussion')->group(function() {
-    Route::get('getDiscussions','DiscussionController@getDiscussions'); // 获取讨论列表
+    Route::get('/','DiscussionController@discussion'); // 讨论区
+
     Route::get('getDiscussion/{id}','DiscussionController@getDiscussion'); // 获取讨论
     Route::get('getComments/{id}','DiscussionController@getComments'); // 获取评论列表
 
     Route::get('niceDiscussion/{id}','DiscussionController@niceDiscussion'); // 讨论推荐
     Route::get('niceComment/{id}','DiscussionController@niceComment'); // 回复点赞
-    Route::get('getHotDiscussions','DiscussionController@getHotDiscussions'); // 获得热点讨论
-    Route::get('getNiceDiscussions','DiscussionController@getNiceDiscussions'); // 获得推荐讨论
+
 
     Route::get('create','DiscussionController@create'); // 讨论区创建页面
     Route::post('store','DiscussionController@store'); // 讨论区创建页面后台
@@ -69,6 +75,8 @@ Route::prefix('discussion')->group(function() {
 
 // FactoryController
 Route::prefix('factory')->group(function() {
+    Route::get('/','FactoryController@factory'); // 冷月制造厂
+
     Route::post('create','FactoryController@create'); // 创建模型
     Route::get('getFactories','FactoryController@getFactories'); // 获得所有模型
     Route::get('getFactory','FactoryController@getFactory'); // 获得模型
@@ -87,19 +95,18 @@ Route::prefix('follow')->group(function() {
 });
 
 // MasterController
-Route::get('/','MasterController@discussion'); // 主页
-Route::get('/welcome','MasterController@discussion'); // 主页
-//Route::get('/','MasterController@welcome'); // 主页
-//Route::get('/welcome','MasterController@welcome'); // 主页
+Route::prefix('master')->group(function() {
+    Route::get('getUser','MasterController@getUser'); // 获得用户信息
+});
+Route::get('/','DiscussionController@discussion'); // 主页
 Route::get('/about','MasterController@about'); // 关于
 Route::get('error/{status}','MasterController@error');
-Route::get('/office','MasterController@office'); // 办公区
-Route::get('/office/warship','MasterController@warship'); // 办公区舰船信息管理中心页面
-Route::get('/discussion','MasterController@discussion'); // 讨论区
-Route::get('/activity','MasterController@activity'); // 活动区
-Route::get('/spaceAdministration','MasterController@spaceAdministration'); // 冷月航天局
-Route::get('/factory','MasterController@factory'); // 冷月制造厂
+
 Route::get('/archives','MasterController@archives'); // 冷月档案馆
+
+
+
+
 
 // NotificationController
 Route::prefix('notification')->group(function() {
@@ -114,6 +121,8 @@ Route::prefix('notification')->group(function() {
 
 // OfficeController 办公区
 Route::prefix('office')->group(function() {
+    Route::get('/','OfficeController@office'); // 办公区
+
     Route::get('getIntroductions','OfficeController@getIntroductions'); // 获取新人报道列表
     Route::get('getIntroduction/{id}','OfficeController@getIntroduction'); // 获取新人报道
     Route::get('getMessages/{id}','OfficeController@getMessages'); // 获取新人报道回复列表
@@ -139,6 +148,8 @@ Route::prefix('office/permission')->group(function (){
 
 // SpaceAdministrationController
 Route::prefix('spaceAdministration')->group(function() {
+    Route::get('/','SpaceAdministrationController@spaceAdministration'); // 冷月航天局
+
     Route::get('create','SpaceAdministrationController@create'); // 航天局发射新的卫星页面
     Route::post('upload','SpaceAdministrationController@upload'); // 航天局发射新的卫星上传图片后台
     Route::post('store','SpaceAdministrationController@store'); // 航天局发射新的卫星后台
@@ -177,6 +188,8 @@ Route::prefix('user/center')->group(function() {
 
 // WarshipController
 Route::prefix('office/warship')->group(function() {
+    Route::get('/','WarshipController@warship'); // 办公区舰船信息管理中心页面
+
     Route::get('create','WarshipController@create'); // 舰船管理创建页面
     Route::post('store','WarshipController@store'); // 舰船管理创建页面后台
     Route::post('picture','WarshipController@changePicture'); // 更改舰船立绘

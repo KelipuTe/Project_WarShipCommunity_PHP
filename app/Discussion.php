@@ -29,8 +29,7 @@ class Discussion extends Model
 
     /**
      * 数据预处理 setAttribute
-     * set 关键字 + Name + Attribute 关键字
-     * Name 是开头大写的数据库列名
+     * set(关键字) + Name(开头大写的数据库列名) + Attribute(关键字)
      * @param $date
      */
     public function setPublishedAtAttribute($date){
@@ -41,62 +40,31 @@ class Discussion extends Model
      * 声明向模型中添加的数据
      * @var array
      */
-    protected $appends = ['username','user_avatar','count_comments','update_diff'];
+    protected $appends = ['relatedInfo'];
 
-    /**
-     * 获得 username 用户名
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getUsernameAttribute(){
-        return $this->user()->get(['username']);
-    }
-
-    /**
-     * 获得 user 头像
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getUserAvatarAttribute(){
-        return $this->user()->get(['avatar']);
-    }
-
-    /**
-     * 获得 comment 数量
-     * @return int
-     */
-    public function getCountCommentsAttribute(){
-        return $this->comments()->count();
-    }
-
-    /**
-     * 获得 Carbon 类 diffForHumans() 方法处理过的 updated_at 字段的数据
-     * @return string
-     */
-    public function getUpdateDiffAttribute(){
+    public function getRelatedInfoAttribute(){
+        $username = $this->user()->get(['username']);
+        $avatar = $this->user()->get(['avatar']);
+        $lastUser = User::find($this->attributes['last_user_id']);
         $update_diff = Carbon::parse($this->attributes['updated_at']);
-        return $update_diff->diffForHumans();
+        $data = [
+            'username' => $username[0]->username,
+            'avatar' => $avatar[0]->avatar,
+            'lastUsername' => $lastUser->username,
+            'countComments' => $this->comments()->count(),
+            'update_diffForHumans' => $update_diff->diffForHumans()
+        ];
+        return $data;
     }
 
     /**
      * 筛选已发表的讨论
      * 查询语句 queryScope
-     * scope 关键字 + Name
-     * Name 是方法名
+     * scope(关键字) + Name(方法名)
      * @param $query
      */
     public function scopePublished($query){
         $query->where('published_at','<=',Carbon::now());
-    }
-
-    public function scopeHotDiscussion($query){
-        $query->orderBy('hot_discussion','desc');
-    }
-
-    public function scopeNiceDiscussion($query){
-        $query->orderBy('nice_discussion','desc');
-    }
-
-    public function scopeSetTop($query){
-        $query->orderBy('set_top','desc');
     }
 
     /**
@@ -105,6 +73,30 @@ class Discussion extends Model
      */
     public function scopeBlacklist($query){
         $query->where('blacklist','!=',true);
+    }
+
+    /**
+     * 按浏览量降序排序
+     * @param $query
+     */
+    public function scopeHotDiscussion($query){
+        $query->orderBy('hot_discussion','desc');
+    }
+
+    /**
+     * 按推荐量降序排序
+     * @param $query
+     */
+    public function scopeNiceDiscussion($query){
+        $query->orderBy('nice_discussion','desc');
+    }
+
+    /**
+     * 按置顶状态降序排序
+     * @param $query
+     */
+    public function scopeSetTop($query){
+        $query->orderBy('set_top','desc');
     }
 
     /**

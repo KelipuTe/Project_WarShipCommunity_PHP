@@ -18,11 +18,11 @@
                         <h2> @{{ discussion.title }}
                             <div class="pull-right">
                                 <button class="btn btn-danger" @click="blacklist(discussion.id)">
-                                    <span class="fa fa-hand-stop-o fa-lg"></span> 举报 </button>
+                                    <span class="fa fa-hand-stop-o fa-lg"></span>举报</button>
                                 <button class="btn btn-danger" v-if="isUser" @click="setTop(discussion.id)">
-                                    <span class="fa fa-thumb-tack fa-lg"></span> 置顶 </button>
+                                    <span class="fa fa-thumb-tack fa-lg"></span>置顶</button>
                                 <button class="btn btn-danger" v-if="isUser" @click="softDelete(discussion.id)">
-                                    <span class="fa fa-trash-o fa-lg"></span> 爆破 </button>
+                                    <span class="fa fa-trash-o fa-lg"></span>爆破</button>
                             </div>
                         </h2>
                     </div>
@@ -151,11 +151,8 @@
                         },
                         setTop:function(discussion_id){
                             $.ajax({
-                                type:'post',
+                                type:'get',
                                 url:'/discussion/setTop',
-                                data:{
-                                    'target': discussion_id
-                                },
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == 'failed'){
@@ -187,14 +184,14 @@
                             <div class="panel-heading">
                                 <div class="media">
                                     <div class="media-left">
-                                        <img class="media-object img-circle img-avatar-small" src="" :src="comment.user_avatar[0].avatar">
+                                        <img class="media-object img-circle img-avatar-small" src="" :src="comment.relatedInfo.avatar">
                                     </div>
                                     <div class="media-body">
                                         <h4 class="media-heading forum-comment-line">
-                                            @{{comment.username[0].username}}
+                                            @{{comment.relatedInfo.username}}
                                             <div class="pull-right">
                                                 <button class="btn btn-danger" role="button" @click="blacklist(comment.id)">
-                                                    <span class="fa fa-hand-stop-o fa-lg"></span> 举报 </button>
+                                                    <span class="fa fa-hand-stop-o fa-lg"></span>举报</button>
                                             </div>
                                         </h4>
                                     </div>
@@ -202,15 +199,19 @@
                             </div>
                             <div class="panel-body" v-html="comment.body"></div>
                             <div class="panel-footer">
-                                @if(Auth::check())
-                                    <div class="clearfix">
-                                        <button :id="['nice-comment-btn-'+comment.id]" class="btn btn-sm pull-right" :class="vbtnclass(comment.is_nice)" role="button" @click="niceComment(comment.id)">
-                                            <span :id="['nice-comment-fa-'+comment.id]" class="fa fa-lg" :class="vfaclass(comment.is_nice)"></span>
-                                            <span :id="['nice-comment-text-'+comment.id]" v-text="comment.cache_nice_comment"></span>
-                                            <span> 点赞 </span>
-                                        </button>
-                                    </div>
-                                @endif
+                                <div class="clearfix">
+                                    <button :id="['nice-comment-btn-'+comment.id]" role="button" v-if="isLogin" @click="niceComment(comment.id)"
+                                            class="btn btn-sm pull-right" :class="vbtnclass(comment.relatedInfo.isNice)">
+                                        <span :id="['nice-comment-fa-'+comment.id]" class="fa fa-lg" :class="vfaclass(comment.relatedInfo.isNice)"></span>
+                                        <span :id="['nice-comment-text-'+comment.id]" v-text="comment.relatedInfo.cache_nice_comment"></span>
+                                        <span>点赞</span>
+                                    </button>
+                                    <a href="/user/login" class="btn btn-info btn-sm pull-right" v-else="isLogin">
+                                        <span class="fa fa-thumbs-o-up fa-lg"></span>
+                                        <span  v-text="comment.relatedInfo.cache_nice_comment"></span>
+                                        <span>点赞</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -221,6 +222,7 @@
                     template:"#template-comment-list",
                     data:function () {
                         return {
+                            isLogin: false,
                             comments: ''
                         };
                     },
@@ -232,22 +234,23 @@
                             var vm = this;
                             var href = location.href.split('/');
                             if( location.href.indexOf('?') != -1 ){
-                                //判断是不是翻页后的地址，携带 ?page=number
+                                // 判断是不是翻页后的地址，携带 ?page=number
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
                             var discussion_id = href[href.length-1];
                             var url = '/discussion/getComments/' + discussion_id;
                             if( location.href.indexOf('?') != -1 ){
-                                //判断是不是翻页后的地址，携带 ?page=number
-                                var href = location.href.split('=');
+                                // 判断是不是翻页后的地址，携带 ?page=number
+                                href = location.href.split('=');
                                 url = '/discussion/getComments/' + discussion_id + '?page='+ href[href.length-1];
                             }
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:url,
                                 dataType:'json',
                                 success:function (data) {
+                                    vm.isLogin = data.isLogin;
                                     vm.comments = data.comments.data;
                                     pageList(data.comments,'http://localhost/discussion/show/'+discussion_id); // 构造分页按钮列表
                                 },
@@ -258,7 +261,7 @@
                         },
                         niceComment:function (comment_id) {
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:'/discussion/niceComment/' + comment_id,
                                 dataType:'json',
                                 success:function (data) {
@@ -299,20 +302,17 @@
                                 }
                             });
                         },
-                        vfaclass:function (is_nice) {
-                            return is_nice ? 'fa-thumbs-up' : 'fa-thumbs-o-up';
+                        vfaclass:function (isNice) {
+                            return isNice ? 'fa-thumbs-up' : 'fa-thumbs-o-up';
                         },
-                        vbtnclass:function (is_nice) {
-                            return is_nice ? 'btn-success' : 'btn-info';
+                        vbtnclass:function (isNice) {
+                            return isNice ? 'btn-success' : 'btn-info';
                         }
                     }
                 });
-                new Vue({
-                    el:"#comment-list"
-                });
+                new Vue({el:"#comment-list"});
             </script>
             {{--创建评论部分--}}
-            <div>
                 @if(Auth::check())
                     @include('vendor.ueditor.assets'){{--使用ueditor编辑器时需要添加--}}
                     <div class="form-group">
@@ -328,16 +328,57 @@
                         ue.ready(function() {
                             ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); /* 设置CSRFtoken */
                         });
+
+                        $('#submit').on('click', function () {
+                            $('#submit').text('');
+                            $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
+                            var href = location.href.split('/');
+                            if( location.href.indexOf('?') != -1 ){
+                                // 判断是不是翻页后的地址，携带 ?page=number
+                                href = location.href.split('?');
+                                href = href[0].split('/');
+                            }
+                            var id = href[href.length-1];
+                            $.ajax({
+                                type: 'post',
+                                url: '/discussion/show/comment',
+                                data: {
+                                    'discussion_id': id,
+                                    'body': UE.getEditor('ue-container').getContent()
+                                },
+                                dataType: 'json',
+                                complete:function(){
+                                    $('#submit').empty();
+                                    $('#submit').text('提交');
+                                },
+                                success: function (data) {
+                                    if(data.status == 1){
+                                        window.location.reload();
+                                    } else if(data.status == 0){
+                                        makeAlertBox('danger',data.message);
+                                    } else {
+                                        makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                    }
+                                },
+                                error: function (jqXHR) {
+                                    if(jqXHR.status == 422){
+                                        // 遍历被 Laravel Request 拦截后返回的错误提示
+                                        $.each(jqXHR.responseJSON.errors,function (index,value) {
+                                            makeAlertBox('danger',value);
+                                        });
+                                    }
+                                }
+                            });
+                        });
                     </script>
                 @else
                     <a href="/user/login" class="form-control btn btn-success"> 登录参与讨论 </a>
                 @endif
-            </div>
         </div>
         {{--右侧部分--}}
         <div class="col-md-3">
             {{--关于标签--}}
-            <div id="about-tags">
+            {{--<div id="about-tags">
                 <about-tags></about-tags>
             </div>
             <template id="tamplate-about-tags">
@@ -519,7 +560,7 @@
                 new Vue({
                     el:"#about-tags"
                 });
-            </script>
+            </script>--}}
             {{--关于讨论--}}
             <div id="about-discussion">
                 <about-discussion></about-discussion>
@@ -828,52 +869,6 @@
                 });
                 new Vue({
                     el:"#about-user"
-                });
-            </script>
-            <script>
-                $(document).ready(function () {
-                    /* 提交按钮 */
-                    $('#submit').on('click', function () {
-                        $('#submit').text('');
-                        $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
-                        var href = location.href.split('/');
-                        if( location.href.indexOf('?') != -1 ){
-                            //判断是不是翻页后的地址，携带 ?page=number
-                            href = location.href.split('?');
-                            href = href[0].split('/');
-                        }
-                        var id = href[href.length-1];
-                        $.ajax({
-                            type: 'post',
-                            url: '/discussion/show/comment',
-                            data: {
-                                'discussion_id': id,
-                                'body': UE.getEditor('ue-container').getContent()
-                            },
-                            dataType: 'json',
-                            success: function (data) {
-                                $('#submit').empty();
-                                $('#submit').text('提交');
-                                if(data.status == 1){
-                                    window.location.reload();
-                                } else if(data.status == 0){
-                                    makeAlertBox('danger',data.message);
-                                } else {
-                                    makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
-                                }
-                            },
-                            error: function (jqXHR) {
-                                $('#submit').empty();
-                                $('#submit').text('提交');
-                                if(jqXHR.status == 422){
-                                    // 遍历被 Laravel Request 拦截后返回的错误提示
-                                    $.each(jqXHR.responseJSON.errors,function (index,value) {
-                                        makeAlertBox('danger',value);
-                                    });
-                                }
-                            }
-                        });
-                    });
                 });
             </script>
         </div>

@@ -15,20 +15,50 @@ class DiscussionApiController extends ApiController
         $this->discussionTransformer = $discussionTransformer;
     }
 
+    /**
+     * 获得讨论列表
+     * @return mixed
+     */
     public function apiGetDiscussions(){
-        $discussions = Discussion::all();
+        $discussions = Discussion::setTop()->latest()->blacklist()->published()->paginate(7);
         return $this->response([
-            'user' => \Auth::guard('api')->user(),
             'status' => 'success',
             'status_code' => $this->getStatusCode(),
-            'data' => $this->discussionTransformer->transformCollection($discussions->toArray())
+            'data' => $discussions
         ]);
     }
 
-    public function apiGetDiscussion($id){
+    /**
+     * 获得热门讨论
+     * @return mixed
+     */
+    public function apiGetHotDiscussions(){
+        $discussions = Discussion::hotDiscussion()->blacklist()->published()->paginate(5);
+        $discussions = $discussions->toArray();
+        return $this->response([
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $this->discussionTransformer->simplifiedTransformCollection($discussions['data'])
+        ]);
+    }
+
+    /**
+     * 获得推荐讨论
+     * @return mixed
+     */
+    public function apiGetNiceDiscussions(){
+        $discussions = Discussion::niceDiscussion()->blacklist()->published()->paginate(5);
+        $discussions = $discussions->toArray();
+        return $this->response([
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $this->discussionTransformer->simplifiedTransformCollection($discussions['data'])
+        ]);
+    }
+
+    /*public function apiGetDiscussion($id){
         $discussion = Discussion::find($id);
         if(!$discussion){
-            // 链式操作需要在前面执行的函数返回 $this
             return $this->responseNotFound();
         }
         return $this->response([
@@ -36,5 +66,5 @@ class DiscussionApiController extends ApiController
             'status_code' => $this->getStatusCode(),
             'data' => $this->discussionTransformer->transform($discussion)
         ]);
-    }
+    }*/
 }

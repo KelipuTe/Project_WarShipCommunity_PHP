@@ -34,6 +34,16 @@ class SpaceAdministrationController extends Controller
     }
 
     /**
+     * 航天局
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function spaceAdministration(){
+        $satellites = Satellite::latest()->notDestroyed()->get();
+        $count = count($satellites);
+        return view('spaceAdministration/spaceAdministration',compact('satellites','count'));
+    }
+
+    /**
      * 发射新的卫星页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

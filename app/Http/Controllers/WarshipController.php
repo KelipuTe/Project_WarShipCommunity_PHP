@@ -19,7 +19,17 @@ class WarshipController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('admin')->except('gotoOne');
+        $this->middleware('admin')->except('warship','gotoOne');
+    }
+
+    /**
+     * 办公区办公室选项卡
+     * 舰船信息管理中心
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function warship(){
+        $warships = Warship::latest()->paginate(10);
+        return view('office/warship/warship',compact('warships'));
     }
 
     /**

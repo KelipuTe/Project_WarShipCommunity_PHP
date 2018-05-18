@@ -18,6 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('discussion')->group(function () {
-    Route::get('discussions','DiscussionApiController@apiGetDiscussions');
-    Route::get('discussion/{id}','DiscussionApiController@apiGetDiscussion');
+    Route::get('getDiscussions','DiscussionApiController@apiGetDiscussions'); // 获得讨论列表
+//    Route::get('discussion/{id}','DiscussionApiController@apiGetDiscussion');
+    Route::get('getHotDiscussions','DiscussionApiController@apiGetHotDiscussions'); // 获得热点讨论
+    Route::get('getNiceDiscussions','DiscussionApiController@apiGetNiceDiscussions'); // 获得推荐讨论
 });

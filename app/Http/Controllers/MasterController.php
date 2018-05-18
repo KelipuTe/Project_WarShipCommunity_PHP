@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Satellite;
 use App\Warship;
 use Auth;
+use Response;
 use Illuminate\Support\Facades\Redis;
 
 use App\Discussion;
@@ -40,21 +41,11 @@ class MasterController extends Controller
     }
 
     /**
-     * 办公区
+     * 档案馆
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function office(){
-        return view('office/office');
-    }
-
-    /**
-     * 办公区办公室选项卡
-     * 舰船信息管理中心
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function warship(){
-        $warships = Warship::latest()->paginate(10);
-        return view('office/warship/warship',compact('warships'));
+    public function archives(){
+        return view('archives/archives');
     }
 
     public function error($status){
@@ -69,45 +60,20 @@ class MasterController extends Controller
         return view('master.error',compact('message',$message));
     }
 
-    /**
-     * 讨论区
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function discussion(){
-        return view('discussion/discussion');
-    }
-
-    /**
-     * 活动区
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function activity(){
-        return view('activity/activity');
-    }
-
-    /**
-     * 航天局
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function spaceAdministration(){
-        $satellites = Satellite::latest()->notDestroyed()->get();
-        $count = count($satellites);
-        return view('spaceAdministration/spaceAdministration',compact('satellites','count'));
-    }
-
-    /**
-     * 制造厂
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function factory(){
-        return view('factory/factory');
-    }
-
-    /**
-     * 档案馆
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function archives(){
-        return view('archives/archives');
+    public function getUser(){
+        if(Auth::check()){
+            $user = [
+                'id' => Auth::user()->id,
+                'username' => Auth::user()->username,
+                'avatar' => Auth::user()->avatar
+            ];
+            return Response::json([
+                'user' => $user,
+                'unreadNotifications' => Auth::user()->unreadNotifications
+            ]);
+        }
+        return Response::json([
+            'user' => false
+        ]);
     }
 }

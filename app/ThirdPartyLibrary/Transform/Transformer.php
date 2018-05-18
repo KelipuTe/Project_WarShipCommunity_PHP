@@ -9,10 +9,9 @@ namespace App\ThirdPartyLibrary\Transformer;
  */
 abstract class Transformer
 {
-    public function transformCollection($items)
-    {
+    public abstract function transform($item);
+
+    public function transformCollection($items){
         return array_map([$this,'transform'],$items);
     }
-
-    public abstract function transform($discussions);
 }

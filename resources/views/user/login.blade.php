@@ -71,7 +71,7 @@
                             $('#submit').text('登录');
                             if(data.status == 1){
                                 // 登陆成功
-                                window.location.href = "/welcome";
+                                window.location.href = "/";
                             } else if(data.status == -1){
                                 // 账号未激活
                                 makeAlertBox2('info',data.message,'reSendEmailConfirm');

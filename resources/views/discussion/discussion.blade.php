@@ -14,17 +14,19 @@
                     <div v-for="discussion in discussions">
                         <div class="media forum-line">
                             <div class="media-left">
-                                <img class="media-object img-circle img-avatar-small" style="margin-left: 20px" src="" :src="discussion.user_avatar[0].avatar">
+                                <img class="media-object img-circle img-avatar-small" style="margin-left: 20px" src="" :src="discussion.relatedInfo.avatar">
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading">
                                     <a href="#" :href="['/discussion/show/'+discussion.id]"> @{{ discussion.title }} </a>
                                     <span class="label label-danger" v-if="discussion.set_top==true">置顶</span>
                                 </h4>
-                                @{{ discussion.username[0].username }}
+                                <span>
+                                    用户：@{{ discussion.relatedInfo.lastUsername }}，
+                                    最后更新于：@{{ discussion.relatedInfo.update_diffForHumans }}
+                                </span>
                                 <div class="pull-right" style="margin-right: 20px">
-                                    <span> 共 @{{ discussion.count_comments }} 条回复 </span>
-                                    <span> 最后更新于 @{{ discussion.update_diff }} </span>
+                                    <span>共 @{{ discussion.relatedInfo.countComments }} 条回复</span>
                                 </div>
                             </div>
                         </div>
@@ -34,30 +36,28 @@
             <script>
                 Vue.component('discussion-list',{
                     template:"#template-discussion-list",
-                    data:function () {
-                        return {
-                            discussions:''
-                        };
+                    data:function(){
+                        return {discussions: ''};
                     },
-                    created:function () {
+                    created:function(){
                         this.getDiscussions();
                     },
                     methods:{
                         getDiscussions:function(){
                             var vm = this;
-                            var url = '/discussion/getDiscussions';
+                            var url = '/api/discussion/getDiscussions';
                             if( location.href.indexOf('=') != -1 ){
-                                //判断是不是翻页后的地址，携带 ?page=number
+                                // 判断是不是翻页后的地址，携带 ?page=number
                                 var href = location.href.split('=');
-                                url = '/discussion/getDiscussions?page='+ href[href.length-1];
+                                url = '/api/discussion/getDiscussions?page='+ href[href.length-1];
                             }
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:url,
                                 dataType:'json',
                                 success:function (data) {
-                                    vm.discussions = data.discussions.data;
-                                    pageList(data.discussions,'http://localhost/discussion'); // 构造分页按钮列表
+                                    vm.discussions = data.data.data; // 这里对应后台数据的结构
+                                    pageList(data.data,'http://localhost/discussion'); // 构造分页按钮列表
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -110,8 +110,8 @@
                     template:"#template-hot-nice-list",
                     data:function () {
                         return {
-                            hot_discussions:'',
-                            nice_discussions:''
+                            hot_discussions: '',
+                            nice_discussions: ''
                         };
                     },
                     created:function () {
@@ -122,11 +122,11 @@
                         getHotDiscussions:function(){
                             var vm = this;
                             $.ajax({
-                                type:'GET',
-                                url:'/discussion/getHotDiscussions',
+                                type:'get',
+                                url:'/api/discussion/getHotDiscussions',
                                 dataType:'json',
                                 success:function (data) {
-                                    vm.hot_discussions = data.discussions.data;
+                                    vm.hot_discussions = data.data;
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -136,11 +136,11 @@
                         getNiceDiscussions:function () {
                             var vm = this;
                             $.ajax({
-                                type:'GET',
-                                url:'/discussion/getNiceDiscussions',
+                                type:'get',
+                                url:'/api/discussion/getNiceDiscussions',
                                 dataType:'json',
                                 success:function (data) {
-                                    vm.nice_discussions = data.discussions.data;
+                                    vm.nice_discussions = data.data;
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);

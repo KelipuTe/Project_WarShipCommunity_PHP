@@ -22,7 +22,15 @@ class ActivityController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('activity');
+    }
+
+    /**
+     * 活动区
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function activity(){
+        return view('activity/activity');
     }
 
     /**

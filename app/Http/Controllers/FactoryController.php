@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 
 class FactoryController extends Controller
 {
+    /**
+     * 制造厂
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function factory(){
+        return view('factory/factory');
+    }
+
     public function create(){
         if(request('title') != null && request('title')!= "") {
             $data = [
