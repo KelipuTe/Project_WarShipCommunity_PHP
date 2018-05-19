@@ -20,7 +20,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'email','email_confirm_code','email_confirm', 'password','avatar','blacklist','api_token'
+        'username', 'email','email_confirm_code','email_confirm', 'password','avatar','api_token','blacklist'
     ];
 
     /**
@@ -71,11 +71,8 @@ class User extends Authenticatable
      * @return array
      */
     public function userDiscussionFollow($discussion){
-        /*return UserDiscussionFollow::create([
-            'user_id' => $this->id,
-            'discussion_id' => $discussion,
-        ]);*/ // 得到 discussion 的 id 并创建 user 关注 discussion 的记录
-        return $this->userDiscussion()->toggle($discussion); // toggle() 方法，如果数据库不存在该数据就创建，存在就删除
+        // toggle() 方法，如果数据库不存在该数据就创建，存在就删除
+        return $this->userDiscussion()->toggle($discussion);
     }
 
     /**
@@ -98,8 +95,7 @@ class User extends Authenticatable
          * 注意一下参数里的两个 key
          */
         return $this->belongsToMany(self::class,'user_user',
-            'follower_id','followed_id')
-            ->withTimestamps();
+            'follower_id','followed_id')->withTimestamps();
     }
 
     /**
@@ -108,10 +104,8 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function userUserFollower(){
-        /* 注意一下参数里的两个 key */
         return $this->belongsToMany(self::class,'user_user',
-            'followed_id','follower_id')
-            ->withTimestamps();
+            'followed_id','follower_id')->withTimestamps();
     }
 
     /**
@@ -155,6 +149,10 @@ class User extends Authenticatable
         return $this->hasMany(Sign::class,'user_id');
     }
 
+    /**
+     * 通过 user 找到其对应的 role
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function roles(){
         return $this->belongsToMany(Role::class,'role_user');
         // 使用 $this->roles()->save($role) 可以为 user 添加 role
@@ -162,20 +160,24 @@ class User extends Authenticatable
         // 使用 $this->roles()->attach($role) 可以为 user 添加 role
     }
 
+    /**
+     * @param $role
+     * @return bool
+     */
     public function hasRole($role){
         if(is_string($role)){
-            // contains() 判断字符串内是否存在
+            // contains() 方法判断集合是否包含给定的项目
             return $this->roles->contains('name',$role);
         }
-        // intersect() 用于比较两个 Collection 是否相同
+        // intersect() 方法从原集合中删除不在给定数组或集合中的任何值
         return !! $role->intersect($this->roles)->count();
     }
 
+    /**
+     * 判断用户是不是管理员
+     * @return bool
+     */
     public function isAdmin(){
         return ($this->hasRole('admin') || $this->power == 1);
-    }
-
-    public function ownsDiscussion($discussion){
-        return $this->id == $discussion->user_id;
     }
 }

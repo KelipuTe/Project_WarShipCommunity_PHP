@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Discussion;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,28 +10,23 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-/**
- * 讨论被访问事件触发器
- * Class HotDiscussion
- * @package App\Events
- */
-class HotDiscussion
+class AddLiveness
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $discussion; // 触发访问事件的讨论
-    public $ip; // 访问者的 ip 地址
+    public $user_id; // 账户所属用户 id
+    public $type; // 活跃值增加类型
 
     /**
      * Create a new event instance.
      *
-     * @param Discussion $discussion
-     * @param $ip
+     * @param $user_id
+     * @param $type
      */
-    public function __construct(Discussion $discussion,$ip)
+    public function __construct($user_id,$type)
     {
-        $this->discussion = $discussion;
-        $this->ip = $ip;
+        $this->user_id = $user_id;
+        $this->type = $type;
     }
 
     /**

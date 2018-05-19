@@ -34,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NiceComment' => [
             'App\Listeners\NiceCommentListener',
         ],
+        'App\Events\AddLiveness' => [
+            'App\Listeners\AddLivenessListener',
+        ],
     ];
 
     /**

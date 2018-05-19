@@ -13,24 +13,23 @@ class Account extends Model
 {
     protected $table = 'accounts';
 
-    protected $fillable=['user_id','bonus_points'];
+    protected $fillable=['user_id'];
 
     /**
-     * 活跃值
-     * 命名方式为"区域名" + "区域控制器方法名"
+     * 活跃值，命名方式为"区域名"+"事件名"
      * @var array
      */
-    public static $livenessScore = array(
-        'officeStore'=>50, 'officeWelcome'=>5, 'officeWelcomer'=>5,
-        'forumStore'=>10, 'forumCommit'=>5, 'forumCommitter'=>5,
-        'activitySign'=>2
+    protected $livenessScore = array(
+        'officeStore'=>10, 'officeWelcome'=>5,
+        'discussionStore'=>10, 'discussionCommit'=>5,
+        'activitySign'=>5
     );
 
     /**
-     * 活跃值等级
+     * 活跃值等级，斐波那契数列
      * @var array
      */
-    public $levelScore = array(
+    protected $levelScore = array(
         'level_1'=>100, 'level_2'=>200, 'level_3'=>300,
         'level_4'=>500, 'level_5'=>800, 'level_6'=>1300,
         'level_7'=>2100, 'level_8'=>3400, 'level_9'=>5500,
@@ -40,17 +39,39 @@ class Account extends Model
     );
 
     /**
-     * 判断活跃值对应等级
+     * 增加活跃值
+     * @param $type
+     * @param int $power
+     */
+    public function addLiveness($type,$power = 1){
+        $this->update([
+            'liveness'=> $this->liveness += ($power * $this->livenessScore[$type])
+        ]);
+        $this->addBonusPoints($type);
+    }
+
+    /**
+     * 增加积分
+     * @param $type
+     */
+    public function addBonusPoints($type){
+        $this->update([
+            'bonus_points'=>$this->bonus_points += ($this->livenessScore[$type]/5)
+        ]);
+    }
+
+    /**
+     * 计算活跃值对应等级
      * @param $liveness
      * @return int
      */
-    public function level($liveness){
-        for($i = 1;$i < 19;++$i){
-            if($liveness < $this->levelScore['level_'.$i]){
+    public function levelCalculate($liveness){
+        for($level = 1;$level < 19;++$level){
+            if($liveness < $this->levelScore['level_'.$level]){
                 break;
             }
         }
-        return $i;
+        return $level;
     }
 
     /**

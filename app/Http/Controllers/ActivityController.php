@@ -224,8 +224,8 @@ class ActivityController extends Controller
          * 基础倍率 1 + 用户累计签到天数 / 10 + 当月连续签到天数 / 7
          */
         $power = 1 + (int)($total/10) + (int)($combo/7);
-        $accountController = new AccountController();
-        $accountController->activitySign(Auth::user()->id,$power); // 增加活跃值
+//        $accountController = new AccountController();
+//        $accountController->activitySign(Auth::user()->id,$power); // 增加活跃值
     }
 
 }

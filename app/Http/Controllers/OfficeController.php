@@ -51,8 +51,8 @@ class OfficeController extends Controller
         ];
         $introduction = Introduction::create(array_merge($request->all(),$data));
         if($introduction != null){
-            $accountController = new AccountController();
-            $accountController->officeStore(Auth::user()->id); // 新人报道，增加活跃值
+//            $accountController = new AccountController();
+//            $accountController->officeStore(Auth::user()->id); // 新人报道，增加活跃值
             $status = 1; $message = "新人报道创建成功！！！";
         } else {
             $status = 0; $message = "新人报道创建失败！！！";
@@ -111,10 +111,10 @@ class OfficeController extends Controller
     public function welcome(MessageRequest $request){
         $message = Message::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
         if($message != null){
-            $accountController = new AccountController();
-            $accountController->officeWelcomer(Auth::user()->id); // 新人报道欢迎者，增加活跃值
+//            $accountController = new AccountController();
+//            $accountController->officeWelcomer(Auth::user()->id); // 新人报道欢迎者，增加活跃值
             $introduction = Introduction::findOrFail($request->get('introduction_id'));
-            $accountController->officeWelcome($introduction->user->id); // 新人报道被欢迎，增加活跃值
+//            $accountController->officeWelcome($introduction->user->id); // 新人报道被欢迎，增加活跃值
             $status = 1; $message = "迎新成功！！！";
         } else {
             $status = 0; $message = "迎新失败！！！";

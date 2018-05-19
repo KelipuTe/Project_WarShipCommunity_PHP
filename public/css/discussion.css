@@ -5,12 +5,12 @@ img{
 }
 
 /* discussion.blade.php 中右侧巨幕 */
-.forum-jumbotron{
+.discussion-jumbotron{
     background-color: rgba(97,234,73,0.8);
 }
 
 /* discussion.blade.php 中讨论标题间距 */
-.forum-line{
+.discussion-line{
     margin-top: 15px;
     margin-bottom: 15px;
     padding: 5px 10px;
@@ -19,15 +19,15 @@ img{
 }
 
 /* show.blade.php 中评论标题间距 */
-.forum-comment-line{
+.comment-line{
     padding-top: 15px;
 }
 
 /* show.blade.php 中右侧关于作者 */
-.forum-user-statics{
+.user-statics{
     display: flex;
     margin-top: 20px;
 }
-.forum-user-statics-item{
+.user-statics-item{
     padding: 2px 20px;
 }

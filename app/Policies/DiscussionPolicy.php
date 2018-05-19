@@ -30,6 +30,6 @@ class DiscussionPolicy
      * @return bool
      */
     public function discussionDelete(User $user,Discussion $discussion){
-        return $user->ownsDiscussion($discussion);
+        return $user->id == $discussion->user_id;
     }
 }

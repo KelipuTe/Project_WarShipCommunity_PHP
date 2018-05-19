@@ -12,7 +12,7 @@
             <template id="template-discussion-list">
                 <div>
                     <div v-for="discussion in discussions">
-                        <div class="media forum-line">
+                        <div class="media discussion-line">
                             <div class="media-left">
                                 <img class="media-object img-circle img-avatar-small" style="margin-left: 20px" src="" :src="discussion.relatedInfo.avatar">
                             </div>
@@ -70,7 +70,7 @@
             </script>
         </div>
         <div class="col-md-3">
-            <div class="jumbotron forum-jumbotron text-center">
+            <div class="jumbotron discussion-jumbotron text-center">
                 @if(Auth::check())
                     <a class="btn btn-danger btn-lg" href="/discussion/create" role="button">发起新的讨论</a>
                 @else

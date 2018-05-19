@@ -38,8 +38,8 @@ Route::prefix('activity')->group(function() {
 // AccountController
 Route::prefix('account')->group(function() {
     Route::get('getLivenessAndLevel/{id}','AccountController@getLivenessAndLevel'); // 获得用户活跃值和等级
-    Route::get('getTools','AccountController@getTools');
-    Route::post('exchangeTool','AccountController@exchangeTool');
+    Route::get('getTools','AccountController@getTools'); // 获得用户道具信息
+    Route::post('exchangeTool','AccountController@exchangeTool'); // 兑换道具
 });
 
 // BlacklistController
@@ -55,22 +55,18 @@ Route::prefix('office/blacklist')->group(function() {
 
 // DiscussionController
 Route::prefix('discussion')->group(function() {
+    Route::get('test','DiscussionController@test');
     Route::get('/','DiscussionController@discussion'); // 讨论区
-
+    Route::get('create','DiscussionController@create'); // 讨论创建页面
+    Route::post('store','DiscussionController@store'); // 讨论存储
+    Route::get('show/{id}','DiscussionController@show'); // 讨论显示页面
     Route::get('getDiscussion/{id}','DiscussionController@getDiscussion'); // 获取讨论
-    Route::get('getComments/{id}','DiscussionController@getComments'); // 获取评论列表
-
-    Route::get('niceDiscussion/{id}','DiscussionController@niceDiscussion'); // 讨论推荐
+    Route::post('show/comment','DiscussionController@comment'); // 回复讨论
+    Route::get('getComments/{id}','DiscussionController@getComments'); // 获取回复列表
+    Route::get('niceDiscussion/{id}','DiscussionController@niceDiscussion'); // 推荐讨论
     Route::get('niceComment/{id}','DiscussionController@niceComment'); // 回复点赞
-
-
-    Route::get('create','DiscussionController@create'); // 讨论区创建页面
-    Route::post('store','DiscussionController@store'); // 讨论区创建页面后台
-    Route::get('show/{id}','DiscussionController@show'); // 讨论区显示页面
-    Route::post('show/comment','DiscussionController@comment'); // 讨论区评论后台
-
-    Route::get('softdelete/{id}','DiscussionController@softdelete'); //讨论软删除
-    Route::post('setTop','DiscussionController@setTop');
+    Route::get('softdelete/{id}','DiscussionController@softdelete'); // 讨论软删除
+    Route::post('setTop','DiscussionController@setTop'); // 讨论置顶
 });
 
 // FactoryController
@@ -98,15 +94,10 @@ Route::prefix('follow')->group(function() {
 Route::prefix('master')->group(function() {
     Route::get('getUser','MasterController@getUser'); // 获得用户信息
 });
-Route::get('/','DiscussionController@discussion'); // 主页
-Route::get('/about','MasterController@about'); // 关于
-Route::get('error/{status}','MasterController@error');
-
+Route::get('/','DiscussionController@discussion'); // 主页面
+Route::get('/about','MasterController@about'); // 关于页面
+Route::get('error/{status}','MasterController@error'); // 错误页面
 Route::get('/archives','MasterController@archives'); // 冷月档案馆
-
-
-
-
 
 // NotificationController
 Route::prefix('notification')->group(function() {
@@ -149,7 +140,6 @@ Route::prefix('office/permission')->group(function (){
 // SpaceAdministrationController
 Route::prefix('spaceAdministration')->group(function() {
     Route::get('/','SpaceAdministrationController@spaceAdministration'); // 冷月航天局
-
     Route::get('create','SpaceAdministrationController@create'); // 航天局发射新的卫星页面
     Route::post('upload','SpaceAdministrationController@upload'); // 航天局发射新的卫星上传图片后台
     Route::post('store','SpaceAdministrationController@store'); // 航天局发射新的卫星后台

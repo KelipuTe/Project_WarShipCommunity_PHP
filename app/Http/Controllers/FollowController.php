@@ -20,7 +20,8 @@ class FollowController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->except('hasUserDiscussionFollow','hasUserUserFollow');
+        $this->middleware('auth')
+            ->except('hasUserDiscussionFollow','hasUserUserFollow');
     }
 
     /**
@@ -30,11 +31,7 @@ class FollowController extends Controller
      */
     public function userDiscussionFollow($discussion_id){
         Auth::user()->userDiscussionFollow($discussion_id); // 获取自己的 user 对象调用关注用户讨论函数
-        $discussion = Discussion::findOrFail($discussion_id);
-        return Response::json([
-            'userDiscussion' => Auth::user()->hasFollowedDiscussion($discussion_id),
-            'countFollowedUser' => $discussion->countFollowedUser()
-        ]);
+        $this->hasUserDiscussionFollow($discussion_id);
     }
 
     /**
@@ -44,13 +41,15 @@ class FollowController extends Controller
      */
     public function hasUserDiscussionFollow($discussion_id){
         $discussion = Discussion::findOrFail($discussion_id);
-        $userDiscussion = false;
+        $isFollowed = false;
         if(Auth::user()){
-            $userDiscussion = Auth::user()->hasFollowedDiscussion($discussion_id);
+            $isFollowed = Auth::user()->hasFollowedDiscussion($discussion_id);
         }
         return Response::json([
-            'userDiscussion' => $userDiscussion,
-            'countFollowedUser' => $discussion->countFollowedUser()
+            'countFollowedUser' => $discussion->countFollowedUser(),
+            'isLogin' => Auth::check(),
+            'isFollowed' => $isFollowed
+
         ]);
     }
 
@@ -64,11 +63,11 @@ class FollowController extends Controller
         $user = User::find($discussion->user->id);
         $followers = $user->userUserFollower()->pluck('follower_id')->toArray();
         if(!in_array(Auth::user()->id,$followers)){
-            /* 如果还没有关注目标用户 */
+            // 如果还没有关注目标用户
             Auth::user()->userUserFollow($user); // 获取自己的 user 对象调用关注用户函数
             $user->notify(new UserUserFollowNotification()); // 关注用户完成后发送站内信通知被关注用户
         } else {
-            /* 否则取消关注目标用户 */
+            // 否则取消关注目标用户
             Auth::user()->userUserFollow($user);
         }
         return $this->hasUserUserFollow($discussion_id);
@@ -83,9 +82,9 @@ class FollowController extends Controller
         $discussion = Discussion::find($discussion_id); // 通过 discussion_id 找到 discussion 对象
         $user = User::find($discussion->user->id); // 通过 discussion 对象找到 user 对象
         $followers = $user->userUserFollower()->pluck('follower_id')->toArray(); // 通过 user 对象找到所有的 follower
-        $userUser = false;
+        $isFollowed = false;
         if(Auth::user()){
-            $userUser = in_array(Auth::user()->id,$followers);
+            $isFollowed = in_array(Auth::user()->id,$followers);
         }
         return Response::json([
             'userAvatar' => $discussion->user->avatar,
@@ -94,7 +93,8 @@ class FollowController extends Controller
             'countUserDiscussions' => $discussion->user->discussions->count(),
             'countUserComments' => $discussion->user->comments->count(),
             'countUserFollowers' => $discussion->user->userUserFollower->count(),
-            'userUser' => $userUser,
+            'isLogin' => Auth::check(),
+            'isFollowed' => $isFollowed,
         ]);
     }
 }

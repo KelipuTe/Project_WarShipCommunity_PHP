@@ -19,9 +19,9 @@
                             <div class="pull-right">
                                 <button class="btn btn-danger" @click="blacklist(discussion.id)">
                                     <span class="fa fa-hand-stop-o fa-lg"></span>举报</button>
-                                <button class="btn btn-danger" v-if="isUser" @click="setTop(discussion.id)">
+                                <button class="btn btn-danger" v-if="isOwner" @click="setTop(discussion.id)">
                                     <span class="fa fa-thumb-tack fa-lg"></span>置顶</button>
-                                <button class="btn btn-danger" v-if="isUser" @click="softDelete(discussion.id)">
+                                <button class="btn btn-danger" v-if="isOwner" @click="softDelete(discussion.id)">
                                     <span class="fa fa-trash-o fa-lg"></span>爆破</button>
                             </div>
                         </h2>
@@ -48,7 +48,7 @@
                     data:function () {
                         return {
                             discussion: '', hot_discussion: '', nice_discussion: '',
-                            isNice: false, isUser: false
+                            isNice: false, isOwner: false
                         };
                     },
                     computed:{
@@ -81,7 +81,7 @@
                                     vm.hot_discussion = data.hot_discussion;
                                     vm.nice_discussion = data.nice_discussion;
                                     vm.isNice = data.isNice;
-                                    vm.isUser = data.isUser;
+                                    vm.isOwner = data.isOwner;
                                     $('#discussion-title').text(data.discussion.title);
                                 },
                                 error:function(jqXHR){
@@ -187,7 +187,7 @@
                                         <img class="media-object img-circle img-avatar-small" src="" :src="comment.relatedInfo.avatar">
                                     </div>
                                     <div class="media-body">
-                                        <h4 class="media-heading forum-comment-line">
+                                        <h4 class="media-heading comment-line">
                                             @{{comment.relatedInfo.username}}
                                             <div class="pull-right">
                                                 <button class="btn btn-danger" role="button" @click="blacklist(comment.id)">
@@ -378,7 +378,7 @@
         {{--右侧部分--}}
         <div class="col-md-3">
             {{--关于标签--}}
-            {{--<div id="about-tags">
+            <div id="about-tags">
                 <about-tags></about-tags>
             </div>
             <template id="tamplate-about-tags">
@@ -392,40 +392,38 @@
                                 <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}
                             </button>
                         </div>
-                        @if(Auth::check() && Auth::user()->id == $discussion->user_id)
-                            <div class="panel-footer text-center">
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" @click="getAllTags" data-toggle="modal" data-target="#tagsModal">
-                                    <span class="fa fa-tags fa-lg"></span> 添加标签
-                                </button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="tagsModal" tabindex="-1" role="dialog" aria-labelledby="tagsModalLabel">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title" id="tagsModalLabel">
-                                                    <span class="fa fa-tags fa-lg"></span> 所有标签
-                                                </h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <button v-for="tag in allTags" class="btn" :class="changeClass(tag)" style="margin: 5px 10px" @click="changeTag(tag)">
-                                                    <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}
+                        <div class="panel-footer text-center" v-if="isOwner">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" @click="getAllTags" data-toggle="modal" data-target="#tagsModal">
+                                <span class="fa fa-tags fa-lg"></span> 添加标签
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="tagsModal" tabindex="-1" role="dialog" aria-labelledby="tagsModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="tagsModalLabel">
+                                                <span class="fa fa-tags fa-lg"></span> 所有标签
+                                            </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <button v-for="tag in allTags" class="btn" :class="changeClass(tag)" style="margin: 5px 10px" @click="changeTag(tag)">
+                                                <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}
+                                            </button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-group">
+                                                <label for="tags-body"><input type="text" id="tags-body" /></label>
+                                                <button id="tags-submit" type="button" class="btn btn-primary" @click="createTags">
+                                                    <span class="fa fa-tags fa-lg"></span> 新增标签
                                                 </button>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <div class="form-group">
-                                                    <label for="tags-body"><input type="text" id="tags-body" /></label>
-                                                    <button id="tags-submit" type="button" class="btn btn-primary" @click="createTags">
-                                                        <span class="fa fa-tags fa-lg"></span> 新增标签
-                                                    </button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        </div>
                     </div>
                 </div>
             </template>
@@ -434,33 +432,29 @@
                     template:"#tamplate-about-tags",
                     data:function () {
                         return{
-                            tags:'',
-                            allTags:'',
-                            isUser:false
+                            tags: '', allTags: '',
+                            isOwner:false
                         }
-                    },
-                    computed:{
-
                     },
                     created:function () {
                         this.getTags();
                     },
                     methods:{
                         getTags:function () {
-                            var vm = this; // 这里需要指定是 Vue.js 的 this 不是 JavaScript 的 this
+                            var vm = this;
                             var href = location.href.split('/');
                             if( location.href.indexOf('?') != -1 ){
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
                             var id = href[href.length-1];
-                            var type = 'discussion';
                             $.ajax({
-                                type:'GET',
-                                url:'/tag/getTags/' + type + '/' + id,
+                                type:'get',
+                                url:'/tag/getTags/discussion/' + id,
                                 dataType:'json',
                                 success:function (data) {
                                     vm.tags = data.tags;
+                                    vm.isOwner = data.isOwner;
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -527,9 +521,8 @@
                                 type: 'post',
                                 url: '/tag/changeTag',
                                 data: {
-                                    'tag_id': tag.id,
-                                    'type':type,
-                                    'target':id
+                                    'tag_id':tag.id,
+                                    'type':type, 'target':id
                                 },
                                 dataType: 'json',
                                 success: function (data) {
@@ -557,10 +550,8 @@
                         }
                     }
                 });
-                new Vue({
-                    el:"#about-tags"
-                });
-            </script>--}}
+                new Vue({el:"#about-tags"});
+            </script>
             {{--关于讨论--}}
             <div id="about-discussion">
                 <about-discussion></about-discussion>
@@ -574,16 +565,13 @@
                         </div>
                         <div class="panel-body text-center">
                             {{--用户关注讨论按钮--}}
-                            @if(Auth::check())
-                                <button class="btn" :class="vbtnclass" @click="userDiscussionFollow()">
-                                    <span class="fa fa-lg" :class="vbtnglyphicon"></span>
-                                    <span v-text="vbtntext"></span>
-                                </button>
-                            @else
-                                <a href="/user/login" class="btn btn-danger">
-                                    <span class="fa fa-star-o fa-lg"></span> 关注该讨论
-                                </a>
-                            @endif
+                            <button class="btn" :class="vbtnclass" @click="userDiscussionFollow()" v-if="isLogin">
+                                <span class="fa fa-lg" :class="vbtnglyphicon"></span>
+                                <span v-text="vbtntext"></span>
+                            </button>
+                            <a href="/user/login" class="btn btn-danger" v-else="isLogin">
+                                <span class="fa fa-star-o fa-lg"></span> 关注该讨论
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -593,19 +581,19 @@
                     template:"#template-about-discussion",
                     data:function () {
                         return{
-                            countFollowedUser:0,
-                            userDiscussion:0
+                            countFollowedUser: 0,
+                            isLogin: '' ,isFollowed: 0
                         }
                     },
                     computed:{
                         vbtnclass:function () {
-                            return this.userDiscussion ? 'btn-success' : 'btn-danger';
+                            return this.isFollowed ? 'btn-success' : 'btn-danger';
                         },
                         vbtnglyphicon:function () {
-                            return this.userDiscussion ? 'fa-star' : 'fa-star-o';
+                            return this.isFollowed ? 'fa-star' : 'fa-star-o';
                         },
                         vbtntext:function () {
-                            return this.userDiscussion ? '已关注' : '关注该讨论';
+                            return this.isFollowed ? '已关注' : '关注该讨论';
                         }
                     },
                     created:function () {
@@ -613,7 +601,7 @@
                     },
                     methods:{
                         hasUserDiscussionFollow:function () {
-                            var vm = this; // 这里需要指定是 Vue.js 的 this 不是 JavaScript 的 this
+                            var vm = this;
                             var href = location.href.split('/');
                             if( location.href.indexOf('?') != -1 ){
                                 href = location.href.split('?');
@@ -621,12 +609,13 @@
                             }
                             var discussion_id = href[href.length-1];
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:'/follow/hasUserDiscussionFollow/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
                                     vm.countFollowedUser = data.countFollowedUser;
-                                    vm.userDiscussion = data.userDiscussion;
+                                    vm.isLogin = data.isLogin;
+                                    vm.isFollowed = data.isFollowed;
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -647,7 +636,7 @@
                                 dataType:'json',
                                 success:function (data) {
                                     vm.countFollowedUser = data.countFollowedUser;
-                                    vm.userDiscussion = data.userDiscussion;
+                                    vm.isFollowed = data.isFollowed;
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -656,9 +645,7 @@
                         }
                     }
                 });
-                new Vue({
-                    el:"#about-discussion"
-                });
+                new Vue({el:"#about-discussion"});
             </script>
             {{--关于作者--}}
             <div id="about-user">
@@ -679,68 +666,61 @@
                         </div>
                     </div>
                     <div class="panel-body text-center">
-                        {{--用户等级--}}
-                        <div id="liveness">
-                            <span v-text="vliveness"></span>
-                            <span v-text="vlevel"></span>
-                        </div>
-                        <div class="forum-user-statics">
-                            <div class="forum-user-statics-item text-center">
-                                <div> 讨 论 </div>
-                                <div> @{{ countUserDiscussions }} </div>
+                        <div class="user-statics">
+                            <div class="user-statics-item text-center">
+                                <div>讨 论</div>
+                                <div>@{{ countUserDiscussions }}</div>
                             </div>
-                            <div class="forum-user-statics-item text-center">
-                                <div> 回 复 </div>
-                                <div> @{{ countUserComments }} </div>
+                            <div class="user-statics-item text-center">
+                                <div>回 复</div>
+                                <div>@{{ countUserComments }}</div>
                             </div>
-                            <div class="forum-user-statics-item text-center">
-                                <div> 关 注 </div>
-                                <div> @{{ countUserFollowers }} </div>
+                            <div class="user-statics-item text-center">
+                                <div>关 注</div>
+                                <div>@{{ countUserFollowers }}</div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer text-center">
-                        <div id="user-user">
-                            @if(Auth::check())
-                                {{--用户关注用户按钮--}}
-                                <button class="btn" :class="vbtnclass" @click="userUserFollow()">
-                                    <span class="fa fa-lg" :class="vbtnglyphicon"></span>
-                                    <span v-text="vbtntext"></span>
-                                </button>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal">
-                                    <span class="fa fa-paper-plane-o fa-lg"></span>
-                                    <span> 发私信 </span>
-                                </button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title" id="tagsModalLabel"> 发送私信 </h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <label for="message-body">内容：</label>
-                                                <textarea name="message-body" class="form-control" id="message-body" rows="5" style="resize: none"></textarea>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <div class="form-group">
-                                                    <button id="message-submit" type="button" class="btn btn-primary" @click="sendMessage">
-                                                        <span class="fa fa-paper-plane-o fa-lg"></span> 发送
-                                                    </button>
-                                                </div>
+                        <div class="user-statics-item" v-if="isLogin">
+                            {{--关注用户按钮--}}
+                            <button class="btn" :class="vbtnclass" @click="userUserFollow()">
+                                <span class="fa fa-lg" :class="vbtnglyphicon"></span>
+                                <span v-text="vbtntext"></span>
+                            </button>
+                        {{--发送私信按钮--}}
+                        <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal">
+                                <span class="fa fa-paper-plane-o fa-lg"></span>
+                                <span> 发私信 </span>
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="tagsModalLabel"> 发送私信 </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <label for="message-body">内容：</label>
+                                            <textarea name="message-body" class="form-control" id="message-body" rows="5" style="resize: none"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="form-group">
+                                                <button id="message-submit" type="button" class="btn btn-primary" @click="sendMessage">
+                                                    <span class="fa fa-paper-plane-o fa-lg"></span> 发送
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            @else
-                                <div class="forum-user-statics-item">
-                                    <a href="/user/login" class="btn btn-danger">
-                                        <span class="fa fa-star-o fa-lg"></span> 关注 TA
-                                    </a>
-                                </div>
-                            @endif
+                            </div>
+                        </div>
+                        <div class="user-statics-item" v-else="isLogin">
+                            <a href="/user/login" class="btn btn-danger">
+                                <span class="fa fa-star-o fa-lg"></span> 关注 TA
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -750,55 +730,26 @@
                     template:"#template-about-user",
                     data:function () {
                         return{
-                            liveness:0, level:0,
-                            userAvatar:'', username:'', user_id:'',
-                            countUserDiscussions:0, countUserComments:0, countUserFollowers:0,
-                            userUser:0
+                            user_id: '', username: '', userAvatar: '',
+                            countUserDiscussions: 0, countUserComments: 0, countUserFollowers: 0,
+                            isLogin: false, isFollowed: 0
                         }
                     },
                     computed:{
-                        vliveness:function () {
-                            return '活跃值：'+this.liveness;
-                        },
-                        vlevel:function () {
-                            return '等级：'+this.level;
-                        },
                         vbtnclass:function () {
-                            return this.userUser ? 'btn-success' : 'btn-danger';
+                            return this.isFollowed ? 'btn-success' : 'btn-danger';
                         },
                         vbtnglyphicon:function () {
-                            return this.userUser ? 'fa-star' : 'fa-star-o';
+                            return this.isFollowed ? 'fa-star' : 'fa-star-o';
                         },
                         vbtntext:function () {
-                            return this.userUser ? '已关注' : '关注TA';
+                            return this.isFollowed ? '已关注' : '关注TA';
                         }
                     },
                     created:function () {
-                        this.getLivenessAndLevel();
                         this.hasUserUserFollow();
                     },
                     methods:{
-                        getLivenessAndLevel:function () {
-                            var vm = this;
-                            var href = location.href.split('/');
-                            if( location.href.indexOf('?') != -1 ){
-                                href = location.href.split('?');
-                                href = href[0].split('/');
-                            }
-                            var discussion_id = href[href.length-1];
-                            $.ajax({
-                                type:'GET',
-                                url:'/account/getLivenessAndLevel/' + discussion_id,
-                                dataType:'json',
-                                success:function (data) {
-                                    vm.liveness = data.liveness;
-                                    vm.level = data.level;
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
-                                }
-                            });
-                        },
                         hasUserUserFollow:function () {
                             var vm = this;
                             var href = location.href.split('/');
@@ -808,17 +759,18 @@
                             }
                             var discussion_id = href[href.length-1];
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:'/follow/hasUserUserFollow/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
-                                    vm.userAvatar = data.userAvatar;
-                                    vm.username = data.username;
                                     vm.user_id = data.user_id;
+                                    vm.username = data.username;
+                                    vm.userAvatar = data.userAvatar;
                                     vm.countUserDiscussions = data.countUserDiscussions;
                                     vm.countUserComments = data.countUserComments;
                                     vm.countUserFollowers = data.countUserFollowers;
-                                    vm.userUser = data.userUser;
+                                    vm.isLogin = data.isLogin;
+                                    vm.isFollowed = data.isFollowed;
                                 },
                                 error:function(jqXHR){
                                     console.log("出现错误：" +jqXHR.status);
@@ -834,7 +786,7 @@
                             }
                             var discussion_id = href[href.length-1];
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:'/follow/userUserFollow/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
@@ -867,9 +819,7 @@
                         }
                     }
                 });
-                new Vue({
-                    el:"#about-user"
-                });
+                new Vue({el:"#about-user"});
             </script>
         </div>
     </div>
