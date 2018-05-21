@@ -15,6 +15,8 @@
     return view('welcome');
 });*/
 
+use App\ThirdPartyLibrary\MongoDB\PersonalLetterMongo;
+
 Route::get('/welcome', function () {
     return view('welcome');
 });
@@ -99,15 +101,15 @@ Route::get('/about','MasterController@about'); // 关于页面
 Route::get('error/{status}','MasterController@error'); // 错误页面
 Route::get('/archives','MasterController@archives'); // 冷月档案馆
 
-// NotificationController
+// NotificationController 消息通知控制器
 Route::prefix('notification')->group(function() {
     Route::get('center','NotificationController@showAll'); // 显示用户所有消息通知
     Route::get('unread','NotificationController@showUnread'); // 显示用户未读消息通知
-    Route::get('fromPersonalLetter','NotificationController@showFromPersonalLetter'); // 显示用户发送的私信
-    Route::get('getFromPersonalLetter','NotificationController@getFromPersonalLetter'); // 获得用户发送的私信
-    Route::get('toPersonalLetter','NotificationController@showToPersonalLetter'); // 显示向该用户发送的私信
-    Route::get('getToPersonalLetter','NotificationController@getToPersonalLetter'); // 获得向该用户发送的私信
-    Route::post('messageStore','NotificationController@messageStore'); // 保存用户私信并发出站内信通知
+
+    Route::post('personalLetterStore','NotificationController@personalLetterStore'); // 保存私信，并发出消息通知
+    Route::get('getPersonalLetters','NotificationController@getPersonalLetters'); // 获得两个用户之间的私信，并标记消息已读
+    Route::get('personalLetter','NotificationController@personalLetter'); // 消息中心，私信消息页面
+    Route::get('getContacts','NotificationController@getContacts'); // 查找与本用户有过交互的用户
 });
 
 // OfficeController 办公区

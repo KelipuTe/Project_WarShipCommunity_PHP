@@ -5,8 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 私信类
- * Class PersonalLetter
+ * Class PersonalLetter [私信类]
  * @package App
  */
 class PersonalLetter extends Model
@@ -15,30 +14,32 @@ class PersonalLetter extends Model
 
     protected $fillable = ['from_user_id','to_user_id','body'];
 
-    /**
-     * 声明向模型中添加的数据
-     * @var array
-     */
-    protected $appends = ['from_user_username','to_user_username'];
+    protected $appends = ['from_user_info','to_user_info'];
 
     /**
-     * 获得 from_user_username 用户名
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return array
      */
-    public function getFromUserUsernameAttribute(){
-        $user = User::findOrFail($this->attributes['from_user_id']);
-        $user_username = $user->username;
-        return $user_username;
+    public function getFromUserInfoAttribute(){
+        $username = $this->fromUser()->get(['username']);
+        $avatar = $this->fromUser()->get(['avatar']);
+        $data = [
+            'username' => $username[0]->username,
+            'avatar' => $avatar[0]->avatar,
+        ];
+        return $data;
     }
 
     /**
-     * 获得 to_user_username 用户名
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return array
      */
-    public function getToUserUsernameAttribute(){
-        $user = User::findOrFail($this->attributes['to_user_id']);
-        $user_username = $user->username;
-        return $user_username;
+    public function getToUserInfoAttribute(){
+        $username = $this->toUser()->get(['username']);
+        $avatar = $this->toUser()->get(['avatar']);
+        $data = [
+            'username' => $username[0]->username,
+            'avatar' => $avatar[0]->avatar,
+        ];
+        return $data;
     }
 
     /**

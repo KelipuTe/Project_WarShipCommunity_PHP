@@ -6,14 +6,14 @@
  * Time: 16:11
  */
 
-namespace App\ThirdPartyLibrary\MyClass;
+namespace App\ThirdPartyLibrary\Mailer;
 
 use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * QQ 邮件发送处理类
  * Class QQMailer
- * @package App\ThirdPartyLibrary\MyClass
+ * @package App\ThirdPartyLibrary\Mailer
  */
 class QQMailer
 {

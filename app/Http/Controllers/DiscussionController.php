@@ -136,10 +136,7 @@ class DiscussionController extends Controller
     public function getComments($id){
         $discussion = Discussion::findOrFail($id);
         $comments = $discussion->comments()->oldest()->blacklist()->paginate(5);
-        return Response::json([
-            'isLogin' => Auth::check(),
-            'comments' => $comments
-        ]);
+        return Response::json(['comments' => $comments]);
     }
 
     /**

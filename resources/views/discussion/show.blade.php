@@ -31,13 +31,11 @@
                         <div class="clearfix">
                             <span> 浏览量 </span>
                             <span v-text="hot_discussion"></span>
-                            @if(Auth::check())
-                                <button class="btn btn-sm pull-right" :class="vbtnclass" @click="niceDiscussion(discussion.id)">
-                                    <span class="fa fa-lg" :class="vfaclass"></span>
-                                    <span v-text="nice_discussion"></span>
-                                    <span> 这篇讨论对我有用 </span>
-                                </button>
-                            @endif
+                            <button class="btn btn-sm pull-right" :class="vbtnclass" v-if="isLogin" @click="niceDiscussion(discussion.id)">
+                                <span class="fa fa-lg" :class="vfaclass"></span>
+                                <span v-text="nice_discussion"></span>
+                                <span> 这篇讨论对我有用 </span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -48,7 +46,7 @@
                     data:function () {
                         return {
                             discussion: '', hot_discussion: '', nice_discussion: '',
-                            isNice: false, isOwner: false
+                            isNice: false, isOwner: false, isLogin: false
                         };
                     },
                     computed:{
@@ -60,6 +58,9 @@
                         }
                     },
                     created:function () {
+                        if($('meta[name="api-token"]').attr('content') != 'Bearer'){
+                            this.isLogin = true;
+                        }
                         this.getDiscussion();
                     },
                     methods:{
@@ -153,6 +154,9 @@
                             $.ajax({
                                 type:'get',
                                 url:'/discussion/setTop',
+                                data:{
+                                    'target': discussion_id,
+                                },
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == 'failed'){
@@ -189,7 +193,7 @@
                                     <div class="media-body">
                                         <h4 class="media-heading comment-line">
                                             @{{comment.relatedInfo.username}}
-                                            <div class="pull-right">
+                                            <div class="pull-right" v-if="isLogin">
                                                 <button class="btn btn-danger" role="button" @click="blacklist(comment.id)">
                                                     <span class="fa fa-hand-stop-o fa-lg"></span>举报</button>
                                             </div>
@@ -208,7 +212,7 @@
                                     </button>
                                     <a href="/user/login" class="btn btn-info btn-sm pull-right" v-else="isLogin">
                                         <span class="fa fa-thumbs-o-up fa-lg"></span>
-                                        <span  v-text="comment.relatedInfo.cache_nice_comment"></span>
+                                        <span v-text="comment.relatedInfo.cache_nice_comment"></span>
                                         <span>点赞</span>
                                     </a>
                                 </div>
@@ -227,6 +231,9 @@
                         };
                     },
                     created:function () {
+                        if($('meta[name="api-token"]').attr('content') != 'Bearer'){
+                            this.isLogin = true;
+                        }
                         this.getComments();
                     },
                     methods:{
@@ -250,7 +257,6 @@
                                 url:url,
                                 dataType:'json',
                                 success:function (data) {
-                                    vm.isLogin = data.isLogin;
                                     vm.comments = data.comments.data;
                                     pageList(data.comments,'http://localhost/discussion/show/'+discussion_id); // 构造分页按钮列表
                                 },
@@ -565,9 +571,9 @@
                         </div>
                         <div class="panel-body text-center">
                             {{--用户关注讨论按钮--}}
-                            <button class="btn" :class="vbtnclass" @click="userDiscussionFollow()" v-if="isLogin">
-                                <span class="fa fa-lg" :class="vbtnglyphicon"></span>
-                                <span v-text="vbtntext"></span>
+                            <button class="btn" :class="vfollowbtnclass" @click="userDiscussionFollow()" v-if="isLogin">
+                                <span class="fa fa-lg" :class="vfollowbtnglyphicon"></span>
+                                <span v-text="vfollowbtntext"></span>
                             </button>
                             <a href="/user/login" class="btn btn-danger" v-else="isLogin">
                                 <span class="fa fa-star-o fa-lg"></span> 关注该讨论
@@ -586,13 +592,13 @@
                         }
                     },
                     computed:{
-                        vbtnclass:function () {
+                        vfollowbtnclass:function () {
                             return this.isFollowed ? 'btn-success' : 'btn-danger';
                         },
-                        vbtnglyphicon:function () {
+                        vfollowbtnglyphicon:function () {
                             return this.isFollowed ? 'fa-star' : 'fa-star-o';
                         },
-                        vbtntext:function () {
+                        vfollowbtntext:function () {
                             return this.isFollowed ? '已关注' : '关注该讨论';
                         }
                     },
@@ -684,33 +690,41 @@
                     <div class="panel-footer text-center">
                         <div class="user-statics-item" v-if="isLogin">
                             {{--关注用户按钮--}}
-                            <button class="btn" :class="vbtnclass" @click="userUserFollow()">
-                                <span class="fa fa-lg" :class="vbtnglyphicon"></span>
-                                <span v-text="vbtntext"></span>
+                            <button class="btn" :class="vfollowbtnclass" @click="userUserFollow()">
+                                <span class="fa fa-lg" :class="vfollowbtnglyphicon"></span>
+                                <span v-text="vfollowbtntext"></span>
                             </button>
-                        {{--发送私信按钮--}}
-                        <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal">
+                            {{--发送私信按钮--}}
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#letterModal" @click="getMessage()">
                                 <span class="fa fa-paper-plane-o fa-lg"></span>
                                 <span> 发私信 </span>
                             </button>
                             <!-- Modal -->
-                            <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel">
+                            <div class="modal fade" id="letterModal" tabindex="-1" role="dialog" aria-labelledby="letterModalLabel">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="tagsModalLabel"> 发送私信 </h4>
+                                            <h4 class="modal-title" id="letterModalLabel"> 发送私信 </h4>
                                         </div>
-                                        <div class="modal-body">
-                                            <label for="message-body">内容：</label>
-                                            <textarea name="message-body" class="form-control" id="message-body" rows="5" style="resize: none"></textarea>
+                                        <div class="modal-body personal-letter-container">
+                                            <div v-for="letter in personalLetters" class="row">
+                                                <div class="panel personal-letter" :class="vletterclass(letter)">
+                                                    <div class="panel-heading">@{{ letter.body }}</div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <div class="form-group">
-                                                <button id="message-submit" type="button" class="btn btn-primary" @click="sendMessage">
-                                                    <span class="fa fa-paper-plane-o fa-lg"></span> 发送
-                                                </button>
+                                                <div class="col-md-10">
+                                                    <textarea name="message-body" class="form-control " id="message-body" rows="1" style="resize: none"></textarea>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button id="message-submit" type="button" class="btn btn-primary" @click="sendMessage">
+                                                        <span class="fa fa-paper-plane-o fa-lg"></span> 发送
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -732,21 +746,25 @@
                         return{
                             user_id: '', username: '', userAvatar: '',
                             countUserDiscussions: 0, countUserComments: 0, countUserFollowers: 0,
-                            isLogin: false, isFollowed: 0
+                            isLogin: false, isFollowed: 0,
+                            personalLetters: ''
                         }
                     },
                     computed:{
-                        vbtnclass:function () {
+                        vfollowbtnclass:function () {
                             return this.isFollowed ? 'btn-success' : 'btn-danger';
                         },
-                        vbtnglyphicon:function () {
+                        vfollowbtnglyphicon:function () {
                             return this.isFollowed ? 'fa-star' : 'fa-star-o';
                         },
-                        vbtntext:function () {
+                        vfollowbtntext:function () {
                             return this.isFollowed ? '已关注' : '关注TA';
                         }
                     },
                     created:function () {
+                        if($('meta[name="api-token"]').attr('content') != 'Bearer'){
+                            this.isLogin = true;
+                        }
                         this.hasUserUserFollow();
                     },
                     methods:{
@@ -769,11 +787,7 @@
                                     vm.countUserDiscussions = data.countUserDiscussions;
                                     vm.countUserComments = data.countUserComments;
                                     vm.countUserFollowers = data.countUserFollowers;
-                                    vm.isLogin = data.isLogin;
                                     vm.isFollowed = data.isFollowed;
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
@@ -792,9 +806,19 @@
                                 success:function (data) {
                                     vm.userUser = data.userUser;
                                     vm.countUserFollowers = data.countUserFollowers;
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
+                                }
+                            });
+                        },
+                        getMessage:function(){
+                            var vm = this;
+                            $.ajax({
+                                type:'get',
+                                url:'/notification/getPersonalLetters',
+                                data:{'other_user_id':vm.user_id},
+                                dataType:'json',
+                                success:function (data) {
+                                    vm.personalLetters = data.personalLetters.data;
+                                    vm.personalLetters =  vm.personalLetters.reverse();
                                 }
                             });
                         },
@@ -802,20 +826,24 @@
                             var vm = this;
                             $.ajax({
                                 type:'post',
-                                url:'/notification/messageStore',
+                                url:'/notification/personalLetterStore',
                                 data:{
                                     'to_user_id':vm.user_id,
                                     'body':$('#message-body').val()
                                 },
                                 dataType:'json',
                                 success:function (data) {
-                                    alert(data.message);
-                                    $('#messageModal').modal('toggle');
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
+                                    if(data.status == 1) {
+                                        vm.personalLetters.push(data.personalLetter);
+                                        $('#message-body').val('');
+                                    } else {
+                                        alert(data.message);
+                                    }
                                 }
                             });
+                        },
+                        vletterclass:function(letter){
+                            return letter.from_user_id == this.user_id ? 'panel-success pull-left' : 'panel-primary pull-right';
                         }
                     }
                 });

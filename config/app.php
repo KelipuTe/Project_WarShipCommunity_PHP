@@ -166,6 +166,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         YuanChao\Editor\EndaEditorServiceProvider::class,
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -233,6 +234,7 @@ return [
         'Html'=>Collective\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'EndaEditor' => YuanChao\Editor\Facade\EndaEditorFacade::class,
+        'Mongo'     => Jenssegers\Mongodb\MongodbServiceProvider::class,
 
     ],
 

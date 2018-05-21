@@ -39,12 +39,12 @@
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="/welcome">WarShipCommunity</a>
+                <a class="navbar-brand" href="/">WarShipCommunity</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="/welcome">首 页</a></li>
+                    <li><a href="/">首 页</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right" v-if="user!=false">
                     <li><img src="" :src="user.avatar" class="img-circle img-avatar-small" alt="50x50"></li>

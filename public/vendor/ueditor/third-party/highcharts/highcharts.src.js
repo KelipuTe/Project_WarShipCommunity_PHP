@@ -12217,7 +12217,7 @@ Point.prototype = {
 	},
 
 	/**
-	 * Transform number or array configs into objects
+	 * Transformer number or array configs into objects
 	 */
 	optionsToObject: function (options) {
 		var ret,

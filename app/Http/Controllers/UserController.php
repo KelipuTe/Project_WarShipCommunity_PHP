@@ -11,7 +11,7 @@ use Intervention\Image\Facades\Image;
 
 use App\User;
 use App\Account;
-use App\ThirdPartyLibrary\MyClass\QQMailer;
+use App\ThirdPartyLibrary\Mailer\QQMailer;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 
@@ -88,7 +88,7 @@ class UserController extends Controller
      */
     public function logout(){
         Auth::logout();
-        return redirect('/welcome');
+        return redirect('/');
     }
 
     /**

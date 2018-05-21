@@ -18836,7 +18836,7 @@ module.exports = function dispatchRequest(config) {
   // Ensure headers exist
   config.headers = config.headers || {};
 
-  // Transform request data
+  // Transformer request data
   config.data = transformData(
     config.data,
     config.headers,
@@ -18862,7 +18862,7 @@ module.exports = function dispatchRequest(config) {
   return adapter(config).then(function onAdapterResolution(response) {
     throwIfCancellationRequested(config);
 
-    // Transform response data
+    // Transformer response data
     response.data = transformData(
       response.data,
       response.headers,
@@ -18874,7 +18874,7 @@ module.exports = function dispatchRequest(config) {
     if (!isCancel(reason)) {
       throwIfCancellationRequested(config);
 
-      // Transform response data
+      // Transformer response data
       if (reason && reason.response) {
         reason.response.data = transformData(
           reason.response.data,
@@ -18899,7 +18899,7 @@ module.exports = function dispatchRequest(config) {
 var utils = __webpack_require__(0);
 
 /**
- * Transform the data for a request or a response
+ * Transformer the data for a request or a response
  *
  * @param {Object|String} data The data to be transformed
  * @param {Array} headers The headers for the request or response

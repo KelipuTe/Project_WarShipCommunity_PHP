@@ -8,8 +8,7 @@ namespace App\ThirdPartyLibrary\Transformer;
  */
 class DiscussionTransformer extends Transformer
 {
-    public function transform($item)
-    {
+    public function transform($item){
         return [
             'id' => $item['id'],
             'title' => $item['title'],
