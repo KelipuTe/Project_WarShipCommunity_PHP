@@ -33,8 +33,16 @@ class Comment extends Model
             }
         }
         $isNice = false;
-        if(Auth::check()) {
+        // 通过 web 访问
+        /*if(Auth::check()){
             $existsInRedisSet = Redis::command('SISMEMBER', ['warshipcommunity:comment:nicelimit:' . $comment_id, Auth::user()->id]);
+            if ($existsInRedisSet) {
+                $isNice = true;
+            }
+        }*/
+        // 通过 api 访问
+        if(Auth::guard('api')->user()){
+            $existsInRedisSet = Redis::command('SISMEMBER', ['warshipcommunity:comment:nicelimit:' . $comment_id, Auth::guard('api')->user()->id]);
             if ($existsInRedisSet) {
                 $isNice = true;
             }

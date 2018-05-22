@@ -6,9 +6,6 @@
             <div id="discussion-list">
                 <discussion-list></discussion-list>
             </div>
-            <div class="text-center">
-                <ul id="page-list" class="pagination"></ul>
-            </div>
             <template id="template-discussion-list">
                 <div>
                     <div v-for="discussion in discussions">
@@ -31,13 +28,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="text-center">
+                        <ul id="page-list" class="pagination"></ul>
+                    </div>
                 </div>
             </template>
             <script>
                 Vue.component('discussion-list',{
                     template:"#template-discussion-list",
                     data:function(){
-                        return {discussions: ''};
+                        return { discussions: '' };
                     },
                     created:function(){
                         this.getDiscussions();
@@ -58,9 +58,6 @@
                                 success:function (data) {
                                     vm.discussions = data.data.data; // 这里对应后台数据的结构
                                     pageList(data.data,'http://localhost/discussion'); // 构造分页按钮列表
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         }

@@ -1,11 +1,9 @@
 @extends('discussion.app')
 @section('breadCrumb')
-    {{--增加面包屑导航条目--}}
     @parent
     <li><a href="#" id="discussion-title"></a></li>
 @stop
 @section('content')
-    {{--主体内容--}}
     <div class="row">
         {{--左侧部分--}}
         <div class="col-md-9">
@@ -17,25 +15,45 @@
                     <div class="panel-heading">
                         <h2> @{{ discussion.title }}
                             <div class="pull-right">
-                                <button class="btn btn-danger" @click="blacklist(discussion.id)">
-                                    <span class="fa fa-hand-stop-o fa-lg"></span>举报</button>
-                                <button class="btn btn-danger" v-if="isOwner" @click="setTop(discussion.id)">
-                                    <span class="fa fa-thumb-tack fa-lg"></span>置顶</button>
-                                <button class="btn btn-danger" v-if="isOwner" @click="softDelete(discussion.id)">
-                                    <span class="fa fa-trash-o fa-lg"></span>爆破</button>
+                                <button type="button" class="btn btn-danger" v-if="isOwner" @click="setTarget(discussion.id)"
+                                        data-toggle="modal" data-target="#discussionModal">
+                                    <span class="fa fa-hand-stop-o fa-lg"></span> 举报</button>
+                                <button type="button" class="btn btn-danger" v-if="isOwner" @click="setTop(discussion.id)">
+                                    <span class="fa fa-thumb-tack fa-lg"></span> 置顶</button>
+                                <button type="button" class="btn btn-danger" v-if="isOwner" @click="softDelete(discussion.id)">
+                                    <span class="fa fa-trash-o fa-lg"></span> 爆破</button>
                             </div>
                         </h2>
                     </div>
                     <div class="panel-body" v-html="discussion.body"></div>
                     <div class="panel-footer">
                         <div class="clearfix">
-                            <span> 浏览量 </span>
+                            <span>浏览量</span>
                             <span v-text="hot_discussion"></span>
                             <button class="btn btn-sm pull-right" :class="vbtnclass" v-if="isLogin" @click="niceDiscussion(discussion.id)">
                                 <span class="fa fa-lg" :class="vfaclass"></span>
                                 <span v-text="nice_discussion"></span>
-                                <span> 这篇讨论对我有用 </span>
+                                <span>这篇讨论对我有用</span>
                             </button>
+                        </div>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="discussionModal" tabindex="-1" role="dialog" aria-labelledby="discussionModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="discussionModalLabel">举报</h4>
+                                </div>
+                                <div class="modal-body personal-letter-container">
+                                    <label for="discussion-explain">举报理由</label>
+                                    <textarea class="form-control" id="discussion-explain" v-model="explain" rows="3" style="resize: none"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger pull-right" @click="report">
+                                        <span class="fa fa-hand-stop-o fa-lg"></span> 举报</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -46,7 +64,8 @@
                     data:function () {
                         return {
                             discussion: '', hot_discussion: '', nice_discussion: '',
-                            isNice: false, isOwner: false, isLogin: false
+                            isNice: false, isOwner: false, isLogin: false,
+                            target: '',explain: ''
                         };
                     },
                     computed:{
@@ -58,7 +77,8 @@
                         }
                     },
                     created:function () {
-                        if($('meta[name="api-token"]').attr('content') != 'Bearer'){
+                        if($.trim($('meta[name="api-token"]').attr('content')) != 'Bearer'){
+                            // $.trim(string) 去空格
                             this.isLogin = true;
                         }
                         this.getDiscussion();
@@ -68,13 +88,13 @@
                             var vm = this;
                             var href = location.href.split('/');
                             if( location.href.indexOf('?') != -1 ){
-                                //判断是不是翻页后的地址，携带 ?page=number
+                                // 判断是不是翻页后的地址，携带 ?page=number
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
                             var discussion_id = href[href.length-1];
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:'/discussion/getDiscussion/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
@@ -84,17 +104,15 @@
                                     vm.isNice = data.isNice;
                                     vm.isOwner = data.isOwner;
                                     $('#discussion-title').text(data.discussion.title);
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
-                        niceDiscussion:function (discussion_id) {
+                        niceDiscussion:function (id) {
                             var vm = this;
                             $.ajax({
-                                type:'GET',
-                                url:'/discussion/niceDiscussion/' + discussion_id,
+                                type:'post',
+                                url:'/discussion/niceDiscussion',
+                                data:{ 'id': id },
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == 1){
@@ -104,69 +122,62 @@
                                     } else {
                                         makeAlertBox('danger',data.message);
                                     }
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
-                        softDelete:function(discussion_id){
+                        softDelete:function(id){
                             $.ajax({
-                                type:'GET',
-                                url:'/discussion/softdelete/' + discussion_id,
+                                type:'post',
+                                url:'/discussion/softdelete',
+                                data:{ 'id': id },
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == true){
-                                        alert(data.message);
-                                        window.location.href = "/discussion";
+                                        makeAlertBox('success',data.message);
+                                        setTimeout(function(){
+                                            window.location.href = "/discussion";
+                                        },5000);
                                     } else {
-                                        alert(data.message);
+                                        makeAlertBox('danger',data.message);
                                     }
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
-                        blacklist:function(discussion_id){
+                        setTarget:function(id){
+                            this.target = id;
+                        },
+                        report:function(){
                             $.ajax({
                                 type:'post',
                                 url:'/office/blacklist/report',
                                 data:{
                                     'type': 'discussion',
-                                    'target': discussion_id,
-                                    'explain': 'null'
+                                    'target': this.target,
+                                    'explain': this.explain
                                 },
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == 1){
-                                        alert(data.message);
+                                        $('#discussionModal').modal('toggle');
+                                        makeAlertBox('success',data.message)
                                     } else {
-                                        alert(data.message);
+                                        makeAlertBox('danger',data.message)
                                     }
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
-                        setTop:function(discussion_id){
+                        setTop:function(id){
                             $.ajax({
-                                type:'get',
+                                type:'post',
                                 url:'/discussion/setTop',
-                                data:{
-                                    'target': discussion_id,
-                                },
+                                data:{ 'target': id },
                                 dataType:'json',
                                 success:function (data) {
-                                    if(data.status == 'failed'){
-                                        alert(data.message);
+                                    if(data.status == 1){
+                                        makeAlertBox('success',data.message)
                                     } else {
-                                        alert('success');
+                                        makeAlertBox('danger',data.message)
                                     }
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         }
@@ -175,11 +186,9 @@
                 new Vue({ el:"#discussion" });
             </script>
             {{--评论部分--}}
+            @include('vendor.ueditor.assets'){{--使用ueditor编辑器时需要添加--}}
             <div id="comment-list">
                 <comment-list></comment-list>
-            </div>
-            <div class="text-center">
-                <ul id="page-list" class="pagination"></ul>
             </div>
             <template id="template-comment-list">
                 <div>
@@ -194,8 +203,9 @@
                                         <h4 class="media-heading comment-line">
                                             @{{comment.relatedInfo.username}}
                                             <div class="pull-right" v-if="isLogin">
-                                                <button class="btn btn-danger" role="button" @click="blacklist(comment.id)">
-                                                    <span class="fa fa-hand-stop-o fa-lg"></span>举报</button>
+                                                <button type="button" class="btn btn-danger" @click="setTarget(comment.id)"
+                                                        data-toggle="modal" data-target="#commentModal">
+                                                    <span class="fa fa-hand-stop-o fa-lg"></span> 举报</button>
                                             </div>
                                         </h4>
                                     </div>
@@ -204,17 +214,48 @@
                             <div class="panel-body" v-html="comment.body"></div>
                             <div class="panel-footer">
                                 <div class="clearfix">
-                                    <button :id="['nice-comment-btn-'+comment.id]" role="button" v-if="isLogin" @click="niceComment(comment.id)"
+                                    <button :id="['nice-comment-btn-'+comment.id]" v-if="isLogin" @click="niceComment(comment.id)"
                                             class="btn btn-sm pull-right" :class="vbtnclass(comment.relatedInfo.isNice)">
                                         <span :id="['nice-comment-fa-'+comment.id]" class="fa fa-lg" :class="vfaclass(comment.relatedInfo.isNice)"></span>
                                         <span :id="['nice-comment-text-'+comment.id]" v-text="comment.relatedInfo.cache_nice_comment"></span>
-                                        <span>点赞</span>
+                                        <span> 点赞</span>
                                     </button>
                                     <a href="/user/login" class="btn btn-info btn-sm pull-right" v-else="isLogin">
                                         <span class="fa fa-thumbs-o-up fa-lg"></span>
                                         <span v-text="comment.relatedInfo.cache_nice_comment"></span>
                                         <span>点赞</span>
                                     </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <ul id="page-list" class="pagination"></ul>
+                    </div>
+                    <div v-if="isLogin">
+                        <div class="form-group">
+                            <script id="ue-container" type="text/plain"></script> {{--编辑器容器--}}
+                        </div>
+                        <div class="form-group">
+                            <button id="submit" class="btn btn-success form-control" @click="commentStore">提交</button>
+                        </div>
+                    </div>
+                    <a v-else="isLogin" href="/user/login" class="form-control btn btn-success">登录参与讨论</a>
+                    <!-- Modal -->
+                    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="commentModalLabel">举报</h4>
+                                </div>
+                                <div class="modal-body personal-letter-container">
+                                    <label for="comment-explain">举报理由</label>
+                                    <textarea class="form-control" id="comment-explain" v-model="explain" rows="3" style="resize: none"></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger pull-right" @click="report">
+                                        <span class="fa fa-hand-stop-o fa-lg"></span> 举报</button>
                                 </div>
                             </div>
                         </div>
@@ -227,12 +268,19 @@
                     data:function () {
                         return {
                             isLogin: false,
-                            comments: ''
+                            comments: '',
+                            target: '',explain: ''
                         };
                     },
                     created:function () {
-                        if($('meta[name="api-token"]').attr('content') != 'Bearer'){
+                        if($.trim($('meta[name="api-token"]').attr('content')) != 'Bearer'){
                             this.isLogin = true;
+                        }
+                        if(this.isLogin) {
+                            var ue = UE.getEditor('ue-container'); // 实例化 ueditor 编辑器
+                            ue.ready(function () {
+                                ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置CSRFtoken
+                            });
                         }
                         this.getComments();
                     },
@@ -246,108 +294,35 @@
                                 href = href[0].split('/');
                             }
                             var discussion_id = href[href.length-1];
-                            var url = '/discussion/getComments/' + discussion_id;
+                            var url = '/api/discussion/getComments/' + discussion_id;
                             if( location.href.indexOf('?') != -1 ){
                                 // 判断是不是翻页后的地址，携带 ?page=number
                                 href = location.href.split('=');
-                                url = '/discussion/getComments/' + discussion_id + '?page='+ href[href.length-1];
+                                url = '/api/discussion/getComments/' + discussion_id + '?page='+ href[href.length-1];
                             }
                             $.ajax({
                                 type:'get',
                                 url:url,
                                 dataType:'json',
                                 success:function (data) {
-                                    vm.comments = data.comments.data;
-                                    pageList(data.comments,'http://localhost/discussion/show/'+discussion_id); // 构造分页按钮列表
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
+                                    vm.comments = data.data.data;
+                                    pageList(data.data,'http://localhost/discussion/show/'+discussion_id); // 构造分页按钮列表
                                 }
                             });
                         },
-                        niceComment:function (comment_id) {
-                            $.ajax({
-                                type:'get',
-                                url:'/discussion/niceComment/' + comment_id,
-                                dataType:'json',
-                                success:function (data) {
-                                    if(data.status == 1){
-                                        $('#nice-comment-btn-'+data.comment_id).removeClass('btn-info').addClass('btn-success');
-                                        $('#nice-comment-fa-'+data.comment_id).removeClass('fa-thumbs-o-up').addClass('fa-thumbs-up');
-                                        $('#nice-comment-text-'+data.comment_id).text(data.cache_nice_comment);
-                                    } else if(data.status == -1) {
-                                        makeAlertBox('info',data.message);
-                                    } else {
-                                        makeAlertBox('danger',data.message);
-                                    }
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
-                                }
-                            });
-                        },
-                        blacklist:function(comment_id){
-                            $.ajax({
-                                type:'post',
-                                url:'/office/blacklist/report',
-                                data:{
-                                    'type': 'comment',
-                                    'target': comment_id,
-                                    'explain': 'null'
-                                },
-                                dataType:'json',
-                                success:function (data) {
-                                    if(data.status == 1){
-                                        alert(data.message);
-                                    } else {
-                                        alert(data.message);
-                                    }
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
-                                }
-                            });
-                        },
-                        vfaclass:function (isNice) {
-                            return isNice ? 'fa-thumbs-up' : 'fa-thumbs-o-up';
-                        },
-                        vbtnclass:function (isNice) {
-                            return isNice ? 'btn-success' : 'btn-info';
-                        }
-                    }
-                });
-                new Vue({el:"#comment-list"});
-            </script>
-            {{--创建评论部分--}}
-                @if(Auth::check())
-                    @include('vendor.ueditor.assets'){{--使用ueditor编辑器时需要添加--}}
-                    <div class="form-group">
-                        {{--编辑器容器--}}
-                        <script id="ue-container" type="text/plain"></script>
-                    </div>
-                    <div class="form-group">
-                        <button id="submit" class="btn btn-success form-control"> 提交 </button>
-                    </div>
-                    {{--实例化编辑器--}}
-                    <script type="text/javascript">
-                        var ue = UE.getEditor('ue-container');
-                        ue.ready(function() {
-                            ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); /* 设置CSRFtoken */
-                        });
-
-                        $('#submit').on('click', function () {
+                        commentStore:function(){
+                            var vm = this;
                             $('#submit').text('');
                             $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
                             var href = location.href.split('/');
                             if( location.href.indexOf('?') != -1 ){
-                                // 判断是不是翻页后的地址，携带 ?page=number
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
                             var id = href[href.length-1];
                             $.ajax({
                                 type: 'post',
-                                url: '/discussion/show/comment',
+                                url: '/discussion/commentStore',
                                 data: {
                                     'discussion_id': id,
                                     'body': UE.getEditor('ue-container').getContent()
@@ -359,27 +334,73 @@
                                 },
                                 success: function (data) {
                                     if(data.status == 1){
-                                        window.location.reload();
-                                    } else if(data.status == 0){
-                                        makeAlertBox('danger',data.message);
+                                        $('#page-list').empty();
+                                        vm.getComments();
                                     } else {
-                                        makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                        makeAlertBox('danger',data.message);
                                     }
                                 },
                                 error: function (jqXHR) {
                                     if(jqXHR.status == 422){
-                                        // 遍历被 Laravel Request 拦截后返回的错误提示
                                         $.each(jqXHR.responseJSON.errors,function (index,value) {
                                             makeAlertBox('danger',value);
                                         });
                                     }
                                 }
                             });
-                        });
-                    </script>
-                @else
-                    <a href="/user/login" class="form-control btn btn-success"> 登录参与讨论 </a>
-                @endif
+                        },
+                        niceComment:function (id) {
+                            $.ajax({
+                                type:'post',
+                                url:'/discussion/niceComment',
+                                data:{ 'id': id },
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.status == 1){
+                                        $('#nice-comment-btn-'+data.comment_id).removeClass('btn-info').addClass('btn-success');
+                                        $('#nice-comment-fa-'+data.comment_id).removeClass('fa-thumbs-o-up').addClass('fa-thumbs-up');
+                                        $('#nice-comment-text-'+data.comment_id).text(data.cache_nice_comment);
+                                    } else if(data.status == -1) {
+                                        makeAlertBox('info',data.message);
+                                    } else {
+                                        makeAlertBox('danger',data.message);
+                                    }
+                                }
+                            });
+                        },
+                        setTarget:function(id){
+                            this.target = id;
+                        },
+                        report:function(){
+                            $.ajax({
+                                type:'post',
+                                url:'/office/blacklist/report',
+                                data:{
+                                    'type': 'comment',
+                                    'target': this.target,
+                                    'explain': this.explain
+                                },
+                                dataType:'json',
+                                success:function (data) {
+                                    if(data.status == 1){
+                                        $('#commentModal').modal('toggle');
+                                        makeAlertBox('success',data.message)
+                                    } else {
+                                        makeAlertBox('danger',data.message)
+                                    }
+                                }
+                            });
+                        },
+                        vfaclass:function (isNice) {
+                            return isNice ? 'fa-thumbs-up' : 'fa-thumbs-o-up';
+                        },
+                        vbtnclass:function (isNice) {
+                            return isNice ? 'btn-success' : 'btn-info';
+                        }
+                    }
+                });
+                new Vue({ el:"#comment-list" });
+            </script>
         </div>
         {{--右侧部分--}}
         <div class="col-md-3">
@@ -391,18 +412,16 @@
                 <div>
                     <div class="panel panel-info">
                         <div class="panel-heading text-center">
-                            <h3> 所属标签 </h3>
+                            <h3>所属标签</h3>
                         </div>
                         <div class="panel-body">
                             <button v-for="tag in tags" class="btn btn-warning btn-xs" style="margin: 5px 5px">
-                                <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}
-                            </button>
+                                <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}</button>
                         </div>
                         <div class="panel-footer text-center" v-if="isOwner">
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" @click="getAllTags" data-toggle="modal" data-target="#tagsModal">
-                                <span class="fa fa-tags fa-lg"></span> 添加标签
-                            </button>
+                                <span class="fa fa-tags fa-lg"></span> 添加标签</button>
                             <!-- Modal -->
                             <div class="modal fade" id="tagsModal" tabindex="-1" role="dialog" aria-labelledby="tagsModalLabel">
                                 <div class="modal-dialog" role="document">
@@ -410,20 +429,17 @@
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             <h4 class="modal-title" id="tagsModalLabel">
-                                                <span class="fa fa-tags fa-lg"></span> 所有标签
-                                            </h4>
+                                                <span class="fa fa-tags fa-lg"></span> 所有标签</h4>
                                         </div>
                                         <div class="modal-body">
                                             <button v-for="tag in allTags" class="btn" :class="changeClass(tag)" style="margin: 5px 10px" @click="changeTag(tag)">
-                                                <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}
-                                            </button>
+                                                <span class="fa fa-tag fa-lg"></span> @{{ tag.body }}</button>
                                         </div>
                                         <div class="modal-footer">
                                             <div class="form-group">
-                                                <label for="tags-body"><input type="text" id="tags-body" /></label>
+                                                <label><input type="text" class="form-control"/></label>
                                                 <button id="tags-submit" type="button" class="btn btn-primary" @click="createTags">
-                                                    <span class="fa fa-tags fa-lg"></span> 新增标签
-                                                </button>
+                                                    <span class="fa fa-tags fa-lg"></span> 新增标签</button>
                                             </div>
                                         </div>
                                     </div>
@@ -456,28 +472,26 @@
                             var id = href[href.length-1];
                             $.ajax({
                                 type:'get',
-                                url:'/tag/getTags/discussion/' + id,
+                                url:'/tag/getTags',
+                                data:{
+                                    'type' : 'discussion',
+                                    'target' : id
+                                },
                                 dataType:'json',
                                 success:function (data) {
                                     vm.tags = data.tags;
                                     vm.isOwner = data.isOwner;
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
                         getAllTags:function () {
                             var vm = this;
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:'/tag/getAllTags',
                                 dataType:'json',
                                 success:function (data) {
                                     vm.allTags = data.allTags;
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
@@ -496,17 +510,14 @@
                                     if(data.status == 1){
                                         $('#tags-body').val('');
                                         vm.getAllTags();
-                                    } else if(data.status == 0){
-                                        makeAlertBox('danger',data.message);
                                     } else {
-                                        makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                        makeAlertBox('danger',data.message);
                                     }
                                 },
                                 error: function (jqXHR) {
                                     $('#tags-submit').empty();
                                     $('#tags-submit').text('新增标签');
                                     if(jqXHR.status == 422){
-                                        // 遍历被 Laravel Request 拦截后返回的错误提示
                                         $.each(jqXHR.responseJSON.errors,function (index,value) {
                                             makeAlertBox('danger',value);
                                         });
@@ -538,9 +549,6 @@
                                     } else {
                                         makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
                                     }
-                                },
-                                error: function (jqXHR) {
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
@@ -556,7 +564,7 @@
                         }
                     }
                 });
-                new Vue({el:"#about-tags"});
+                new Vue({ el:"#about-tags" });
             </script>
             {{--关于讨论--}}
             <div id="about-discussion">
@@ -637,7 +645,7 @@
                             }
                             var discussion_id = href[href.length-1];
                             $.ajax({
-                                type:'GET',
+                                type:'get',
                                 url:'/follow/userDiscussionFollow/' + discussion_id,
                                 dataType:'json',
                                 success:function (data) {
@@ -651,7 +659,7 @@
                         }
                     }
                 });
-                new Vue({el:"#about-discussion"});
+                new Vue({ el:"#about-discussion" });
             </script>
             {{--关于作者--}}
             <div id="about-user">
@@ -698,7 +706,7 @@
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#letterModal" @click="getMessage()">
                                 <span class="fa fa-paper-plane-o fa-lg"></span>
-                                <span> 发私信 </span>
+                                <span>发私信</span>
                             </button>
                             <!-- Modal -->
                             <div class="modal fade" id="letterModal" tabindex="-1" role="dialog" aria-labelledby="letterModalLabel">
@@ -706,7 +714,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title" id="letterModalLabel"> 发送私信 </h4>
+                                            <h4 class="modal-title" id="letterModalLabel">发送私信</h4>
                                         </div>
                                         <div class="modal-body personal-letter-container">
                                             <div v-for="letter in personalLetters" class="row">
@@ -721,9 +729,8 @@
                                                     <textarea name="message-body" class="form-control " id="message-body" rows="1" style="resize: none"></textarea>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button id="message-submit" type="button" class="btn btn-primary" @click="sendMessage">
-                                                        <span class="fa fa-paper-plane-o fa-lg"></span> 发送
-                                                    </button>
+                                                    <button type="button" class="btn btn-primary" @click="sendMessage">
+                                                        <span class="fa fa-paper-plane-o fa-lg"></span> 发送</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -847,7 +854,7 @@
                         }
                     }
                 });
-                new Vue({el:"#about-user"});
+                new Vue({ el:"#about-user" });
             </script>
         </div>
     </div>

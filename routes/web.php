@@ -15,8 +15,6 @@
     return view('welcome');
 });*/
 
-use App\ThirdPartyLibrary\MongoDB\PersonalLetterMongo;
-
 Route::get('/welcome', function () {
     return view('welcome');
 });
@@ -28,7 +26,6 @@ Route::get('test',function(){
 // ActivityController
 Route::prefix('activity')->group(function() {
     Route::get('/','ActivityController@activity'); // 活动区
-
     Route::get('publicChat','ActivityController@publicChat'); // 活动区公共聊天室
     Route::post('showPublicChat','ActivityController@showPublicChat'); // 活动区公共聊天室后台
     Route::get('publicChatLogout','ActivityController@publicChatLogout'); // 退出活动区公共聊天室
@@ -46,7 +43,7 @@ Route::prefix('account')->group(function() {
 
 // BlacklistController
 Route::prefix('office/blacklist')->group(function() {
-    Route::get('/archives','BlacklistController@archives'); // 举报档案页面
+    Route::get('archives','BlacklistController@archives'); // 举报档案页面
     Route::get('notice','BlacklistController@notice'); // 举报处理公示页面
     Route::post('report','BlacklistController@report'); // 用户举报
     Route::get('getBlacklists','BlacklistController@getBlacklists'); // 获得举报列表
@@ -55,19 +52,17 @@ Route::prefix('office/blacklist')->group(function() {
     Route::post('agree','BlacklistController@agree'); // 获得举报列表
 });
 
-// DiscussionController
+// DiscussionController 讨论区控制器
 Route::prefix('discussion')->group(function() {
-    Route::get('test','DiscussionController@test');
     Route::get('/','DiscussionController@discussion'); // 讨论区
-    Route::get('create','DiscussionController@create'); // 讨论创建页面
-    Route::post('store','DiscussionController@store'); // 讨论存储
+    Route::get('discussionCreate','DiscussionController@discussionCreate'); // 讨论创建页面
+    Route::post('discussionStore','DiscussionController@discussionStore'); // 保存讨论
     Route::get('show/{id}','DiscussionController@show'); // 讨论显示页面
     Route::get('getDiscussion/{id}','DiscussionController@getDiscussion'); // 获取讨论
-    Route::post('show/comment','DiscussionController@comment'); // 回复讨论
-    Route::get('getComments/{id}','DiscussionController@getComments'); // 获取回复列表
-    Route::get('niceDiscussion/{id}','DiscussionController@niceDiscussion'); // 推荐讨论
-    Route::get('niceComment/{id}','DiscussionController@niceComment'); // 回复点赞
-    Route::get('softdelete/{id}','DiscussionController@softdelete'); // 讨论软删除
+    Route::post('commentStore','DiscussionController@commentStore'); // 保存回复
+    Route::post('niceDiscussion','DiscussionController@niceDiscussion'); // 推荐讨论
+    Route::post('niceComment','DiscussionController@niceComment'); // 回复点赞
+    Route::post('softdelete','DiscussionController@softdelete'); // 讨论软删除
     Route::post('setTop','DiscussionController@setTop'); // 讨论置顶
 });
 
@@ -149,9 +144,9 @@ Route::prefix('spaceAdministration')->group(function() {
     Route::get('getSatellites','SpaceAdministrationController@getSatellites'); //获得所有的在轨卫星
 });
 
-// TagController
+// TagController 标签控制器
 Route::prefix('tag')->group(function() {
-    Route::get('getTags/{type}/{id}','TagController@getTags'); // 获取指定对象的标签
+    Route::get('getTags','TagController@getTags'); // 获取指定对象的标签
     Route::get('getAllTags','TagController@getAllTags'); // 获取所有标签
     Route::post('createTag','TagController@createTag'); // 新建标签
     Route::post('changeTag','TagController@changeTag'); // 改变标签
@@ -159,7 +154,7 @@ Route::prefix('tag')->group(function() {
 
 // UserController
 Route::prefix('user')->group(function(){
-    Route::get('register','UserController@register'); // 注册页面
+    Route::get('register',[ 'as' => 'register', 'uses' => 'UserController@register']); // 注册页面
     Route::post('create','UserController@create'); // 注册页面后台
     Route::get('login',[ 'as' => 'login', 'uses' => 'UserController@login']); // 登录页面
     Route::post('signIn','UserController@signIn'); // 登录页面后台

@@ -5,34 +5,33 @@ namespace App\Http\Controllers;
 use App\Discussion;
 use App\Tag;
 use Auth;
+use Illuminate\Support\Facades\Gate;
 use Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
- * 标签控制器
- * Class TagController
+ * Class TagController [标签控制器]
  * @package App\Http\Controllers
  */
 class TagController extends Controller
 {
     /**
      * 根据类型和 id 获取对应的标签
-     * @param $type
-     * @param $target
+     * @param Request $request
      * @return mixed
      */
-    public function getTags($type,$target){
+    public function getTags(Request $request){
         $tags = DB::table('tag_target')->leftjoin('tags','tag_target.tag_id','=','tags.id')
             ->where([
-                ['tag_target.type','=',$type],
-                ['tag_target.target','=',$target],
+                ['tag_target.type','=',$request->get('type')],
+                ['tag_target.target','=',$request->get('target')],
             ])->get();
         $isOwner = false;
         if(Auth::check()){
-            if($type == 'discussion'){
-                $discussion = Discussion::find($target);
-                $isOwner = Auth::user()->id == $discussion->user_id;
+            if($request->get('type') == 'discussion'){
+                $discussion = Discussion::find($request->get('target'));
+                $isOwner = Gate::allows('discussionDelete',$discussion);
             }
         }
         return Response::json([
@@ -63,10 +62,7 @@ class TagController extends Controller
         if($tag != null){
             $status = 1; $message = "标签创建成功！！！";
         }
-        return Response::json([
-            'status' => $status,
-            'message' => $message
-        ]);
+        return Response::json(['status' => $status, 'message' => $message]);
     }
 
     /**
@@ -96,8 +92,6 @@ class TagController extends Controller
                 ])->delete();
             $status = 2; $message = '标签移除成功';
         }
-        return Response::json([
-            'status' => $status, 'message' => $message
-        ]);
+        return Response::json(['status' => $status, 'message' => $message]);
     }
 }

@@ -96,8 +96,10 @@ class NotificationController extends Controller
             ['from_user_id','=',$request->input('other_user_id')],
             ['to_user_id','=',Auth::user()->id]
         ])->first();
-        $lastLetter->read_at = Carbon::now();
-        $lastLetter->save();
+        if($lastLetter != null) {
+            $lastLetter->read_at = Carbon::now();
+            $lastLetter->save();
+        }
         return Response::json(['personalLetters' => $letters]);
     }
 

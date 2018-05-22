@@ -10,8 +10,7 @@ use App\Discussion;
 use Illuminate\Http\Request;
 
 /**
- * 黑名单控制器
- * Class BlacklistController
+ * Class BlacklistController [黑名单控制器]
  * @package App\Http\Controllers
  */
 class BlacklistController extends Controller
@@ -21,11 +20,12 @@ class BlacklistController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('admin')->except(['notice','report','getDoneBlacklists']);
+        $this->middleware('admin')
+            ->except(['notice','report','getDoneBlacklists']);
     }
 
     /**
-     * 黑名单公告牌
+     * 公告牌
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function notice(){
@@ -33,7 +33,7 @@ class BlacklistController extends Controller
     }
 
     /**
-     * 黑名单档案室
+     * 档案室
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function archives(){
@@ -41,17 +41,13 @@ class BlacklistController extends Controller
     }
 
     /**
-     * 用户举报
+     * 举报
      * @param Request $request
      * @return mixed
      */
     public function report(Request $request){
-        $data = [
-            'explain' => '违规',
-            'user_id' => Auth::user()->id
-        ];
-        Blacklist::create(array_merge($request->all(),$data));
-        return Response::json(['status' => 1, 'message' => '成功']);
+        Blacklist::create(array_merge($request->all(),['user_id' => Auth::user()->id]));
+        return Response::json(['status' => 1, 'message' => '举报成功，请等待管理员处理']);
     }
 
     /**
@@ -73,18 +69,18 @@ class BlacklistController extends Controller
     }
 
     /**
-     * 锁定被举报条目的具体内容所在地
+     * 查阅被举报条目的具体内容
      * @param Request $request
      * @return mixed
      */
     public function locking(Request $request){
-        $blacklist = Blacklist::findOrFail($request->get('blacklist_id'));
+        $blacklist = Blacklist::find($request->get('blacklist_id'));
         switch ($blacklist->type){
             case 'discussion':
                 $url = '/discussion/show/'.$blacklist->target;
                 break;
             case 'comment':
-                $comment = Comment::findOrFail($blacklist->target);
+                $comment = Comment::find($blacklist->target);
                 $url = '/discussion/show/'.$comment->discussion_id;
                 break;
         }
@@ -97,13 +93,13 @@ class BlacklistController extends Controller
      * @return mixed
      */
     public function agree(Request $request){
-        $blacklist = Blacklist::findOrFail($request->get('blacklist_id'));
+        $blacklist = Blacklist::find($request->get('blacklist_id'));
         switch ($blacklist->type){
             case 'discussion':
-                $target = Discussion::findOrFail($blacklist->target);
+                $target = Discussion::find($blacklist->target);
                 break;
             case 'comment':
-                $target = Comment::findOrFail($blacklist->target);
+                $target = Comment::find($blacklist->target);
                 break;
             default:
                 $target = null;

@@ -19,7 +19,6 @@
                                 <span v-text="vbtntext(contact)"></span>
                             </button>
                         </div>
-                        <!-- Button trigger modal -->
                         <div class="panel-body">
                             <img src="" :src="contact.from_user_info.avatar" class="img-circle img-avatar-small" alt="50x50">
                             @{{ contact.from_user_info.username }}

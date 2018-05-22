@@ -22,9 +22,10 @@ class CreateBlacklistsTable extends Migration
              */
             $table->string('type');
             $table->integer('target'); // 目标对应 id
-            $table->string('explain'); // 拉黑解释
+            $table->string('explain'); // 举报解释
             $table->integer('user_id')->unsigned(); // 举报的用户
             $table->boolean('done')->default(false); // 处理状态
+            $table->string('admin_opinion'); // 管理员意见
             $table->timestamps();
         });
     }

@@ -4,9 +4,6 @@
         <div id="blacklist-list">
             <blacklist-list></blacklist-list>
         </div>
-        <div class="text-center">
-            <ul id="page-list" class="pagination"></ul>
-        </div>
         <template id="template-blacklist-list">
             <div>
                 <table class="table table-bordered table-hover text-center">
@@ -35,6 +32,9 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="text-center">
+                    <ul id="page-list" class="pagination"></ul>
+                </div>
             </div>
         </template>
         <script>

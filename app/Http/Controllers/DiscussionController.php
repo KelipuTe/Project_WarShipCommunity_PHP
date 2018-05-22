@@ -19,8 +19,7 @@ use Auth;
 use Response;
 
 /**
- * 讨论区模块控制器
- * Class OfficeController
+ * Class OfficeController [讨论区控制器]
  * @package App\Http\Controllers
  */
 class DiscussionController extends Controller
@@ -42,7 +41,7 @@ class DiscussionController extends Controller
      * 讨论创建页面
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create(){
+    public function discussionCreate(){
         return view('discussion/create');
     }
 
@@ -51,7 +50,7 @@ class DiscussionController extends Controller
      * @param ForumStoreRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(ForumStoreRequest $request){
+    public function discussionStore(ForumStoreRequest $request){
         $data = [
             'user_id'=>Auth::user()->id,
             'last_user_id'=>Auth::user()->id,
@@ -81,12 +80,12 @@ class DiscussionController extends Controller
 
     /**
      * 获得讨论内容
-     * @param $id
+     * @param $id [discussion_id]
      * @param Request $request
      * @return mixed
      */
     public function getDiscussion($id,Request $request){
-        $discussion = Discussion::findOrFail($id);
+        $discussion = Discussion::find($id);
         $ip = $request->ip(); // 获取 ip 地址
         event(new HotDiscussion($discussion,$ip)); // 触发访问 discussion 事件
         $hot_discussion = Redis::hget('warshipcommunity:discussion:viewcount',$id); // 获取 redis 数据库中的点击量
@@ -115,11 +114,11 @@ class DiscussionController extends Controller
      * @param CommentRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function comment(CommentRequest $request){
+    public function commentStore(CommentRequest $request){
         $comment = Comment::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
         $status = 0; $message = "评论创建失败！！！";
         if($comment != null){
-            $discussion = Discussion::findOrFail($request->get('discussion_id'));
+            $discussion = Discussion::find($request->get('discussion_id'));
             $discussion->update(['last_user_id'=>Auth::user()->id]);
             $status = 1; $message = "评论创建成功！！！";
             event(new AddLiveness(Auth::user()->id,'discussionCommit')); // 讨论回复者，增加活跃值
@@ -129,25 +128,14 @@ class DiscussionController extends Controller
     }
 
     /**
-     * 获得讨论回复列表
-     * @param $id
-     * @return mixed
-     */
-    public function getComments($id){
-        $discussion = Discussion::findOrFail($id);
-        $comments = $discussion->comments()->oldest()->blacklist()->paginate(5);
-        return Response::json(['comments' => $comments]);
-    }
-
-    /**
      * 推荐讨论
-     * @param $id [discussion_id]
      * @return mixed
      */
-    public function niceDiscussion($id){
-        $discussion = Discussion::findOrFail($id);
+    public function niceDiscussion(){
+        // request('id') 类似于 $request->get('id') 或 $request->input('id')
+        $discussion = Discussion::find(request('id'));
         $user_id = Auth::user()->id;
-        $userNiceDiscussionKey = 'warshipcommunity:discussion:nicelimit:'.$id; // 从 redis 数据库中获取信息
+        $userNiceDiscussionKey = 'warshipcommunity:discussion:nicelimit:'.request('id'); // 从 redis 数据库中获取信息
         $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否已经推荐
         $status = -1; $message = '请不要重复推荐';
         if(!$existsInRedisSet){
@@ -163,13 +151,12 @@ class DiscussionController extends Controller
 
     /**
      * 回复点赞
-     * @param $id [comment_id]
      * @return
      */
-    public function niceComment($id){
-        $comment = Comment::findOrFail($id);
+    public function niceComment(){
+        $comment = Comment::find(request('id'));
         $user_id = Auth::user()->id;
-        $userNiceCommentKey = 'warshipcommunity:comment:nicelimit:'.$id; // 从 redis 数据库中获取信息
+        $userNiceCommentKey = 'warshipcommunity:comment:nicelimit:'.request('id'); // 从 redis 数据库中获取信息
         $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceCommentKey, $user_id]); // 确认是否已经推荐
         $status = -1; $message = '请不要重复点赞';
         if(!$existsInRedisSet){
@@ -182,22 +169,21 @@ class DiscussionController extends Controller
         }
         return Response::json([
             'status' => $status, 'message' => $message,
-            'comment_id' => $id,
-            'cache_nice_comment' => Redis::hget('warshipcommunity:comment:nicecount',$id)
+            'comment_id' => request('id'),
+            'cache_nice_comment' => Redis::hget('warshipcommunity:comment:nicecount',request('id'))
         ]);
     }
 
     /**
      * 讨论软删除
-     * @param $discussion_id
      * @return mixed
      */
-    public function softdelete($discussion_id){
-        $discussion = Discussion::findOrFail($discussion_id);
+    public function softdelete(){
+        $discussion = Discussion::find(request('id'));
         $status = $discussion->delete();
         $message = "爆破失败";
         if($status) {
-            $message = "爆破成功";
+            $message = "爆破成功，即将跳转至讨论区";
         }
         return Response::json(['status' => $status, 'message' => $message]);
     }
@@ -210,13 +196,10 @@ class DiscussionController extends Controller
     public function setTop(Request $request){
         $accountController = new AccountController();
         if($accountController->useTool('setTop')){
-            $discussion = Discussion::find($request->input('target'));
+            $discussion = Discussion::find($request->get('target'));
             $discussion->update(['set_top' => true]);
-            return Response::json(['status' => 'success']);
+            return Response::json(['status' => 1, 'message' => '置顶成功']);
         }
-        return Response::json([
-            'status' => 'failed',
-            'message' => '道具库存为0'
-        ]);
+        return Response::json(['status' => 0, 'message' => '道具库存为0']);
     }
 }

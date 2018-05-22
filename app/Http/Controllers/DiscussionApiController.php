@@ -6,6 +6,10 @@ use App\Discussion;
 use App\ThirdPartyLibrary\Transformer\DiscussionTransformer;
 use Illuminate\Http\Request;
 
+/**
+ * Class DiscussionApiController [讨论区 api 控制器]
+ * @package App\Http\Controllers
+ */
 class DiscussionApiController extends ApiController
 {
     protected $discussionTransformer;
@@ -26,6 +30,32 @@ class DiscussionApiController extends ApiController
             'status_code' => $this->getStatusCode(),
             'data' => $discussions
         ]);
+    }
+
+    /*public function apiGetDiscussion($id){
+        $discussion = Discussion::find($id);
+        if(!$discussion){
+            return $this->responseNotFound();
+        }
+        return $this->response([
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $this->discussionTransformer->transform($discussion)
+        ]);
+    }*/
+
+    /**
+     * 获得回复列表
+     * @param $id [discussion_id]
+     * @return mixed
+     */
+    public function apiGetComments($id){
+        $discussion = Discussion::find($id);
+        $comments = $discussion->comments()->oldest()->blacklist()->paginate(5);
+        return $this->response([
+            'status' => 'success',
+            'status_code' => $this->getStatusCode(),
+            'data' => $comments]);
     }
 
     /**
@@ -55,16 +85,4 @@ class DiscussionApiController extends ApiController
             'data' => $this->discussionTransformer->simplifiedTransformCollection($discussions['data'])
         ]);
     }
-
-    /*public function apiGetDiscussion($id){
-        $discussion = Discussion::find($id);
-        if(!$discussion){
-            return $this->responseNotFound();
-        }
-        return $this->response([
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
-            'data' => $this->discussionTransformer->transform($discussion)
-        ]);
-    }*/
 }
