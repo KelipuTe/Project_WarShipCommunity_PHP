@@ -6,8 +6,6 @@
             <li role="presentation" class="active">
                 <a href="#introduction" aria-controls="introduction" role="tab" data-toggle="tab">新人报道</a></li>
             <li role="presentation">
-                <a href="#violations" aria-controls="violations" role="tab" data-toggle="tab">小黑屋</a></li>
-            <li role="presentation">
                 <a href="#office" aria-controls="office" role="tab" data-toggle="tab">办公室</a></li>
         </ul>
         <!-- Tab panes -->
@@ -18,9 +16,6 @@
                         {{--显示新人报道列表--}}
                         <div id="introduction-list">
                             <introduction-list></introduction-list>
-                        </div>
-                        <div class="text-center">
-                            <ul id="page-list" class="pagination"></ul>
                         </div>
                         <template id="template-introduction-list">
                             <div>
@@ -39,6 +34,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="text-center">
+                                    <ul id="page-list" class="pagination"></ul>
                                 </div>
                             </div>
                         </template>
@@ -68,9 +66,6 @@
                                             success:function (data) {
                                                 vm.introductions = data.introductions.data;
                                                 pageList(data.introductions,'http://localhost/office'); // 构造分页按钮列表
-                                            },
-                                            error:function(jqXHR){
-                                                console.log("出现错误：" +jqXHR.status);
                                             }
                                         });
                                     }
@@ -85,7 +80,7 @@
                     <a href="/office/create" class="form-control btn btn-success">我要报道</a>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="violations">
+            <div role="tabpanel" class="tab-pane" id="office">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="thumbnail">
@@ -97,20 +92,18 @@
                             </div>
                         </div>
                     </div>
+                    {{--判断是否拥有 admin 权限--}}
+                    @can('admin')
                     <div class="col-md-4">
                         <div class="thumbnail">
                             <img alt="200 * 200" src="/image/background/dangan.jpg" style="height: 200px; width: 200px; display: block;">
                             <div class="caption">
                                 <h3 class="text-center">
-                                    <a href="/office/blacklist/archives" class="btn btn-primary"> 档案室 </a>
+                                    <a href="/office/blacklist/archives" class="btn btn-primary"> 举报管理中心 </a>
                                 </h3>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="office">
-                <div class="row">
                     <div class="col-md-4">
                         <div class="thumbnail">
                             <img alt="200 * 200" src="/image/background/quanxian.jpg" style="height: 200px; width: 200px; display: block;">
@@ -131,6 +124,7 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
                 </div>
             </div>
         </div>

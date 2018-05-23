@@ -50,7 +50,7 @@
                                     <textarea class="form-control" id="discussion-explain" v-model="explain" rows="3" style="resize: none"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger pull-right" @click="report">
+                                    <button type="button" class="btn btn-danger" @click="report">
                                         <span class="fa fa-hand-stop-o fa-lg"></span> 举报</button>
                                 </div>
                             </div>
@@ -147,6 +147,7 @@
                             this.target = id;
                         },
                         report:function(){
+                            var vm = this;
                             $.ajax({
                                 type:'post',
                                 url:'/office/blacklist/report',
@@ -158,6 +159,7 @@
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == 1){
+                                        vm.explain = '';
                                         $('#discussionModal').modal('toggle');
                                         makeAlertBox('success',data.message)
                                     } else {
@@ -254,7 +256,7 @@
                                     <textarea class="form-control" id="comment-explain" v-model="explain" rows="3" style="resize: none"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger pull-right" @click="report">
+                                    <button type="button" class="btn btn-danger" @click="report">
                                         <span class="fa fa-hand-stop-o fa-lg"></span> 举报</button>
                                 </div>
                             </div>
@@ -372,6 +374,7 @@
                             this.target = id;
                         },
                         report:function(){
+                            var vm = this;
                             $.ajax({
                                 type:'post',
                                 url:'/office/blacklist/report',
@@ -383,6 +386,7 @@
                                 dataType:'json',
                                 success:function (data) {
                                     if(data.status == 1){
+                                        vm.explain = '';
                                         $('#commentModal').modal('toggle');
                                         makeAlertBox('success',data.message)
                                     } else {

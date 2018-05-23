@@ -21,7 +21,7 @@ class BlacklistController extends Controller
     public function __construct()
     {
         $this->middleware('admin')
-            ->except(['notice','report','getDoneBlacklists']);
+            ->except(['notice','report','getDoneBlacklists','locking']);
     }
 
     /**
@@ -55,7 +55,7 @@ class BlacklistController extends Controller
      * @return mixed
      */
     public function getBlacklists(){
-        $blacklists = Blacklist::done(false)->latest()->paginate(10);
+        $blacklists = Blacklist::latest()->paginate(10);
         return Response::json(['blacklists' => $blacklists]);
     }
 
@@ -70,21 +70,22 @@ class BlacklistController extends Controller
 
     /**
      * 查阅被举报条目的具体内容
-     * @param Request $request
      * @return mixed
      */
-    public function locking(Request $request){
-        $blacklist = Blacklist::find($request->get('blacklist_id'));
+    public function locking(){
+        $blacklist = Blacklist::find(request('id'));
         switch ($blacklist->type){
             case 'discussion':
-                $url = '/discussion/show/'.$blacklist->target;
-                break;
+                $target = Discussion::find($blacklist->target);break;
             case 'comment':
-                $comment = Comment::find($blacklist->target);
-                $url = '/discussion/show/'.$comment->discussion_id;
-                break;
+                $target = Comment::find($blacklist->target);break;
+            default:
+                $target = null;
         }
-        return Response::json(['url' => $url]);
+        return Response::json([
+            'blacklist' => $blacklist,
+            'target' => $target
+        ]);
     }
 
     /**
@@ -92,27 +93,33 @@ class BlacklistController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function agree(Request $request){
-        $blacklist = Blacklist::find($request->get('blacklist_id'));
+    public function handel(Request $request){
+        $blacklist = Blacklist::find($request->get('id'));
         switch ($blacklist->type){
             case 'discussion':
-                $target = Discussion::find($blacklist->target);
-                break;
+                $target = Discussion::find($blacklist->target);break;
             case 'comment':
-                $target = Comment::find($blacklist->target);
-                break;
+                $target = Comment::find($blacklist->target);break;
             default:
                 $target = null;
         }
+        $status = 0; $message = '处理失败';
         if($target != null) {
-            $target->blacklist = true;
+            switch($request->get('opinion')){
+                case 'agree':
+                    $target->blacklist = true;
+                    $blacklist->done = true;
+                    $blacklist->admin_opinion = '处理目标！';
+                    break;
+                case 'disagree':
+                    $blacklist->done = true;
+                    $blacklist->admin_opinion = '理由不充分！';
+                    break;
+            }
             $target->save();
-            $message = '处理成功';
-            $blacklist->done = true;
             $blacklist->save();
-        } else {
-            $message = '处理失败';
+            $status = 1; $message = '处理成功';
         }
-        return Response::json(['message' => $message]);
+        return Response::json(['status' => $status,'message' => $message]);
     }
 }

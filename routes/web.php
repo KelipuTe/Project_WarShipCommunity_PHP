@@ -47,9 +47,9 @@ Route::prefix('office/blacklist')->group(function() {
     Route::get('notice','BlacklistController@notice'); // 举报处理公示页面
     Route::post('report','BlacklistController@report'); // 用户举报
     Route::get('getBlacklists','BlacklistController@getBlacklists'); // 获得举报列表
-    Route::get('getDoneBlacklists','BlacklistController@getDoneBlacklists'); // 获得举报列表
-    Route::post('locking','BlacklistController@locking'); // 获得举报列表
-    Route::post('agree','BlacklistController@agree'); // 获得举报列表
+    Route::get('getDoneBlacklists','BlacklistController@getDoneBlacklists'); // 获得处理过的举报列表
+    Route::post('locking','BlacklistController@locking'); // 获得举报对象
+    Route::post('handel','BlacklistController@handel'); //
 });
 
 // DiscussionController 讨论区控制器
