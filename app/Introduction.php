@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,48 +12,28 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Introduction extends Model
 {
-    /**
-     * 模型对应的数据表
-     * @var string
-     */
+
     protected $table = 'introductions';
 
-    /**
-     * 声明可批量赋值的数据
-     * @var array
-     */
     protected $fillable = [
         'title','body','user_id','last_user_id'
     ];
 
-    /**
-     * 声明向模型中添加的数据
-     * @var array
-     */
-    protected $appends = ['username','user_avatar','count_messages'];
+    protected $appends = ['relatedInfo'];
 
-    /**
-     * 获得 username 用户名
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getUsernameAttribute(){
-        return $this->user()->get(['username']);
-    }
-
-    /**
-     * 获得 user 头像
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getUserAvatarAttribute(){
-        return $this->user()->get(['avatar']);
-    }
-
-    /**
-     * 获得 message 数量
-     * @return int
-     */
-    public function getCountMessagesAttribute(){
-        return $this->messages()->count();
+    public function getRelatedInfoAttribute(){
+        $username = $this->user()->get(['username']);
+        $avatar = $this->user()->get(['avatar']);
+        $lastUser = User::find($this->attributes['last_user_id']);
+        $update_diff = Carbon::parse($this->attributes['updated_at']);
+        $data = [
+            'username' => $username[0]->username,
+            'avatar' => $avatar[0]->avatar,
+            'lastUsername' => $lastUser->username,
+            'countMessages' => $this->messages()->count(),
+            'update_diffForHumans' => $update_diff->diffForHumans()
+        ];
+        return $data;
     }
 
     /**

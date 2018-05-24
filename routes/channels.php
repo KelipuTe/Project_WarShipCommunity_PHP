@@ -19,6 +19,7 @@ Broadcast::channel('App.User.{id}', function ($user, $id) {
 //    return $user->id == 1;
 //});
 
+// 消息通知身份验证
 Broadcast::channel('broadcast-notification-{user_id}', function ($user,$user_id) {
     return $user->id == $user_id;
 });

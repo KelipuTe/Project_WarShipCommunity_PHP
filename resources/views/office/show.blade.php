@@ -13,11 +13,14 @@
                 <div class="jumbotron">
                     <div class="media">
                         <div class="media-left">
-                            <img class="media-object img-circle img-avatar-middle" src="" :src="avatar" alt="username">
+                            <img src="" :src="introduction.relatedInfo.avatar"
+                                 class="media-object img-circle img-avatar-middle" alt="avatar:150x150">
                         </div>
                         <div class="media-body">
                             <h2 class="media-heading">@{{ introduction.title }}
-                                <a href="#" :href="['/user/center/info/'+introduction.user_id]"><span>@</span>@{{ username }}</a>
+                                <a href="#" :href="['/user/center/info/'+introduction.user_id]">
+                                    <span>@</span>@{{ introduction.relatedInfo.username }}
+                                </a>
                             </h2>
                             <h3>@{{ introduction.body }}</h3>
                         </div>
@@ -29,10 +32,7 @@
             Vue.component('introduction',{
                 template:"#template-introduction",
                 data:function () {
-                    return {
-                        introduction: '',
-                        username: '', avatar: ''
-                    };
+                    return { introduction: '' };
                 },
                 created:function () {
                     this.getIntroduction();
@@ -43,25 +43,18 @@
                         var href = location.href.split('/');
                         var id = href[href.length-1];
                         $.ajax({
-                            type:'GET',
+                            type:'get',
                             url:'/office/getIntroduction/' + id,
                             dataType:'json',
                             success:function (data) {
                                 vm.introduction = data.introduction;
-                                vm.avatar = data.introduction.user_avatar[0].avatar;
-                                vm.username = data.introduction.username[0].username;
                                 $('#introduction-title').text(data.introduction.title);
-                            },
-                            error:function(jqXHR){
-                                console.log("出现错误：" +jqXHR.status);
                             }
                         });
                     }
                 }
             });
-            new Vue({
-                el:"#introduction"
-            });
+            new Vue({ el:"#introduction" });
         </script>
         {{--显示所有的新人报道回复--}}
         <div id="message-list">
@@ -69,21 +62,41 @@
         </div>
         <template id="template-message-list">
             <div>
-                <div>
-                    <div v-for="message in messages">
-                        <hr>
-                        <div class="media">
-                            <div class="media-left">
-                                <img class="media-object img-circle img-avatar-small" src="" :src="message.user_avatar[0].avatar">
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading">
-                                    <a href="#" :href="['/user/center/info/'+message.user_id]"><span>@</span>@{{message.username[0].username}}</a>
-                                </h4>
-                                <p>@{{message.body}}</p>
-                            </div>
+                <div v-for="message in messages">
+                    <hr>
+                    <div class="media">
+                        <div class="media-left">
+                            <img src="" :src="message.relatedInfo.avatar"
+                                 class="media-object img-circle img-avatar-small" alt="avatar:50x50">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                <a href="#" :href="['/user/center/info/'+message.user_id]">
+                                    <span>@</span>@{{message.relatedInfo.username}}
+                                </a>
+                            </h4>
+                            <p>@{{message.body}}</p>
                         </div>
                     </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <ul id="page-list" class="pagination"></ul>
+                </div>
+                {{--创建新人报道回复--}}
+                <div v-if="isLogin">
+                    <hr>
+                    <div class="form-group">
+                        <label for="body">迎新内容：</label>
+                        <textarea id="message-body" class="form-control" rows="5" style="resize: none"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button id="submit" class="btn btn-success form-control" @click="messageStore">打个招呼</button>
+                    </div>
+                </div>
+                <div v-else="isLogin">
+                    <hr>
+                    <a href="/user/login" class="form-control btn btn-success">登录参与迎新</a>
                 </div>
             </div>
         </template>
@@ -92,10 +105,14 @@
                 template:"#template-message-list",
                 data:function () {
                     return {
-                        messages: ''
+                        messages: '',
+                        isLogin: false
                     };
                 },
                 created:function () {
+                    if($.trim($('meta[name="api-token"]').attr('content')) != 'Bearer'){
+                        this.isLogin = true;
+                    }
                     this.getMessages();
                 },
                 methods:{
@@ -104,80 +121,54 @@
                         var href = location.href.split('/');
                         var id = href[href.length-1];
                         $.ajax({
-                            type:'GET',
+                            type:'get',
                             url:'/office/getMessages/' + id,
                             dataType:'json',
                             success:function (data) {
                                 vm.messages = data.messages.data;
+                                pageList(data.messages,'http://localhost/discussion'); // 构造分页按钮列表
+                            }
+                        });
+                    },
+                    messageStore:function(){
+                        var vm = this;
+                        var href = location.href.split('/');
+                        var id = href[href.length-1];
+                        $('#submit').text('');
+                        $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
+                        $.ajax({
+                            type: 'post',
+                            url: '/office/messageStore',
+                            data: {
+                                'introduction_id': id,
+                                'body': $('#message-body').val()
                             },
-                            error:function(jqXHR){
-                                console.log("出现错误：" +jqXHR.status);
+                            dataType: 'json',
+                            success: function (data) {
+                                $('#submit').empty();
+                                $('#submit').text('打个招呼');
+                                if(data.status == 1){
+                                    $('#message-body').val('');
+                                    $('#page-list').empty();
+                                    vm.getMessages();
+                                } else {
+                                    makeAlertBox('danger',data.message);
+                                }
+                            },
+                            error: function (jqXHR) {
+                                $('#submit').empty();
+                                $('#submit').text('打个招呼');
+                                if(jqXHR.status == 422){
+                                    $.each(jqXHR.responseJSON.errors,function (index,value) {
+                                        makeAlertBox('danger',value);
+                                    });
+                                }
                             }
                         });
                     }
                 }
             });
-            new Vue({
-                el:"#message-list"
-            });
-        </script>
-        {{--创建新人报道回复--}}
-        @if(Auth::check())
-            <hr>
-            @if(Auth::user()->username != $introduction->user->username)
-                <div>
-                    <div class="form-group">
-                        <label for="body">迎新内容：</label>
-                        <textarea name="body" class="form-control" id="body" rows="10" style="resize: none"></textarea>
-                    </div>
-                    <div>
-                        <button id="submit" class="btn btn-success form-control">打个招呼</button>
-                    </div>
-                </div>
-            @endif
-        @else
-            <hr>
-            <a href="/user/login" class="form-control btn btn-success">登录参与迎新</a>
-        @endif
-        <script>
-            $(document).ready(function () {
-                /* 提交按钮 */
-                $('#submit').on('click', function () {
-                    var href = location.href.split('/'); // 获得地址栏地址并拆分
-                    var id = href[href.length-1]; // 通过地址栏获得新人报道的 id
-                    $('#submit').text('');
-                    $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
-                    $.ajax({
-                        type: 'post',
-                        url: '/office/show/welcome',
-                        data: {
-                            'introduction_id': id,
-                            'body': $('#body').val()
-                        },
-                        dataType: 'json',
-                        success: function (data) {
-                            $('#submit').empty();
-                            $('#submit').text('打个招呼');
-                            if(data.status == 1){
-                                window.location.href = "/office/show/"+ data.introduction_id;
-                            } else if(data.status == 0){
-                                makeAlertBox('danger',data.message);
-                            } else {
-                                makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
-                            }
-                        },
-                        error: function (jqXHR) {
-                            $('#submit').empty();
-                            $('#submit').text('打个招呼');
-                            if(jqXHR.status == 422){
-                                $.each(jqXHR.responseJSON.errors,function (index,value) {
-                                    makeAlertBox('danger',value);
-                                });
-                            }
-                        }
-                    });
-                });
-            });
+            new Vue({ el:"#message-list" });
         </script>
     </div>
 @stop

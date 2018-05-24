@@ -6,8 +6,7 @@
 
 /* office.blade.php 中报道标题间距 */
 .office-line{
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin: 15px 0;
     padding: 5px 10px;
     /*background-color: #8df97b;*/
     background-color: rgba(141,249,123,0.8);

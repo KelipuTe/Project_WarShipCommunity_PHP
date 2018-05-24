@@ -12,8 +12,7 @@ use App\Discussion;
 use App\Notifications\UserUserFollowNotification;
 
 /**
- * 关注事件控制器
- * Class FollowController
+ * Class FollowController [关注控制器]
  * @package App\Http\Controllers
  */
 class FollowController extends Controller

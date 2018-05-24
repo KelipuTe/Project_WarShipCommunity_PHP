@@ -378,7 +378,9 @@
             infoPostShowResponse:function(response){
                 $('#editModal').modal('toggle');
                 if(response.success == false) {
-                    makeAlertBox('danger',response.errors);
+                    $.each(response.errors,function (index,value) {
+                        makeAlertBox('danger',value);
+                    });
                 } else {
                     makeAlertBox('success','修改成功');
                 }
@@ -405,14 +407,16 @@
                 var vm = this;
                 $('#editModal').modal('toggle');
                 if(response.success == false) {
-                    console.log(response.errors);
+                    $.each(response.errors,function (index,value) {
+                        makeAlertBox('danger',value);
+                    });
                 } else {
                     vm.factory.file = response.fileURL;
                 }
             }
         }
     });
-    new Vue({el:"#factory"});
+    new Vue({ el:"#factory" });
 </script>
 <script>
     $(document).ready(function () {

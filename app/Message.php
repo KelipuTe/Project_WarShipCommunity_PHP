@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,26 +18,18 @@ class Message extends Model
         'body','user_id','introduction_id'
     ];
 
-    /**
-     * 声明向模型中添加的数据
-     * @var array
-     */
-    protected $appends = ['username','user_avatar'];
+    protected $appends = ['relatedInfo'];
 
-    /**
-     * 获得 username 用户名
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getUsernameAttribute(){
-        return $this->user()->get(['username']);
-    }
-
-    /**
-     * 获得 user 头像
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getUserAvatarAttribute(){
-        return $this->user()->get(['avatar']);
+    public function getRelatedInfoAttribute(){
+        $username = $this->user()->get(['username']);
+        $avatar = $this->user()->get(['avatar']);
+        $update_diff = Carbon::parse($this->attributes['updated_at']);
+        $data = [
+            'username' => $username[0]->username,
+            'avatar' => $avatar[0]->avatar,
+            'update_diffForHumans' => $update_diff->diffForHumans()
+        ];
+        return $data;
     }
 
     /**

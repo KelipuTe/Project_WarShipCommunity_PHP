@@ -11,8 +11,7 @@ use App\Warship;
 use Illuminate\Http\Request;
 
 /**
- * 舰船信息管理中心模块控制器
- * Class WarshipController
+ * Class WarshipController [舰船信息管理控制器]
  * @package App\Http\Controllers
  */
 class WarshipController extends Controller
@@ -127,14 +126,5 @@ class WarshipController extends Controller
         $warship = Warship::findOrFail($id);
         $warship->update($request->all());
         return redirect()->action('MasterController@warship');
-    }
-
-    /**
-     * 去到某个具体舰船的页面
-     * @param $name
-     * @return mixed
-     */
-    public function gotoOne($name){
-        return view('archives/warship/'.$name);
     }
 }

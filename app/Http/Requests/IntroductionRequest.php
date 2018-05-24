@@ -4,12 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * Discussion 讨论，提交时的验证条件
- * Class ForumStoreRequest
- * @package App\Http\Requests
- */
-class ForumStoreRequest extends FormRequest
+class IntroductionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,7 +26,6 @@ class ForumStoreRequest extends FormRequest
         return [
             'title'=>'required',
             'body'=>'required',
-            'published_at'=>'required'
         ];
     }
 
@@ -43,8 +37,7 @@ class ForumStoreRequest extends FormRequest
     {
         return [
             'title.required' => '标题不能为空',
-            'body.required' => '内容不能为空',
-            'published_at.required' => '发布日期不能为空'
+            'body.required' => '内容不能为空'
         ];
     }
 }

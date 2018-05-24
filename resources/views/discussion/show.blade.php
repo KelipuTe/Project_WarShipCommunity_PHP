@@ -336,6 +336,7 @@
                                 },
                                 success: function (data) {
                                     if(data.status == 1){
+                                        UE.getEditor('ue-container').setContent('');
                                         $('#page-list').empty();
                                         vm.getComments();
                                     } else {

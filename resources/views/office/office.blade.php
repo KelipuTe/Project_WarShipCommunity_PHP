@@ -19,18 +19,18 @@
                         </div>
                         <template id="template-introduction-list">
                             <div>
-                                <div v-for="introduction in introductions">
-                                    <div class="media office-line">
+                                <div v-for="introduction in introductions" class="office-line">
+                                    <div class="media">
                                         <div class="media-left">
-                                            <img class="media-object img-circle img-avatar-small" src="" :src="introduction.user_avatar[0].avatar">
+                                            <img src="" :src="introduction.relatedInfo.avatar" class="media-object img-circle img-avatar-small" >
                                         </div>
                                         <div class="media-body">
                                             <h4 class="media-heading">
                                                 <a href="#" :href="['/office/show/'+introduction.id]">@{{ introduction.title }}</a>
                                             </h4>
-                                            @{{ introduction.username[0].username }}
+                                            @{{ introduction.relatedInfo.username }}
                                             <div class="pull-right">
-                                                <span> 共 @{{ introduction.count_messages }} 条回复 </span>
+                                                <span> 共 @{{ introduction.relatedInfo.countMessages }} 条回复 </span>
                                             </div>
                                         </div>
                                     </div>
@@ -53,14 +53,13 @@
                                     getIntroductions:function(){
                                         var vm = this;
                                         var url = '/office/getIntroductions';
-                                        var href = location.href; // 获得地址栏地址
+                                        var href = location.href;
                                         if( href.indexOf('?') != -1 ){
-                                            //判断是不是翻页后的地址，携带 ?page=number
                                             href = location.href.split('=');
                                             url = '/office/getIntroductions?page='+ href[href.length-1];
                                         }
                                         $.ajax({
-                                            type:'GET',
+                                            type:'get',
                                             url:url,
                                             dataType:'json',
                                             success:function (data) {
@@ -87,7 +86,7 @@
                             <img alt="200 * 200" src="/image/background/gonggaopai.jpg" style="height: 200px; width: 200px; display: block;">
                             <div class="caption">
                                 <h3 class="text-center">
-                                    <a href="/office/blacklist/notice" class="btn btn-primary"> 公告牌 </a>
+                                    <a href="/office/blacklist/notice" class="btn btn-primary">公告牌</a>
                                 </h3>
                             </div>
                         </div>
@@ -99,7 +98,7 @@
                             <img alt="200 * 200" src="/image/background/dangan.jpg" style="height: 200px; width: 200px; display: block;">
                             <div class="caption">
                                 <h3 class="text-center">
-                                    <a href="/office/blacklist/archives" class="btn btn-primary"> 举报管理中心 </a>
+                                    <a href="/office/blacklist/archives" class="btn btn-primary">举报管理中心</a>
                                 </h3>
                             </div>
                         </div>
@@ -119,7 +118,7 @@
                             <img alt="200 * 200" src="/image/background/zhanjian.jpg" style="height: 200px; width: 200px; display: block;">
                             <div class="caption">
                                 <h3 class="text-center">
-                                    <a href="/office/warship" class="btn btn-primary">舰船信息管理中心</a>
+                                    <a href="/office/warship" class="btn btn-primary">舰船管理中心</a>
                                 </h3>
                             </div>
                         </div>

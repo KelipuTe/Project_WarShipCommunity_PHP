@@ -26,8 +26,7 @@ class DiscussionApiController extends ApiController
     public function apiGetDiscussions(){
         $discussions = Discussion::setTop()->latest()->blacklist()->published()->paginate(7);
         return $this->response([
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
+            'status' => 'success', 'status_code' => $this->getStatusCode(),
             'data' => $discussions
         ]);
     }
@@ -53,8 +52,7 @@ class DiscussionApiController extends ApiController
         $discussion = Discussion::find($id);
         $comments = $discussion->comments()->oldest()->blacklist()->paginate(5);
         return $this->response([
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
+            'status' => 'success', 'status_code' => $this->getStatusCode(),
             'data' => $comments]);
     }
 
@@ -66,8 +64,7 @@ class DiscussionApiController extends ApiController
         $discussions = Discussion::hotDiscussion()->blacklist()->published()->paginate(5);
         $discussions = $discussions->toArray();
         return $this->response([
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
+            'status' => 'success', 'status_code' => $this->getStatusCode(),
             'data' => $this->discussionTransformer->simplifiedTransformCollection($discussions['data'])
         ]);
     }
@@ -80,8 +77,7 @@ class DiscussionApiController extends ApiController
         $discussions = Discussion::niceDiscussion()->blacklist()->published()->paginate(5);
         $discussions = $discussions->toArray();
         return $this->response([
-            'status' => 'success',
-            'status_code' => $this->getStatusCode(),
+            'status' => 'success', 'status_code' => $this->getStatusCode(),
             'data' => $this->discussionTransformer->simplifiedTransformCollection($discussions['data'])
         ]);
     }

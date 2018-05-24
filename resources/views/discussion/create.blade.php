@@ -48,11 +48,9 @@
                                 $('#submit').empty();
                                 $('#submit').text('提交');
                                 if(data.status == 1){
-                                    window.location.href = "/discussion/show/"+ data.discussion_id;
-                                } else if(data.status == 0){
-                                    makeAlertBox('danger',data.message);
+                                    window.location.href = "/discussion/show/"+ data.id;
                                 } else {
-                                    makeAlertBox('danger','很抱歉，遇到未知错误，请重试！！！');
+                                    makeAlertBox('danger',data.message);
                                 }
                             },
                             error: function (jqXHR) {

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Satellite;
-use Auth;
-use Carbon\Carbon;
-use Response;
-use Validator;
 use Intervention\Image\Facades\Image;
 use App\Factory;
 use Illuminate\Http\Request;
+use App\Satellite;
+use Carbon\Carbon;
+use Auth;
+use Response;
+use Validator;
 
 class FactoryController extends Controller
 {

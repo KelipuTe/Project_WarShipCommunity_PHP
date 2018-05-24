@@ -41,15 +41,15 @@ Route::prefix('account')->group(function() {
     Route::post('exchangeTool','AccountController@exchangeTool'); // 兑换道具
 });
 
-// BlacklistController
+// BlacklistController 黑名单控制器
 Route::prefix('office/blacklist')->group(function() {
-    Route::get('archives','BlacklistController@archives'); // 举报档案页面
-    Route::get('notice','BlacklistController@notice'); // 举报处理公示页面
     Route::post('report','BlacklistController@report'); // 用户举报
+    Route::get('archives','BlacklistController@archives'); // 举报信息页面
     Route::get('getBlacklists','BlacklistController@getBlacklists'); // 获得举报列表
+    Route::get('locking','BlacklistController@locking'); // 获得举报对象
+    Route::post('handel','BlacklistController@handel'); // 处理举报信息
+    Route::get('notice','BlacklistController@notice'); // 举报处理公示页面
     Route::get('getDoneBlacklists','BlacklistController@getDoneBlacklists'); // 获得处理过的举报列表
-    Route::post('locking','BlacklistController@locking'); // 获得举报对象
-    Route::post('handel','BlacklistController@handel'); //
 });
 
 // DiscussionController 讨论区控制器
@@ -69,17 +69,16 @@ Route::prefix('discussion')->group(function() {
 // FactoryController
 Route::prefix('factory')->group(function() {
     Route::get('/','FactoryController@factory'); // 冷月制造厂
-
     Route::post('create','FactoryController@create'); // 创建模型
     Route::get('getFactories','FactoryController@getFactories'); // 获得所有模型
-    Route::get('getFactory','FactoryController@getFactory'); // 获得模型
     Route::get('show/{id}','FactoryController@show'); // 显示模型
+    Route::get('getFactory','FactoryController@getFactory'); // 获得模型
     Route::post('infoEdit','FactoryController@infoEdit'); // 修改模型信息
     Route::post('viewEdit','FactoryController@viewEdit'); // 修改模型视图
     Route::post('fileEdit','FactoryController@fileEdit'); // 修改模型文件
 });
 
-// FollowController
+// FollowController 关注控制器
 Route::prefix('follow')->group(function() {
     Route::get('userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow'); // 用户关注讨论
     Route::get('hasUserDiscussionFollow/{discussion}','FollowController@hasUserDiscussionFollow'); // 检查用户是否关注讨论
@@ -107,18 +106,17 @@ Route::prefix('notification')->group(function() {
     Route::get('getContacts','NotificationController@getContacts'); // 查找与本用户有过交互的用户
 });
 
-// OfficeController 办公区
+// OfficeController 办公区控制器
 Route::prefix('office')->group(function() {
     Route::get('/','OfficeController@office'); // 办公区
+    Route::get('create','OfficeController@create'); // 报道创建页面
+    Route::post('introductionStore','OfficeController@introductionStore'); // 报道创建页面后台
+    Route::get('getIntroductions','OfficeController@getIntroductions'); // 获取报道列表
+    Route::get('show/{id}','OfficeController@show'); // 报道显示页面
+    Route::get('getIntroduction/{id}','OfficeController@getIntroduction'); // 获取报道
+    Route::post('messageStore','OfficeController@messageStore'); // 报道回复
+    Route::get('getMessages/{id}','OfficeController@getMessages'); // 获取报道回复列表
 
-    Route::get('getIntroductions','OfficeController@getIntroductions'); // 获取新人报道列表
-    Route::get('getIntroduction/{id}','OfficeController@getIntroduction'); // 获取新人报道
-    Route::get('getMessages/{id}','OfficeController@getMessages'); // 获取新人报道回复列表
-
-    Route::get('create','OfficeController@create'); // 新人报道创建页面
-    Route::post('store','OfficeController@store'); // 新人报道创建页面后台
-    Route::get('show/{id}','OfficeController@show'); // 新人报道显示页面
-    Route::post('show/welcome','OfficeController@welcome'); // 新人报道显示页面迎新后台
 });
 
 // PermissionController
@@ -173,15 +171,14 @@ Route::prefix('user/center')->group(function() {
     Route::get('account', 'UserController@account'); //
 });
 
-// WarshipController
+// WarshipController 舰船信息管理控制器
 Route::prefix('office/warship')->group(function() {
-    Route::get('/','WarshipController@warship'); // 办公区舰船信息管理中心页面
-
-    Route::get('create','WarshipController@create'); // 舰船管理创建页面
-    Route::post('store','WarshipController@store'); // 舰船管理创建页面后台
+    Route::get('/','WarshipController@warship'); // 舰船管理中心页面
+    Route::get('create','WarshipController@create'); // 舰船创建页面
+    Route::post('store','WarshipController@store'); // 舰船创建
     Route::post('picture','WarshipController@changePicture'); // 更改舰船立绘
-    Route::get('{id}/edit','WarshipController@edit'); // 舰船管理修改页面
-    Route::patch('{id}/update','WarshipController@update'); // 舰船管理修改页面后台
     Route::get('getWarship','WarshipController@getWarship'); // 获得所有舰船数据
-    Route::get('{name}','WarshipController@gotoOne'); // 获得所有舰船数据
+    Route::get('{id}/edit','WarshipController@edit'); // 舰船修改页面
+    Route::patch('{id}/update','WarshipController@update'); // 舰船修改
+
 });

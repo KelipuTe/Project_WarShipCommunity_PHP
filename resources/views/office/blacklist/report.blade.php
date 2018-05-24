@@ -140,7 +140,7 @@
                     locking:function(blacklist){
                         var vm = this;
                         $.ajax({
-                            type:'post',
+                            type:'get',
                             url:'/office/blacklist/locking',
                             data:{'id': blacklist.id},
                             dataType:'json',

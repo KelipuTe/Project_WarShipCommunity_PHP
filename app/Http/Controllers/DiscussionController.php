@@ -6,7 +6,7 @@ use App\Comment;
 use App\Discussion;
 use App\Events\AddLiveness;
 use App\Http\Requests\CommentRequest;
-use App\Http\Requests\ForumStoreRequest;
+use App\Http\Requests\DiscussionRequest;
 
 use App\Events\HotDiscussion;
 use App\Events\NiceComment;
@@ -47,10 +47,10 @@ class DiscussionController extends Controller
 
     /**
      * 讨论创建页面后台
-     * @param ForumStoreRequest $request
+     * @param DiscussionRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function discussionStore(ForumStoreRequest $request){
+    public function discussionStore(DiscussionRequest $request){
         $data = [
             'user_id'=>Auth::user()->id,
             'last_user_id'=>Auth::user()->id,
@@ -66,7 +66,7 @@ class DiscussionController extends Controller
         }
         return Response::json([
             'status' => $status, 'message' => $message,
-            'discussion_id' => $discussion->id
+            'id' => $discussion->id
         ]);
     }
 

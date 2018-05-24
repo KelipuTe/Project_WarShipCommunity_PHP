@@ -15,8 +15,12 @@ class Discussion extends Model
 {
     use SoftDeletes; // 使用软删除
 
-    protected $table = 'discussions';
+    protected $table = 'discussions'; //模型对应的数据表
 
+    /**
+     * 声明可批量赋值的数据
+     * @var array
+     */
     protected $fillable = [
         'title','body','user_id','last_user_id','published_at','set_top'
     ];

@@ -254,7 +254,7 @@
      * http://localhost/discussion/show/1
      * http://localhost/discussion/show/1?page=2
      */
-    /*function getIdFromHref(){
+    function getIdFromHref(){
         var href = location.href.split('/');
         if( location.href.indexOf('?') != -1 ){
             // 判断是不是翻页后的地址，携带 ?page=number
@@ -262,7 +262,7 @@
             href = href[0].split('/');
         }
         return href[href.length-1];
-    }*/
+    }
 </script>
 </body>
 </html>
