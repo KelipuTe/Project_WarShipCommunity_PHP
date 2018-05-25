@@ -53,7 +53,8 @@ class DiscussionApiController extends ApiController
         $comments = $discussion->comments()->oldest()->blacklist()->paginate(5);
         return $this->response([
             'status' => 'success', 'status_code' => $this->getStatusCode(),
-            'data' => $comments]);
+            'data' => $comments
+        ]);
     }
 
     /**

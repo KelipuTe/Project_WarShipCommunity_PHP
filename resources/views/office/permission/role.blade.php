@@ -109,18 +109,15 @@
                     var href = location.href.split('/');
                     var roleId = href[href.length-1];
                     $.ajax({
-                        type:'GET',
+                        type:'get',
                         url:'/office/permission/getRole',
-                        data:{ 'id':roleId },
+                        data:{ 'roleId':roleId },
                         dataType:'json',
                         success:function (data) {
                             vm.role = data.role;
                             vm.rolePermissionIds = data.rolePermissionIds;
                             vm.permissions = data.permissions;
                             vm.roleUsers = data.roleUsers;
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
                         }
                     });
                 },
@@ -136,9 +133,6 @@
                         success:function (data) {
                             vm.permissions = data.permissions;
                             $('#addPermissionModal').modal('toggle');
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
                         }
                     });
                 },
@@ -155,10 +149,8 @@
                         },
                         dataType:'json',
                         success:function (data) {
-
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
+                            vm.rolePermissionIds = data.rolePermissionIds;
+                            vm.permissions = data.permissions;
                         }
                     });
                 },
@@ -175,10 +167,7 @@
                         },
                         dataType:'json',
                         success:function (data) {
-
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
+                            vm.roleUsers = data.roleUsers;
                         }
                     });
                 },
@@ -195,10 +184,7 @@
                         },
                         dataType:'json',
                         success:function (data) {
-
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
+                            vm.roleUsers = data.roleUsers;
                         }
                     });
                 },

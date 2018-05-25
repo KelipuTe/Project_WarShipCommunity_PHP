@@ -4,17 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Permission;
 use App\Role;
+use App\ThirdPartyLibrary\Transformer\UserTransformer;
 use App\User;
 use Illuminate\Http\Request;
 use Response;
 
+/**
+ * Class PermissionController [权限管理控制器]
+ * @package App\Http\Controllers
+ */
 class PermissionController extends Controller
 {
+    protected $userTransformer;
+
     /**
      * PermissionController constructor.
+     * @param UserTransformer $userTransformer
      */
-    public function __construct(){
+    public function __construct(UserTransformer $userTransformer){
         $this->middleware('admin');
+        $this->userTransformer = $userTransformer;
     }
 
     /**
@@ -58,7 +67,7 @@ class PermissionController extends Controller
      * @return mixed
      */
     public function getRole(Request $request){
-        $id = $request->input('id');
+        $id = $request->input('roleId');
         $role = Role::find($id);
         $rolePermissions = $role->permissions()->get();
         $rolePermissionIds = [];
@@ -94,9 +103,13 @@ class PermissionController extends Controller
         $role = Role::find($request->input('roleId'));
         $permission = Permission::find($request->input('permissionId'));
         $role->permissions()->toggle($permission);
+        $rolePermissions = $role->permissions()->get();
+        $rolePermissionIds = [];
+        foreach($rolePermissions as $permission){
+            array_push($rolePermissionIds,$permission->id);
+        }
         return Response::json([
-            'role' => $role,
-            'rolePermissions' => $permission,
+            'rolePermissionIds' => $rolePermissionIds,
             'permissions' => Permission::all()
         ]);
     }
@@ -110,22 +123,19 @@ class PermissionController extends Controller
         $roleId = $request->input('roleId');
         $userId = $request->input('userId');
         $username = $request->input('username');
+        $role = Role::find($roleId);
         $user = null;
         if($userId != null){
             $user = User::find($userId);
         }
         if($username != null){
-            $user = User::where('username','=',$username);
+            $user = User::where('username','=',$username)->first();
         }
-        if($user == null){
-            return Response::json([
-                'user' => $user
-            ]);
+        if($user != null){
+            $user->roles()->toggle($role);
         }
-        $role = Role::find($roleId);
-        $user->roles()->toggle($role);
         return Response::json([
-            'user' => $user
+            'roleUsers' => $role->users()->get(['user_id','username'])
         ]);
     }
 
@@ -137,11 +147,11 @@ class PermissionController extends Controller
     public function removeRoleFromUser(Request $request){
         $roleId = $request->input('roleId');
         $userId = $request->input('userId');
-        $user = User::find($userId);
         $role = Role::find($roleId);
+        $user = User::find($userId);
         $user->roles()->toggle($role);
         return Response::json([
-            'user' => $user
+            'roleUsers' => $role->users()->get(['user_id','username'])
         ]);
     }
 }

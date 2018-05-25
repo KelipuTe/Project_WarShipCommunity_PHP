@@ -1,6 +1,17 @@
+/* 左侧导航列表去掉 bootstrap 栅格的填充 */
 .master-user-center [class *= "col-"]{
     padding-left: 0;
     padding-right: 0;
+}
+
+/* 间距 */
+.row-interval{
+    padding: 10px 0;
+}
+
+/* 间距 */
+.thumbnail-interval{
+    margin: 0 30px;
 }
 
 /* 左侧导航列表样式 */
@@ -12,11 +23,10 @@
     background: #e1e4ea;
 }
 
-/* 上传按钮 */
+/* 头像上传按钮 */
 .avatar{
+    width: 110px;  height: 34px;
     margin: -34px auto 0;
-    width: 110px;
-    height: 34px;
     opacity: 0;
     z-index: 6;
 }
@@ -25,10 +35,9 @@
     z-index: 3;
 }
 
-/* 表单间距 */
+/* 用户信息表单间距 */
 .user-form-line{
-    padding-top: 25px;
-    padding-bottom: 25px;
+    padding: 25px 0;
 }
 .user-form-label-line{
     padding-top: 5px;

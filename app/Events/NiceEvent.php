@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Comment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -12,36 +11,29 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 /**
- * 评论被点赞事件触发器
- * Class NiceComment
+ * Class NiceEvent [点赞事件]
  * @package App\Events
  */
-class NiceComment
+class NiceEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * 触发点赞事件的评论
-     * @var Comment
-     */
-    public $comment;
-
-    /**
-     * 点赞的用户 id
-     * @var
-     */
-    public $user_id;
+    public $user_id; // 点赞用户 id
+    public $type; // 被点赞目标的类型，如 'discussion','comment'
+    public $target_id; // 被点赞目标的 id
 
     /**
      * Create a new event instance.
      *
-     * @param Comment $comment
      * @param $user_id
+     * @param $type
+     * @param $target_id
      */
-    public function __construct(Comment $comment,$user_id)
+    public function __construct($user_id,$type,$target_id)
     {
-        $this->comment = $comment;
         $this->user_id = $user_id;
+        $this->type = $type;
+        $this->target_id = $target_id;
     }
 
     /**

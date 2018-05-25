@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AddLiveness;
 use App\Http\Requests\IntroductionRequest;
 use App\Http\Requests\MessageRequest;
 use App\Introduction;
@@ -50,6 +51,7 @@ class OfficeController extends Controller
         $introduction = Introduction::create(array_merge($request->all(),$data));
         $status = 0; $message = "报道失败！";
         if($introduction != null){
+            event(new AddLiveness($introduction->user_id,'officeStore')); // 创建报道，增加活跃值
             $status = 1; $message = "报道成功！";
         }
         return Response::json([
@@ -105,6 +107,8 @@ class OfficeController extends Controller
         $messageStore = Message::create(array_merge($request->all(),['user_id'=>Auth::user()->id]));
         $status = 0; $message = "迎新失败！！！";
         if($message != null){
+            event(new AddLiveness(Auth::user()->id,'officeWelcome')); // 报道回复者，增加活跃值
+            event(new AddLiveness($messageStore->user_id,'officeWelcome')); // 报道被回复，增加活跃值
             $status = 1; $message = "迎新成功！！！";
         }
         return Response::json([

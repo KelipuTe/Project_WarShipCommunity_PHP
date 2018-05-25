@@ -11,16 +11,24 @@ use Auth;
 use Response;
 use Validator;
 
+/**
+ * Class FactoryController [制造区控制器]
+ * @package App\Http\Controllers
+ */
 class FactoryController extends Controller
 {
     /**
-     * 制造厂
+     * 制造区
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function factory(){
         return view('factory/factory');
     }
 
+    /**
+     * 创建模型
+     * @return mixed
+     */
     public function create(){
         if(request('title') != null && request('title')!= "") {
             $data = [
@@ -46,12 +54,20 @@ class FactoryController extends Controller
         return Response::json(['factory_id' => 0]);
     }
 
+    /**
+     * 获得所有模型
+     * @return mixed
+     */
     public function getFactories(){
         $factories = Factory::latest()->paginate(5);
         return Response::json(['factories' => $factories]);
     }
 
-    public  function getFactory(){
+    /**
+     * 获得单个模型
+     * @return mixed
+     */
+    public function getFactory(){
         $factory = Factory::find(request('factory_id'));
         $owner = false;
         if(Auth::check()) {
@@ -65,6 +81,10 @@ class FactoryController extends Controller
         ]);
     }
 
+    /**
+     * 模型展示页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function show(){
         return view('factory/show');
     }
@@ -97,6 +117,11 @@ class FactoryController extends Controller
         ]);
     }
 
+    /**
+     * 上传模型视图
+     * @param Request $request
+     * @return mixed
+     */
     public function viewEdit(Request $request){
         $rules = [
             'factory-id' => 'required',
@@ -136,6 +161,11 @@ class FactoryController extends Controller
         ]);
     }
 
+    /**
+     * 上传模型文件
+     * @param Request $request
+     * @return mixed
+     */
     public function fileEdit(Request $request){
         $id = $request->input('factory-id');
         $file = $request->file('model-file'); // 拿到上传文件

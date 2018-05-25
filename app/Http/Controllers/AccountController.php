@@ -11,8 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 /**
- * 用户账户控制器
- * Class AccountController
+ * Class AccountController [用户账户控制器]
  * @package App\Http\Controllers
  */
 class AccountController extends Controller

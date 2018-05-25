@@ -12,8 +12,7 @@ use App\Discussion;
 use App\Introduction;
 
 /**
- * 主模块控制器
- * Class MasterController
+ * Class MasterController [主控制器]
  * @package App\Http\Controllers
  */
 class MasterController extends Controller
@@ -48,6 +47,11 @@ class MasterController extends Controller
         return view('archives/archives');
     }
 
+    /**
+     * 错误页面
+     * @param $status
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function error($status){
         switch($status){
             case '401':
@@ -60,6 +64,10 @@ class MasterController extends Controller
         return view('master.error',compact('message',$message));
     }
 
+    /**
+     * 获得用户信息
+     * @return mixed
+     */
     public function getUser(){
         if(Auth::check()){
             $user = [

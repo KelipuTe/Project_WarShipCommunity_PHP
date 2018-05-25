@@ -14,8 +14,7 @@ use App\Events\PublicChatUserSignIn;
 use App\Sign;
 
 /**
- * 活动区模块控制器
- * Class ActivityController
+ * Class ActivityController [活动区控制器]
  * @package App\Http\Controllers
  */
 class ActivityController extends Controller

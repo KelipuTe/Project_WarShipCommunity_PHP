@@ -37,7 +37,7 @@
                         $('#submit').append('<span class="fa fa-spinner fa-pulse"></span>');
                         $.ajax({
                             type: 'post',
-                            url: '/discussion/store',
+                            url: '/discussion/discussionStore',
                             data: {
                                 'title': $('#title').val(),
                                 'published_at': $('#published_at').val(),

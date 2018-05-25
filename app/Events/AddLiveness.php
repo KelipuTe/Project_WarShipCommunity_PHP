@@ -10,6 +10,10 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * Class AddLiveness [活跃值事件]
+ * @package App\Events
+ */
 class AddLiveness
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;

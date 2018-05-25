@@ -11,8 +11,7 @@ use Auth;
 use Illuminate\Http\Request;
 
 /**
- * 航天局模块控制器
- * Class SpaceAdministrationController
+ * Class SpaceAdministrationController [航天局控制器]
  * @package App\Http\Controllers
  */
 class SpaceAdministrationController extends Controller
@@ -23,11 +22,6 @@ class SpaceAdministrationController extends Controller
      */
     protected $markdown;
 
-    /**
-     * 构造函数
-     * SpaceAdministrationController constructor.
-     * @param Markdown $markdown
-     */
     public function __construct(Markdown $markdown)
     {
         $this->markdown = $markdown;
@@ -85,6 +79,10 @@ class SpaceAdministrationController extends Controller
         return view('spaceAdministration/show',compact('satellite','html'));
     }
 
+    /**
+     * 获得所有卫星
+     * @return mixed
+     */
     public function getSatellites(){
         $satellites = Satellite::latest()->notDestroyed()->get();
         return Response::json([

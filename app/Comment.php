@@ -7,8 +7,7 @@ use Auth;
 use Illuminate\Support\Facades\Redis;
 
 /**
- * 讨论回复类
- * Class Comment
+ * Class Comment [讨论回复类]
  * @package App
  */
 class Comment extends Model

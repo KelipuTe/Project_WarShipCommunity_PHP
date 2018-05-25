@@ -69,7 +69,7 @@
         <div class="col-md-3">
             <div class="jumbotron discussion-jumbotron text-center">
                 @if(Auth::check())
-                    <a class="btn btn-danger btn-lg" href="/discussion/create" role="button">发起新的讨论</a>
+                    <a class="btn btn-danger btn-lg" href="/discussion/discussionCreate" role="button">发起新的讨论</a>
                 @else
                     <a class="btn btn-danger btn-lg" href="/user/login" role="button">登陆参与讨论</a>
                 @endif

@@ -99,7 +99,6 @@ Route::get('/archives','MasterController@archives'); // 冷月档案馆
 Route::prefix('notification')->group(function() {
     Route::get('center','NotificationController@showAll'); // 显示用户所有消息通知
     Route::get('unread','NotificationController@showUnread'); // 显示用户未读消息通知
-
     Route::post('personalLetterStore','NotificationController@personalLetterStore'); // 保存私信，并发出消息通知
     Route::get('getPersonalLetters','NotificationController@getPersonalLetters'); // 获得两个用户之间的私信，并标记消息已读
     Route::get('personalLetter','NotificationController@personalLetter'); // 消息中心，私信消息页面
@@ -116,7 +115,6 @@ Route::prefix('office')->group(function() {
     Route::get('getIntroduction/{id}','OfficeController@getIntroduction'); // 获取报道
     Route::post('messageStore','OfficeController@messageStore'); // 报道回复
     Route::get('getMessages/{id}','OfficeController@getMessages'); // 获取报道回复列表
-
 });
 
 // PermissionController
@@ -180,5 +178,4 @@ Route::prefix('office/warship')->group(function() {
     Route::get('getWarship','WarshipController@getWarship'); // 获得所有舰船数据
     Route::get('{id}/edit','WarshipController@edit'); // 舰船修改页面
     Route::patch('{id}/update','WarshipController@update'); // 舰船修改
-
 });

@@ -109,7 +109,7 @@ class BlacklistController extends Controller
                 case 'agree':
                     $target->blacklist = true;
                     $blacklist->done = true;
-                    $blacklist->admin_opinion = '处理目标！';
+                    $blacklist->admin_opinion = '违规！';
                     break;
                 case 'disagree':
                     $blacklist->done = true;

@@ -28,14 +28,11 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\HotDiscussion' => [
             'App\Listeners\HotDiscussionListener',
         ],
-        'App\Events\NiceDiscussion' => [
-            'App\Listeners\NiceDiscussionListener',
-        ],
-        'App\Events\NiceComment' => [
-            'App\Listeners\NiceCommentListener',
-        ],
         'App\Events\AddLiveness' => [
             'App\Listeners\AddLivenessListener',
+        ],
+        'App\Events\NiceEvent' => [
+            'App\Listeners\NiceEventListener',
         ],
     ];
 

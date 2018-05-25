@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Response;
 use Illuminate\Http\Request;
 
+/**
+ * Class ApiController [ api controller 基类 ]
+ * @package App\Http\Controllers
+ */
 class ApiController extends Controller
 {
     protected $status_code = 200; // 状态码

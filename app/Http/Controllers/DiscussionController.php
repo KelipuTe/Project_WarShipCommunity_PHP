@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Comment;
 use App\Discussion;
 use App\Events\AddLiveness;
+use App\Events\NiceEvent;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\DiscussionRequest;
 
@@ -139,7 +140,7 @@ class DiscussionController extends Controller
         $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否已经推荐
         $status = -1; $message = '请不要重复推荐';
         if(!$existsInRedisSet){
-            event(new NiceDiscussion($discussion,$user_id)); // 触发 discussion 推荐事件
+            event(new NiceEvent($user_id,'discussion',$discussion->id)); // 触发点赞事件
             $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceDiscussionKey, $user_id]); // 确认是否推荐成功
             $status = 1; $message = '推荐成功';
             if(!$existsInRedisSet){
@@ -160,7 +161,7 @@ class DiscussionController extends Controller
         $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceCommentKey, $user_id]); // 确认是否已经推荐
         $status = -1; $message = '请不要重复点赞';
         if(!$existsInRedisSet){
-            event(new NiceComment($comment,$user_id)); // 触发 comment 点赞事件
+            event(new NiceEvent($user_id,'comment',$comment->id)); // 触发点赞事件
             $existsInRedisSet = Redis::command('SISMEMBER', [$userNiceCommentKey, $user_id]); // 确认是否推荐成功
             $status = 1; $message = '点赞成功';
             if(!$existsInRedisSet){

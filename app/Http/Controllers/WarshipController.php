@@ -22,7 +22,6 @@ class WarshipController extends Controller
     }
 
     /**
-     * 办公区办公室选项卡
      * 舰船信息管理中心
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

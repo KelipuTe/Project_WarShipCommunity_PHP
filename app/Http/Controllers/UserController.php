@@ -16,8 +16,7 @@ use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserRegisterRequest;
 
 /**
- * 用户模块控制器
- * Class UserController
+ * Class UserController [用户模块控制器]
  * @package App\Http\Controllers
  */
 class UserController extends Controller

@@ -15,6 +15,18 @@ class Account extends Model
 
     protected $fillable=['user_id'];
 
+    protected $appends = ['relatedInfo'];
+
+    public function getRelatedInfoAttribute(){
+        $level = $this->levelCalculate($this->attributes['liveness']);
+        $nextLevel = $this->levelScore['level_'.($level + 1)];
+        $data = [
+            'level' => $level,
+            'nextLevel' => $nextLevel,
+        ];
+        return $data;
+    }
+
     /**
      * 活跃值，命名方式为"区域名"+"事件名"
      * @var array

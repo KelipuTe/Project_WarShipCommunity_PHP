@@ -13,9 +13,9 @@
                 <div class="panel-heading text-center">个人中心</div>
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked text-center">
-                        {{--<li role="presentation" class="list-li">--}}
-                            {{--<a href="#"><span class="fa fa-home fa-lg"></span> 信息总览</a>--}}
-                        {{--</li>--}}
+                        <li role="presentation" class="list-li">
+                            <a href="/user/center"><span class="fa fa-home fa-lg"></span> 信息总览</a>
+                        </li>
                         <li role="presentation" class="list-li">
                             <a href="/user/center/infoEdit"><span class="fa fa-edit fa-lg"></span> 我的信息</a>
                         </li>

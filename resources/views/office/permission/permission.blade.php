@@ -70,9 +70,6 @@
                         dataType:'json',
                         success:function (data) {
                             vm.roles = data.roles;
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
                         }
                     });
                 },
@@ -88,9 +85,6 @@
                         success:function (data) {
                             vm.roles = data.roles;
                             $('#addRoleModal').modal('toggle');
-                        },
-                        error:function(jqXHR){
-                            console.log("出现错误：" +jqXHR.status);
                         }
                     });
                 }
