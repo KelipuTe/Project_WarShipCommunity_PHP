@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Discussion;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -10,30 +11,23 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-/**
- * Class NiceEvent [点赞事件]
- * @package App\Events
- */
-class NiceEvent
+class DiscussionEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user_id; // 点赞用户 id
-    public $type; // 被点赞目标的类型，如'discussion','comment'
-    public $target_id; // 被点赞目标的 id
+    public $type;
+    public $discussion;
 
     /**
      * Create a new event instance.
      *
-     * @param $user_id
      * @param $type
-     * @param $target_id
+     * @param Discussion $discussion
      */
-    public function __construct($user_id,$type,$target_id)
+    public function __construct($type,Discussion $discussion)
     {
-        $this->user_id = $user_id;
         $this->type = $type;
-        $this->target_id = $target_id;
+        $this->discussion = $discussion;
     }
 
     /**

@@ -34,6 +34,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NiceEvent' => [
             'App\Listeners\NiceEventListener',
         ],
+        'App\Events\DiscussionEvent' => [
+            'App\Listeners\DiscussionEventListener',
+        ],
     ];
 
     /**

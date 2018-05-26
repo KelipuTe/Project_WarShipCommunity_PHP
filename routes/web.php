@@ -20,7 +20,8 @@ Route::get('/welcome', function () {
 });
 
 Route::get('test',function(){
-
+    $d = \App\Discussion::find(6);
+    return $d->userDiscussion()->pluck('user_id')->toArray();
 });
 
 // ActivityController
@@ -80,10 +81,10 @@ Route::prefix('factory')->group(function() {
 
 // FollowController 关注控制器
 Route::prefix('follow')->group(function() {
-    Route::get('userDiscussionFollow/{discussion}','FollowController@userDiscussionFollow'); // 用户关注讨论
-    Route::get('hasUserDiscussionFollow/{discussion}','FollowController@hasUserDiscussionFollow'); // 检查用户是否关注讨论
-    Route::get('userUserFollow/{discussion}','FollowController@userUserFollow'); // 用户关注用户
-    Route::get('hasUserUserFollow/{discussion}','FollowController@hasUserUserFollow'); // 检查用户是否关注用户
+    Route::post('userDiscussionFollow','FollowController@userDiscussionFollow'); // 用户关注讨论
+    Route::get('hasUserDiscussionFollow','FollowController@hasUserDiscussionFollow'); // 检查用户是否关注讨论
+    Route::post('userUserFollow','FollowController@userUserFollow'); // 用户关注用户
+    Route::get('hasUserUserFollow','FollowController@hasUserUserFollow'); // 检查用户是否关注用户
 });
 
 // MasterController

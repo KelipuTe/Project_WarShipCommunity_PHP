@@ -601,7 +601,7 @@
                     data:function () {
                         return{
                             countFollowedUser: 0,
-                            isLogin: '' ,isFollowed: 0
+                            isLogin: false ,isFollowed: 0
                         }
                     },
                     computed:{
@@ -616,6 +616,9 @@
                         }
                     },
                     created:function () {
+                        if($('meta[name="api-token"]').attr('content') != 'Bearer'){
+                            this.isLogin = true;
+                        }
                         this.hasUserDiscussionFollow();
                     },
                     methods:{
@@ -626,18 +629,15 @@
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
-                            var discussion_id = href[href.length-1];
+                            var id = href[href.length-1];
                             $.ajax({
                                 type:'get',
-                                url:'/follow/hasUserDiscussionFollow/' + discussion_id,
+                                url:'/follow/hasUserDiscussionFollow',
+                                data:{ 'id': id },
                                 dataType:'json',
                                 success:function (data) {
                                     vm.countFollowedUser = data.countFollowedUser;
-                                    vm.isLogin = data.isLogin;
                                     vm.isFollowed = data.isFollowed;
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         },
@@ -648,17 +648,15 @@
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
-                            var discussion_id = href[href.length-1];
+                            var id = href[href.length-1];
                             $.ajax({
-                                type:'get',
-                                url:'/follow/userDiscussionFollow/' + discussion_id,
+                                type:'post',
+                                url:'/follow/userDiscussionFollow',
+                                data:{ 'id': id },
                                 dataType:'json',
                                 success:function (data) {
                                     vm.countFollowedUser = data.countFollowedUser;
                                     vm.isFollowed = data.isFollowed;
-                                },
-                                error:function(jqXHR){
-                                    console.log("出现错误：" +jqXHR.status);
                                 }
                             });
                         }
@@ -787,10 +785,11 @@
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
-                            var discussion_id = href[href.length-1];
+                            var id = href[href.length-1];
                             $.ajax({
                                 type:'get',
-                                url:'/follow/hasUserUserFollow/' + discussion_id,
+                                url:'/follow/hasUserUserFollow',
+                                data:{ 'id': id },
                                 dataType:'json',
                                 success:function (data) {
                                     vm.user_id = data.user_id;
@@ -810,13 +809,14 @@
                                 href = location.href.split('?');
                                 href = href[0].split('/');
                             }
-                            var discussion_id = href[href.length-1];
+                            var id = href[href.length-1];
                             $.ajax({
-                                type:'get',
-                                url:'/follow/userUserFollow/' + discussion_id,
+                                type:'post',
+                                url:'/follow/userUserFollow',
+                                data:{ 'id': id },
                                 dataType:'json',
                                 success:function (data) {
-                                    vm.userUser = data.userUser;
+                                    vm.isFollowed = data.isFollowed;
                                     vm.countUserFollowers = data.countUserFollowers;
                                 }
                             });

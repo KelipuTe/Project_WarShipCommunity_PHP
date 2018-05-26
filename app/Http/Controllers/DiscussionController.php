@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Comment;
 use App\Discussion;
 use App\Events\AddLiveness;
+use App\Events\DiscussionEvent;
 use App\Events\NiceEvent;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\DiscussionRequest;
@@ -57,13 +58,13 @@ class DiscussionController extends Controller
             'last_user_id'=>Auth::user()->id,
         ];
         $discussion = Discussion::create(array_merge($request->all(),$data));
+        $status = 0; $message = "讨论创建失败！！！";
         if($discussion != null){
             Redis::command('HSET', ['warshipcommunity:discussion:viewcount',$discussion->id,0]);
             Redis::command('HSET', ['warshipcommunity:discussion:nicecount',$discussion->id,0]);
-            $status = 1; $message = "讨论创建成功！！！";
+            event(new DiscussionEvent('create',$discussion)); // 讨论创建事件
             event(new AddLiveness($discussion->user_id,'discussionStore')); // 创建讨论，增加活跃值
-        } else {
-            $status = 0; $message = "讨论创建失败！！！";
+            $status = 1; $message = "讨论创建成功！！！";
         }
         return Response::json([
             'status' => $status, 'message' => $message,
@@ -121,9 +122,10 @@ class DiscussionController extends Controller
         if($comment != null){
             $discussion = Discussion::find($request->get('discussion_id'));
             $discussion->update(['last_user_id'=>Auth::user()->id]);
-            $status = 1; $message = "评论创建成功！！！";
+            event(new DiscussionEvent('update',$comment->discussion)); // 讨论更新事件
             event(new AddLiveness(Auth::user()->id,'discussionCommit')); // 讨论回复者，增加活跃值
             event(new AddLiveness($discussion->user_id,'discussionCommit')); // 讨论被回复，增加活跃值
+            $status = 1; $message = "评论创建成功！！！";
         }
         return Response::json(['status' => $status, 'message' => $message]);
     }

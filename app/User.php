@@ -57,7 +57,7 @@ class User extends Authenticatable
     }
 
     /**
-     * 定义 user 和 discussion 在 user_discussion 表中的多对多关系
+     * 定义 user 和 discussion 在 user_discussion 表中的多对多关系，关注关系
      * 这个函数通过用户找到所有被用户关注的讨论
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -77,15 +77,15 @@ class User extends Authenticatable
 
     /**
      * 判断 user 是否已经关注 discussion
-     * @param $discussion
+     * @param $id [discussion_id]
      * @return int
      */
-    public function hasFollowedDiscussion($discussion){
-        return $this->userDiscussion()->where('discussion_id',$discussion)->count();
+    public function hasFollowedDiscussion($id){
+        return $this->userDiscussion()->where('discussion_id',$id)->count();
     }
 
     /**
-     * 定义 user 和 user 在 user_user 表中的多对多关系
+     * 定义 user 和 user 在 user_user 表中的多对多关系，关注关系
      * 这个函数通过关注者找到被关注的用户
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -99,7 +99,7 @@ class User extends Authenticatable
     }
 
     /**
-     * 定义 user 和 user 在 user_user 表中的多对多关系
+     * 定义 user 和 user 在 user_user 表中的多对多关系，关注关系
      * 这个函数通过被关注的用户找到关注者
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

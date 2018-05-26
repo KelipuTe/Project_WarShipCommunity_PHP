@@ -104,12 +104,9 @@
                                 .listen('BroadcastNotification',e =>{
                                     vm.unreadNotifications.push($.parseJSON(e.notification));
                                     vm.countUnreadNotifications = vm.unreadNotifications.length;
-                                    console.log(vm.countUnreadNotifications);
+                                    console.log(e);
                                 });
                         }
-                    },
-                    error:function(jqXHR){
-                        console.log("出现错误：" +jqXHR.status);
                     }
                 });
             }

@@ -120,7 +120,7 @@ class Discussion extends Model
     }
 
     /**
-     * 定义 user 和 discussion 在 user_discussion 表中的多对多关系
+     * 定义 user 和 discussion 在 user_discussion 表中的多对多关系，关注关系
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function userDiscussion(){

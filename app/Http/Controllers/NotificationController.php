@@ -77,8 +77,8 @@ class NotificationController extends Controller
                 'from_user_id' => Auth::user()->id
             ]);
         }
-//        $to_user = User::findOrFail(request('to_user_id'));
-//        $to_user->notify(new PersonalLetterNotification($personalLetter->id));
+        $to_user = User::find(request('to_user_id'));
+        $to_user->notify(new PersonalLetterNotification($lastLetter->id));
         return Response::json(['status' => 1, 'personalLetter' => $letter]);
     }
 

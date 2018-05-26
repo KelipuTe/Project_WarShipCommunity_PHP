@@ -21,11 +21,11 @@ class PersonalLetterNotification extends Notification
 
     /**
      * Create a new notification instance.
-     * @param $personalLetter_id
+     * @param $id [personalLetter_id]
      */
-    public function __construct($personalLetter_id)
+    public function __construct($id)
     {
-        $this->personalLetter_id = $personalLetter_id;
+        $this->personalLetter_id = $id;
     }
 
     /**

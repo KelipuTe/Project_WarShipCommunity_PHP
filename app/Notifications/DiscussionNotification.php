@@ -2,28 +2,28 @@
 
 namespace App\Notifications;
 
-use Auth;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-/**
- * 这个类记录用户关注用户的站内信信息
- * Class UserUserFollowNotification
- * @package App\Notifications
- */
-class UserUserFollowNotification extends Notification
+class DiscussionNotification extends Notification
 {
     use Queueable;
+
+    protected $type;
+    public $discussion_id;
 
     /**
      * Create a new notification instance.
      *
+     * @param $type
+     * @param $id
      */
-    public function __construct()
+    public function __construct($type,$id)
     {
-        //
+        $this->type = $type;
+        $this->discussion_id = $id;
     }
 
     /**
@@ -35,24 +35,12 @@ class UserUserFollowNotification extends Notification
     public function via($notifiable)
     {
         return ['database'];
-        /*
-         * database 表示使用数据库站内信通知方式
-         * mail 表示使用邮件通知方式
-         */
-        //return ['database','mail'];
     }
 
-    /**
-     * notification 需要执行的函数
-     * toDatabase() 的函数名是根据 via() 函数中的 database 起的名字
-     * @param $notifiable
-     * @return array
-     */
     public function toDatabase($notifiable){
-        // 写入数据库中的数据
         return [
-            'follower_id' => Auth::user()->id, // 发起关注的用户 id
-            'follower' => Auth::user()->username // 发起关注的用户 username
+            'type' => $this->type,
+            'discussion_id' => $this->discussion_id
         ];
     }
 
